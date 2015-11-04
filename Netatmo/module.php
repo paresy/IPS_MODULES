@@ -532,13 +532,8 @@ private function CreateCategoryByIdent($id, $ident, $name)
 		}
 		
 	
-	}
-
-
-
-
-
-
+	
+	
 
 // external Classes from Netatmo
 
@@ -2486,6 +2481,48 @@ class NACamera extends NAObject
         return $this->getVar(NACameraInfo::CI_STATUS);
     }
 }
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	}
+
+
+
 
 
 
