@@ -1946,5 +1946,480 @@ class NAWSApiClient extends NAApiClient
 
 
 
+/**
+* Class NAEvent
+*/
+class NAEvent extends NAObjectWithPicture
+{
+    private static $videoEvents = array(NACameraEventType::CET_PERSON, NACameraEventType::CET_MOVEMENT);
+
+    /**
+    *
+    * @brief returns event's snapshot
+    */
+    public function getSnapshot()
+    {
+        $snapshot = $this->getVar(NACameraEventInfo::CEI_SNAPSHOT);
+        return $this->getPictureURL($snapshot);
+    }
+
+    /**
+    * @return string
+    * @brief returns event's description
+    */
+    public function getMessage()
+    {
+        return $this->getVar(NACameraEventInfo::CEI_MESSAGE);
+    }
+
+    /**
+    * @return timestamp
+    * @brief returns at which time the event has been triggered
+    */
+    public function getTime()
+    {
+        return $this->getVar(NACameraEventInfo::CEI_TIME);
+    }
+
+    /**
+    * @return string
+    * @brief returns the event's type
+    */
+    public function getEventType()
+    {
+        return $this->getVar(NACameraEventInfo::CEI_TYPE);
+    }
+
+    /**
+    * @return int
+    * @brief returns event's subtype for SD Card & power adapter events
+    * @throw NASDKException
+    */
+    public function getEventSubType()
+    {
+        if($this->getEventType() === NACameraEventType::CET_SD
+            || $this->getEventType() === NACameraEventType::CET_ALIM)
+        {
+            return $this->getVar(NACameraEventInfo::CEI_SUB_TYPE);
+        }
+        else throw new NASDKException(NASDKError::INVALID_FIELD, "This field does not exist for this type of event");
+    }
+
+    /**
+    * @return string
+    * @brief returns id of the camera that triggered the event
+    */
+    public function getCameraId()
+    {
+        return $this->getVar(NACameraEventInfo::CEI_CAMERA_ID);
+    }
+
+    /**
+    * @return string
+    * @brief returns id of the person seen in the event
+    * @throw NASDKException
+    */
+    public function getPersonId()
+    {
+        if($this->getEventType() === NACameraEventType::CET_PERSON
+            || $this->getEventType() === NACameraEventType::CET_PERSON_AWAY
+        )
+        {
+            return $this->getVar(NACameraEventInfo::CEI_PERSON_ID);
+        }
+        else throw new NASDKException(NASDKError::INVALID_FIELD, "This field does not exist for this type of event");
+
+    }
+
+    public function hasVideo()
+    {
+        if(in_array($this->getEventType(), $this->videoEvents))
+            return TRUE;
+        else return FALSE;
+    }
+
+    /**
+    * @return string
+    * @brief returns event's video id
+    * @throw NASDKException
+    */
+    public function getVideo()
+    {
+        if($this->hasVideo())
+            return $this->getVar(NACameraEventInfo::CEI_VIDEO_ID);
+        else throw new NASDKException(NASDKError::INVALID_FIELD, "This type of event does not have videos");
+    }
+
+    /**
+    * @return string
+    * @brief returns event's video status
+    * @throw NASDKException
+    */
+    public function getVideoStatus()
+    {
+        if($this->hasVideo())
+            return $this->getVar(NACameraEventInfo::CEI_VIDEO_STATUS);
+        else throw new NASDKException(NASDKError::INVALID_FIELD, "This type of event does not have videos");
+
+    }
+
+    /**
+    * @return boolean
+    * @brief returns whether or not this event corresponds to the moment where the person arrived home
+    * @throw NASDKException
+    */
+    public function isPersonArrival()
+    {
+        if($this->getEventType() === NACameraEventType::CET_PERSON)
+        {
+            return $this->getVar(NACameraEventInfo::CEI_IS_ARRIVAL);
+        }
+        else throw new NASDKException(NASDKError::INVALID_FIELD, "This field does not exist for this type of event");
+
+    }
+}
+
+
+
+require_once dirname(__FILE__)."/../Constants/AppliCommonPublic.php";
+
+/**
+* NAObject Class
+* Abstact class, parent of every objects
+*/
+abstract class NAObject
+{
+    protected $object = array();
+
+    public function __construct($array)
+    {
+        $this->object = $array;
+    }
+
+    /**
+    * @param string field : array key
+    * @param $default : default value in case field is not set
+    * @return object field or default if field is not set
+    * @brief returns an object's field
+    */
+    public function getVar($field, $default = NULL)
+    {
+        if(isset($this->object[$field]))
+            return $this->object[$field];
+        else return $default;
+    }
+
+    /**
+    * @param string $field : field to be set
+    * @param $value value to set to field
+    * @brief set an object's field
+    */
+    public function setVar($field, $value)
+    {
+        $this->object[$field] = $value;
+    }
+
+    /**
+    * @return id
+    * @btief returns object id
+    */
+    public function getId()
+    {
+        return $this->getVar("id");
+    }
+
+    /**
+    * @return array $object
+    * @brief return this object as an array
+    */
+    public function toArray()
+    {
+        return $this->object;
+    }
+
+    /**
+    * @return JSON document
+    * @brief returns object as a JSON document
+    */
+    public function toJson()
+    {
+        return json_encode($this->toArray());
+    }
+
+    /**
+    * @return string
+    * @brief return string representation of object : JSON doc
+    */
+    public function __toString()
+    {
+        return $this->toJson();
+    }
+
+}
+
+abstract class NAObjectWithPicture extends NAObject
+{
+    public function getPictureURL($picture, $baseURI = 'https://api.netatmo.com/api/getcamerapicture')
+    {
+        if(isset($picture[NACameraImageInfo::CII_ID]) && isset($picture[NACameraImageInfo::CII_KEY]))
+        {
+            return $baseURI.'?image_id='.$picture[NACameraImageInfo::CII_ID].'&key='.$picture[NACameraImageInfo::CII_KEY];
+        }
+        else return NULL;
+
+    }
+
+}
+
+
+/**
+* class NAPerson
+*/
+class NAPerson extends NAObjectWithPicture
+{
+    /**
+    * @return bool
+    * @brief returns whether or not this person is known
+    */
+    public function isKnown()
+    {
+        if($this->getVar(NACameraPersonInfo::CPI_PSEUDO, FALSE))
+            return TRUE;
+        else return FALSE;
+    }
+
+    /**
+    * @return bool
+    * @brief returns whether or not this person is unknown
+    */
+
+    public function isUnknown()
+    {
+        return !$this->isKnown();
+    }
+
+    /**
+    * @return bool
+    * @brief returns whether or not this person is at home
+    */
+    public function isAway()
+    {
+        return $this->getVar(NACameraPersonInfo::CPI_OUT_OF_SIGHT);
+    }
+
+    public function getFace()
+    {
+        $face = $this->getVar(NACameraPersonInfo::CPI_FACE);
+        return $this->getPictureURL($face);
+    }
+
+    /**
+    * @return timestamp
+    * @brief returns last time this person has been seen
+    */
+    public function getLastSeen()
+    {
+        return $this->getVar(NACameraPersonInfo::CPI_LAST_SEEN);
+    }
+
+    /**
+    * @return string
+    * @brief returns this person's name
+    */
+    public function getPseudo()
+    {
+        return $this->getVar(NACameraPersonInfo::CPI_PSEUDO);
+    }
+}
+
+
+/**
+* Class NAHome
+*
+*/
+class NAHome extends NAObject
+{
+
+    public function __construct($array)
+    {
+        parent::__construct($array);
+
+        if(isset($array[NACameraHomeInfo::CHI_PERSONS]))
+        {
+            $personArray = array();
+            foreach($array[NACameraHomeInfo::CHI_PERSONS] as $person)
+            {
+                $personArray[] = new NAPerson($person);
+            }
+            $this->object[NACameraHomeInfo::CHI_PERSONS] = $personArray;
+        }
+
+        if(isset($array[NACameraHomeInfo::CHI_EVENTS]))
+        {
+            $eventArray = array();
+            foreach($array[NACameraHomeInfo::CHI_EVENTS] as $event)
+            {
+                $eventArray[] = new NAEvent($event);
+            }
+            $this->object[NACameraHomeInfo::CHI_EVENTS] = $eventArray;
+        }
+
+        if(isset($array[NACameraHomeInfo::CHI_CAMERAS]))
+        {
+            $cameraArray = array();
+            foreach($array[NACameraHomeInfo::CHI_CAMERAS] as $camera)
+            {
+                $cameraArray[] = new NACamera($camera);
+            }
+            $this->object[NACameraHomeInfo::CHI_CAMERAS] = $cameraArray;
+        }
+    }
+
+    /**
+    * @return string
+    * @brief returns home's name
+    */
+    public function getName()
+    {
+        return $this->getVar(NACameraHomeInfo::CHI_NAME);
+    }
+
+    /**
+    * @return array of event objects
+    * @brief returns home timeline of event
+    */
+    public function getEvents()
+    {
+        return $this->getVar(NACameraHomeInfo::CHI_EVENTS, array());
+    }
+
+    /**
+    * @return array of person objects
+    * @brief returns every person belonging to this home
+    */
+    public function getPersons()
+    {
+        return $this->getVar(NACameraHomeInfo::CHI_PERSONS, array());
+    }
+
+    /**
+    * @return array of person objects
+    * @brief returns every known person belonging to this home
+    */
+    public function getKnownPersons()
+    {
+        $knowns = array();
+        foreach($this->getVar(NACameraHomeInfo::CHI_PERSONS, array()) as $person)
+        {
+            if($person->isKnown())
+                $knowns[] = $person;
+        }
+        return $knowns;
+    }
+
+    /**
+    * @return array of person objects
+    * @brief returns every unknown person belonging to this home
+    */
+    public function getUnknownPersons()
+    {
+        $unknowns = array();
+        foreach($this->getVar(NACameraHomeInfo::CHI_PERSONS, array()) as $person)
+        {
+            if($person->isUnknown())
+                $unknowns[] = $person;
+        }
+        return $unknowns;
+    }
+
+    /**
+    * @return array of camera objects
+    * @brief returns every camera belonging to this home
+    */
+    public function getCameras()
+    {
+        return $this->getVar(NACameraHomeInfo::CHI_CAMERAS, array());
+    }
+
+    /**
+    * @return string
+    * @brief returns home's timezone
+    */
+    public function getTimezone()
+    {
+        $place = $this->getVar(NACameraHomeInfo::CHI_PLACE);
+        return isset($place['timezone'])? $place['timezone'] : 'GMT';
+    }
+
+    /**
+    * @return NACamera
+    * @brief return the camera object corresponding to the id asked
+    * @throw NASDKErrorException
+    */
+    public function getCamera($camera_id)
+    {
+        foreach($this->getVar(NACameraHomeInfo::CHI_CAMERAS, array()) as $camera)
+        {
+            if($camera->getId() === $camera_id)
+            {
+                return $camera;
+            }
+        }
+        throw new NASDKException(NASDKError::NOT_FOUND, "camera $camera_id not found in home: " . $this->getId());
+    }
+
+    /**
+    * @return NAPerson
+    * @brief returns NAPerson object corresponding to the id in parameter
+    * @throw NASDKErrorException
+    */
+    public function getPerson($person_id)
+    {
+        foreach($this->getVar(NACameraHomeInfo::CHI_PERSONS, array()) as $camera)
+        {
+            if($person->getId() === $person_id)
+                return $person;
+        }
+
+        throw new NASDKException(NASDKError::NOT_FOUND, "person $person_id not found in home: " . $this->getId());
+    }
+
+    /**
+    * @return array of NAPerson
+    * @brief returns every person that are not home
+    */
+    public function getPersonAway()
+    {
+        $away = array();
+
+        foreach($this->getVar(NACameraHomeInfo::CHI_PERSONS, array()) as $person)
+        {
+            if($person->isAway())
+                $away[] = $person;
+        }
+        return $away;
+    }
+
+    /**
+    * @return array of NAPerson
+    * @brief returns every person that are home
+    */
+    public function getPersonAtHome()
+    {
+        $home = array();
+
+        foreach($this->getVar(NACameraHomeInfo::CHI_PERSONS, array()) as $person)
+        {
+            if(!$person->isAway())
+                $home[] = $person;
+        }
+        return $home;
+    }
+}
+
+
+
+
+
 ?>
 
