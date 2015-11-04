@@ -38,8 +38,9 @@
 			&& (IPS_GetProperty($this->InstanceID, "client_id") != "") 
 			&& (IPS_GetProperty($this->InstanceID, "client_secret") != "")
 			){
-			
-	
+			echo "";
+			}
+		}
 
 /**
  * Prints a list of devices
