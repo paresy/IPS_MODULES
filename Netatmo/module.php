@@ -32,8 +32,10 @@
 			$client_id = $this->ReadPropertyString("client_id");
 			$client_secret = $this->ReadPropertyString("client_secret");
 			
-			if((IPS_GetProperty($this->InstanceID, "username") != "") && (IPS_GetProperty($this->InstanceID, "password") != "") ) 
-			&& (IPS_GetProperty($this->InstanceID, "client_id") != "") && (IPS_GetProperty($this->InstanceID, "client_secret") != "") {
+			if(
+			(IPS_GetProperty($this->InstanceID, "username") != "") && (IPS_GetProperty($this->InstanceID, "password") != "") ) 
+			&& (IPS_GetProperty($this->InstanceID, "client_id") != "") && (IPS_GetProperty($this->InstanceID, "client_secret") != "")
+			){
 			
 	
 
