@@ -18,7 +18,10 @@
 		{
 			//Never delete this line!
 			parent::ApplyChanges();
-			
+			$this->RegisterPropertyString("username",  $this->ReadPropertyString("username"));
+			$this->RegisterPropertyString("password", $this->ReadPropertyString("password"));
+			$this->RegisterPropertyString("client_id", $this->ReadPropertyString("client_id"));
+			$this->RegisterPropertyString("client_secret", $this->ReadPropertyString("client_secret"));
 		//	Update();
 
 		}
