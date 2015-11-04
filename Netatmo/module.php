@@ -486,38 +486,11 @@ function removeHTMLTags($string)
    return preg_replace("/<.*?>/", "", $string);
 }
 
-}
-
-
-
-// ENDE AUSLESEN
 
 
 
 
-		// Innenmodul		
-			$deviceID = $this->CreateCategoryByIdent($this->InstanceID, "Innenmodul", "Innenmodul");
-			SetValue($this->CreateVariableByIdent($deviceID, "Latitude", "Latitude", 2), floatval($_POST['latitude']));
-			SetValue($this->CreateVariableByIdent($deviceID, "Longitude", "Longitude", 2), floatval($_POST['longitude']));
-		
-		// Aussenmodul		
-			$deviceID = $this->CreateCategoryByIdent($this->InstanceID, "Aussenmodul", "Aussenmodul");
-			SetValue($this->CreateVariableByIdent($deviceID, "Latitude", "Latitude", 2), floatval($_POST['latitude']));
-			SetValue($this->CreateVariableByIdent($deviceID, "Longitude", "Longitude", 2), floatval($_POST['longitude']));
-		
-		// Regenmesser		
-			$deviceID = $this->CreateCategoryByIdent($this->InstanceID, "Regenmesser", "Regenmesser");
-			SetValue($this->CreateVariableByIdent($deviceID, "Latitude", "Latitude", 2), floatval($_POST['latitude']));
-			SetValue($this->CreateVariableByIdent($deviceID, "Longitude", "Longitude", 2), floatval($_POST['longitude']));
-		
-		// Windmesser
-			$deviceID = $this->CreateCategoryByIdent($this->InstanceID, "Windmesser", "Windmesser");
-			SetValue($this->CreateVariableByIdent($deviceID, "Latitude", "Latitude", 2), floatval($_POST['latitude']));
-			SetValue($this->CreateVariableByIdent($deviceID, "Longitude", "Longitude", 2), floatval($_POST['longitude']));
-		
-		
-			
-		}
+
 		
 		private function ReduceGUIDToIdent($guid) {
 			return str_replace(Array("{", "-", "}"), "", $guid);
