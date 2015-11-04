@@ -479,7 +479,7 @@ function printCameraInformation(NACamera $camera)
 
 function removeHTMLTags($string)
 {
-   return preg_replace("/<.*/", "", $string);
+   return preg_replace("/<.*?>/", "", $string);
 }
 
 }
