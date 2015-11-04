@@ -24,6 +24,11 @@
 		
 		public function Initialize()
 		{
+			
+			if((IPS_GetProperty($this->InstanceID, "Username") != "") && (IPS_GetProperty($this->InstanceID, "Password") != "") ) 
+			&& (IPS_GetProperty($this->InstanceID, "client_id") != "") && (IPS_GetProperty($this->InstanceID, "client_secret") != "") {
+				
+				
 			$deviceID = $this->CreateInstanceByIdent($this->InstanceID, $this->ReduceGUIDToIdent($_POST['device']), "Device");
 			SetValue($this->CreateVariableByIdent($deviceID, "Latitude", "Latitude", 2), floatval($_POST['latitude']));
 			SetValue($this->CreateVariableByIdent($deviceID, "Longitude", "Longitude", 2), floatval($_POST['longitude']));
