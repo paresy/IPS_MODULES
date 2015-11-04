@@ -449,8 +449,7 @@ function printPersonInformation(NAPerson $person, $tz)
 {
     $person->isKnown() ? printMessageWithBorder($person->getPseudo()) : printMessageWithBorder("Inconnu");
     echo("id: ". $person->getId(). "\n");
-    if($person->isAway())
-        echo("is away from home \n" );
+    if($person->isAway())  echo("is away from home \n" );
     else echo("is home \n");
 
     echo ("Last seen on: ");
@@ -487,22 +486,15 @@ function removeHTMLTags($string)
    return preg_replace("/<.*?>/", "", $string);
 }
 
+private function ReduceGUIDToIdent($guid) {
+	return str_replace(Array("{", "-", "}"), "", $guid);
+}
 
-
-
-
-
-		
-		private function ReduceGUIDToIdent($guid) {
-			return str_replace(Array("{", "-", "}"), "", $guid);
-		}
-		
-
-		private function CreateCategoryByIdent($id, $ident, $name)
-		 {
-			 $cid = @IPS_GetObjectIDByIdent($ident, $id);
-			 if($cid === false)
-			 {
+private function CreateCategoryByIdent($id, $ident, $name)
+ {
+ $cid = @IPS_GetObjectIDByIdent($ident, $id);
+ if($cid === false)
+ {
 				 $cid = IPS_CreateCategory();
 				 IPS_SetParent($cid, $id);
 				 IPS_SetName($cid, $name);
