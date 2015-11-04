@@ -25,8 +25,7 @@
 		
 		public function Update()
 		{
-require_once 'NAApiClient.php';
-require_once 'Config.php';
+
 
 			$username = $this->ReadPropertyString("username");
 			$password = $this->ReadPropertyString("password");
@@ -38,7 +37,7 @@ require_once 'Config.php';
 			
 			$scope = NAScopes::SCOPE_READ_STATION;
 
-			$client = new NAApiClient(array("client_id" => $client_id, "client_secret" => $client_secret, "username" => $test_username, "password" => $test_password, "scope" => $scope));
+			$client = new NAApiClient(array("client_id" => $client_id, "client_secret" => $client_secret, "username" => $username, "password" => $password, "scope" => $scope));
 			$helper = new NAApiHelper($client);
 
 			try {
@@ -354,9 +353,6 @@ echo "User does not have any devices\n";
 // external Classes from Netatmo
 
 <?php
-require_once (dirname(__FILE__).'/../Constants/AppliCommonPublic.php');
-require_once (dirname(__FILE__).'/../Exceptions/NASDKException.php');
-require_once (dirname(__FILE__).'/../Exceptions/NAClientException.php');
 
 
 define('CURL_ERROR_TYPE', 0);
