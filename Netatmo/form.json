@@ -7,6 +7,10 @@
 		{ "name": "client_secret", "type": "PasswordTextBox", "caption": "Client Secret" }
 	
 	],
+	"actions":
+	[
+		{ "type": "Button", "label": "Save", "onClick": "NAW_Update($id);" }
+	],
 	"status":
     [
         { "code": 102, "icon": "active", "caption": "Login information valid" },
