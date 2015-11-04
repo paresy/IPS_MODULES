@@ -2081,7 +2081,7 @@ class NAEvent extends NAObjectWithPicture
 
 
 
-require_once dirname(__FILE__)."/../Constants/AppliCommonPublic.php";
+
 
 /**
 * NAObject Class
