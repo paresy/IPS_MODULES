@@ -11,6 +11,7 @@
 			$this->RegisterPropertyString("password", "");
 			$this->RegisterPropertyString("client_id", "");
 			$this->RegisterPropertyString("client_secret", "");
+			$this->RegisterPropertyBoolean("debug", true);
 		}
 	
 		public function ApplyChanges()
@@ -18,12 +19,16 @@
 			//Never delete this line!
 			parent::ApplyChanges();
 			
-			Initialize();
+			Update();
 
 		}
 		
-		public function Initialize()
+		public function Update()
 		{
+			$username = $this->ReadPropertyString("username");
+			$password = $this->ReadPropertyString("password");
+			$client_id = $this->ReadPropertyString("client_id");
+			$client_secret = $this->ReadPropertyString("client_secret");
 			
 			if((IPS_GetProperty($this->InstanceID, "Username") != "") && (IPS_GetProperty($this->InstanceID, "Password") != "") ) 
 			&& (IPS_GetProperty($this->InstanceID, "client_id") != "") && (IPS_GetProperty($this->InstanceID, "client_secret") != "") {
