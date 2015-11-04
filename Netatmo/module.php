@@ -170,6 +170,318 @@ else
     {
         handleError("An error occcured while retrieving last month info: ".$ex->getMessage() . " \n");
     }
+    
+    
+function handleError($message, $exit = FALSE)
+{
+    echo $message;
+    if($exit)
+        exit(-1);
+}
+
+function printTimeInTz($time, $timezone, $format)
+{
+    try{
+        $tz = new DateTimeZone($timezone);
+    }
+    catch(Exception $ex)
+    {
+        $tz = new DateTimeZone("GMT");
+    }
+    $date = new DateTime();
+    $date->setTimezone($tz);
+    $date->setTimestamp($time);
+    echo $date->format($format);
+}
+
+function printBorder($message)
+{
+    $size = strlen($message);
+    for($i = 0; $i < $size; $i++)
+        echo("-");
+    echo("\n");
+}
+
+function printMessageWithBorder($message)
+{
+    $message = "- " . $message . " -";
+    printBorder($message);
+    echo $message . "\n";
+    printBorder($message);
+}
+
+function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
+{
+    if(!empty($measurements))
+    {
+        if(!empty($title))
+            printMessageWithBorder($title);
+
+        if($monthly)
+            $dateFormat = 'F: ';
+        else $dateFormat = 'j F: ';
+        //array of requested info type, needed to map result values to what they mean
+        $keys = explode(",", $type);
+
+        foreach($measurements as $timestamp => $values)
+        {
+            printTimeinTz($timestamp, $tz, $dateFormat);
+             echo"\n";
+            foreach($values as $key => $val)
+            {
+                echo $keys[$key] . ": ";
+                if($keys[$key] === "time_utc" || preg_match("/^date_.*/", $keys[$key]))
+                    echo printTimeInTz($val, $tz, "j F H:i");
+                else{
+                    echo $val;
+                    printUnit($keys[$key]);
+                }
+                if(count($values)-1 === $key || $monthly)
+                    echo "\n";
+                else echo ", ";
+            }
+        }
+    }
+}
+
+/**
+ * function printing a weather station or modules basic information such as id, name, dashboard data, modules (if main device), type(if module)
+ *
+ */
+function printWSBasicInfo($device)
+{
+    if(isset($device['station_name']))
+        echo ("- ".$device['station_name']. " -\n");
+    else if($device['module_name'])
+        echo ("- ".$device['module_name']. " -\n");
+
+    echo ("id: " . $device['_id']. "\n");
+
+    if(isset($device['type']))
+    {
+        echo ("type: ");
+        switch($device['type'])
+        {
+            // Outdoor Module
+            case "NAModule1": echo ("Outdoor\n");
+                              break;
+            //Wind Sensor
+            case "NAModule2": echo("Wind Sensor\n");
+                              break;
+
+            //Rain Gauge
+            case "NAModule3": echo("Rain Gauge\n");
+                              break;
+            //Indoor Module
+            case "NAModule4": echo("Indoor\n");
+                              break;
+            case "NAMain" : echo ("Main device \n");
+                            break;
+        }
+
+    }
+
+    if(isset($device['place']['timezone']))
+        $tz = $device['place']['timezone'];
+    else $tz = 'GMT';
+
+    if(isset($device['dashboard_data']))
+    {
+        echo ("Last data: \n");
+        foreach($device['dashboard_data'] as $key => $val)
+        {
+            if($key === 'time_utc' || preg_match("/^date_.*/", $key))
+            {
+                echo $key .": ";
+                printTimeInTz($val, $tz, 'j F H:i');
+                echo ("\n");
+            }
+            else if(is_array($val))
+            {
+                //do nothing : don't print historic
+            }
+            else {
+                echo ($key .": " . $val);
+                printUnit($key);
+                echo "\n";
+            }
+        }
+
+        if(isset($device['modules']))
+        {
+            echo (" \n\nModules: \n");
+            foreach($device['modules'] as $module)
+                printWSBasicInfo($module);
+        }
+    }
+
+    echo"       ----------------------   \n";
+}
+
+function printUnit($key)
+{
+    $typeUnit = array('temp' => '°C', 'hum' => '%', 'noise' => 'db', 'strength' => 'km/h', 'angle' => '°', 'rain' => 'mm', 'pressure' => 'mbar', 'co2' => 'ppm');
+    foreach($typeUnit as $type => $unit)
+    {
+        if(preg_match("/.*$type.*/i", $key))
+        {
+            echo " ".$unit;
+            return;
+        }
+    }
+}
+
+/** THERM Utils function **/
+/*
+* @brief print a thermostat basic information in CLI
+*/
+function printThermBasicInfo($dev)
+{
+    //Device
+    echo (" -".$dev['station_name']."- \n");
+    echo (" id: ".$dev['_id']." \n");
+    echo ("Modules : \n");
+    // Device's modules info
+    foreach($dev['modules'] as $module)
+    {
+        echo ("    - ".$module['module_name']." -\n");
+
+        //module last measurements
+        echo ("    Last Measure date : ");
+        printTimeInTz($module['measured']['time'], $dev['place']['timezone'], 'j F H:i');
+        echo("\n");
+        echo ("    Last Temperature measured: ". $module['measured']['temperature']);
+        printUnit("temperature");
+        echo("\n");
+        echo ("    Last Temperature setpoint: ". $module['measured']['setpoint_temp']);
+        printUnit('setpoint_temp');
+        echo("\n");
+        echo ("    Program List: \n");
+
+        //program list
+        foreach($module['therm_program_list'] as $program)
+        {
+            if(isset($program['name']))
+                echo ("        -".$program['name']."- \n");
+            else echo("        -Standard- \n");
+            echo ("        id: ".$program['program_id']." \n");
+            if(isset($program['selected']) && $program['selected'] === TRUE)
+            {
+                echo "         This is the current program \n";
+            }
+        }
+    }
+
+}
+
+/**
+* @brief returns the current program of a therm module
+*/
+function getCurrentProgram($module)
+{
+    foreach($module['therm_program_list'] as $program)
+    {
+        if(isset($program['selected']) && $program['selected'] === TRUE)
+            return $program['program_id'];
+    }
+    //not found
+    return NULL;
+}
+
+/**
+* @brief returns the current setpoint of a therm module along with its setpoint temperature and endtime if defined
+*/
+function getCurrentMode($module)
+{
+    $initialMode = $module["setpoint"]["setpoint_mode"];
+    $initialTemp = isset($module["setpoint"]["setpoint_temp"]) ? $module["setpoint"]["setpoint_temp"]: NULL;
+    $initialEndtime = isset($module['setpoint']['setpoint_endtime']) ? $module['setpoint']['setpoint_endtime'] : NULL;
+
+    return array($initialMode, $initialTemp, $initialEndtime);
+
+}
+
+function printHomeInformation(NAHome $home)
+{
+    !is_null($home->getName()) ? printMessageWithBorder($home->getName()) : printMessageWithBorder($home->getId());
+    echo ("id: ". $home->getId() ."\n");
+
+    $tz = $home->getTimezone();
+    $persons = $home->getPersons();
+	
+    if(!empty($persons))
+    {
+        printMessageWithBorder("Persons");
+        //print person list
+        foreach($persons as $person)
+        {
+            printPersonInformation($person, $tz);
+        }
+    }
+
+    if((!empty($home->getEvents())))
+    {
+        printMessageWithBorder('Timeline of Events');
+        //print event list
+        foreach($home->getEvents() as $event)
+        {
+            printEventInformation($event, $tz);
+        }
+    }
+
+    if(!empty($home->getCameras()))
+    {
+        printMessageWithBorder("Cameras");
+        foreach($home->getCameras() as $camera)
+        {
+            printCameraInformation($camera);
+        }
+    }
+}
+
+
+function printPersonInformation(NAPerson $person, $tz)
+{
+    $person->isKnown() ? printMessageWithBorder($person->getPseudo()) : printMessageWithBorder("Inconnu");
+    echo("id: ". $person->getId(). "\n");
+    if($person->isAway())
+        echo("is away from home \n" );
+    else echo("is home \n");
+
+    echo ("Last seen on: ");
+    printTimeInTz($person->getLastSeen(), $tz, "j F H:i");
+    echo ("\n");
+}
+
+function printEventInformation(NAEvent $event, $tz)
+{
+  printTimeInTz($event->getTime(), $tz, "j F H:i");
+  $message = removeHTMLTags($event->getMessage());
+  echo(": ".$message. "\n");
+}
+
+function printCameraInformation(NACamera $camera)
+{
+    !is_null($camera->getName()) ? printMessageWithBorder($camera->getName()) : printMessageWithBorder($camera->getId());
+
+    echo("id: ". $camera->getId() ."\n");
+    echo("Monitoring status: ". $camera->getVar(NACameraInfo::CI_STATUS) ."\n");
+    echo("SD card status: " .$camera->getVar(NACameraInfo::CI_SD_STATUS) . "\n");
+    echo ("Power status: ". $camera->getVar(NACameraInfo::CI_ALIM_STATUS) ."\n");
+
+    if($camera->getGlobalStatus())
+        $globalStatus = "OK";
+    else $globalStatus = "NOK";
+
+    echo ("Global Status: ". $globalStatus ."\n");
+
+}
+
+function removeHTMLTags($string)
+{
+   return preg_replace("/<.*/", "", $string);
+}
+
 }
 
 
@@ -254,229 +566,11 @@ else
 
 
 
-
-
-
-/// ALTES SCRIPT
-
-
-/*
-Authentication to Netatmo Server with the user credentials grant
-*/
-
-
-
-
-try
-{
-
-//echo $Carport;
-
-
-  //          "a": 20.1,
-    //        "b": 63
-
-if(isset($deviceList["devices"][0]))
-    {
-    $device_id = $deviceList["devices"][0]["_id"];
-    // Ok now retrieve last temperature and humidity from indoor/base
-    $params = array("scale" =>"max",
-    "type"=>"Temperature,Humidity,Co2,Pressure,Noise",
-    "date_end"=>"last",
-    "device_id"=>$device_id);
-    $res = $client->api("getmeasure", $params);
-    if(isset($res[0]) && isset($res[0]["beg_time"]))
-        {
-        $time = $res[0]["beg_time"];
-        $t = $res[0]["value"][0][0];
-        $h = $res[0]["value"][0][1];
-        $co2 = $res[0]["value"][0][2];
-        $pres = $res[0]["value"][0][3];
-        $noise = $res[0]["value"][0][4];
-//        echo "Temperature is $t ° Celsius @".date('c', $time)."\n";
-//        echo "Humidity is $h % @".date('c', $time)."\n";
-//        echo "CO2 is $co2 ppm @".date('c', $time)."\n";
-//        echo "Luftdruck is $pres hPa @".date('c', $time)."\n";
-//        echo "Lärm is $noise db @".date('c', $time)."\n";
-        SetValue(57989 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Humidity]*/, $h);
-        SetValueFloat(27551 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Temperature]*/, $t);
-        SetValueFloat(48408 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\CO2]*/, $co2);
-        SetValueFloat(24051 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Noise]*/, $noise);
-        SetValue(20059 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\AbsolutePressure]*/, $pres);
-        }
-    }
-        {
-    $device_id = $deviceList["devices"][0]["_id"];
-    // Ok now retrieve last temperature and humidity from outdoor
-    $params = array("scale" =>"max",
-    "type"=>"Temperature,Humidity",
-    "date_end"=>"last",
-    "device_id"=>$device_id,
-    "module_id"=>$carport);
-    $res = $client->api("getmeasure", $params);
-    if(isset($res[0]) && isset($res[0]["beg_time"]))
-        {
-        $time = $res[0]["beg_time"];
-        $t = $res[0]["value"][0][0];
-        $h = $res[0]["value"][0][1];
-//        echo "Aussentemperature is $t Celsius @".date('c', $time)."\n";
-//        echo "Aussen-Humidity is $h % @".date('c', $time)."\n";
-        SetValue(57713 /*[Zentrale Funktionen\Netatmo\Koeppern\Aussenmodul\Humidity]*/, $h);
-        SetValueFloat(33854 /*[Zentrale Funktionen\Netatmo\Koeppern\Aussenmodul\Temperature]*/, $t);
-        }
-
-    
-      $device_id = $deviceList["devices"][0]["_id"];
-    $params = array("scale" =>"max",
-    "type"=>"rain",
-    "date_end"=>"last",
-    "device_id"=>$device_id,
-    "module_id"=>$regen);
-    $res = $client->api("getmeasure", $params);
-//    print_r($res);
-    if(isset($res[0]) && isset($res[0]["beg_time"]))
-        {
-        $time = $res[0]["beg_time"];
-        $t = $res[0]["value"][0][0];
-  
-     //   echo "Aussentemperature is $t Celsius @".date('c', $time)."\n";
-     //   echo "Aussen-Humidity is $h % @".date('c', $time)."\n";
-        SetValue(59005 /*[Zentrale Funktionen\Netatmo\Koeppern\Regen Koeppern\Rain]*/, $t);
-      //  SetValueFloat(33854 /*[Zentrale Funktionen\Netatmo\Koeppern\Aussenmodul\Temperature]*/, $t);
-        }
-    }
-
-
-if(isset($deviceList["devices"][0]))
-    {
-    $device_id = $deviceList["devices"][0]["_id"];
-    // Ok now retrieve last temperature and humidity from indoor/base
-    $params = array("scale" =>"1day",
-    "type"=>"min_temp,max_temp,min_hum,max_hum,min_pressure,max_pressure,min_noise,max_noise",
-    "date_end"=>"last",
-    "device_id"=>$device_id);
-    $res = $client->api("getmeasure", $params);
-    if(isset($res[0]) && isset($res[0]["beg_time"]))
-        {
-        $time = $res[0]["beg_time"];
-        $tmin = $res[0]["value"][0][0];
-        $tmax = $res[0]["value"][0][1];
-        $hmin = $res[0]["value"][0][2];
-        $hmax = $res[0]["value"][0][3];
-        $presmin = $res[0]["value"][0][4];
-        $presmax = $res[0]["value"][0][5];
-        $noisemin = $res[0]["value"][0][6];
-        $noisemax = $res[0]["value"][0][7];
-
-        SetValue(43864 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Min Temperature]*/, $tmin);
-        SetValue(12767 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Max Temperature]*/, $tmax);
-
-        SetValue(57264 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Min Humidity]*/ , $hmin);
-        SetValue(35077 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Max Humidity]*/ , $hmax);
-        
-        SetValue(24212 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Min AbsolutePressure]*/ , $presmin);
-        SetValue(58811 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Max AbsolutePressure]*/ , $presmax);
-        
-        SetValue(53094 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Min Noise]*/ , $noisemin);
-        SetValue(15986 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Max Noise]*/ , $noisemax);
-        
-	   //  SetValueFloat(27551 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Temperature]*/, $t);
-     //   SetValueFloat(48408 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\CO2]*/, $co2);
-     //   SetValueFloat(24051 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\Noise]*/, $noise);
-      //  SetValue(20059 /*[Zentrale Funktionen\Netatmo\Koeppern\Innenmodul\AbsolutePressure]*/, $pres);
-        }
-    }
-
-    $device_id = $deviceList["devices"][0]["_id"];
-    $params = array("scale" =>"1hour",
-    "type"=>"sum_rain",
-    "date_end"=>"last",
-    "device_id"=>$device_id,
-    "module_id"=>$regen);
-    $res = $client->api("getmeasure", $params);
-//    print_r($res);
-    if(isset($res[0]) && isset($res[0]["beg_time"]))
-        {
-        $time = $res[0]["beg_time"];
-        $t = $res[0]["value"][0][0];
-
-     //   echo "Aussentemperature is $t Celsius @".date('c', $time)."\n";
-     //   echo "Aussen-Humidity is $h % @".date('c', $time)."\n";
-        SetValue(20861 /*[Zentrale Funktionen\Netatmo\Koeppern\Regen Koeppern\sum_rain_1]*/, $t);
-      //  SetValueFloat(33854 /*[Zentrale Funktionen\Netatmo\Koeppern\Aussenmodul\Temperature]*/, $t);
-        }
-
-    
-      $device_id = $deviceList["devices"][0]["_id"];
-    $params = array("scale" =>"1day",
-    "type"=>"sum_rain",
-    "date_end"=>"last",
-    "device_id"=>$device_id,
-    "module_id"=>$regen);
-    $res = $client->api("getmeasure", $params);
-//    print_r($res);
-    if(isset($res[0]) && isset($res[0]["beg_time"]))
-        {
-        $time = $res[0]["beg_time"];
-        $t = $res[0]["value"][0][0];
-
-     //   echo "Aussentemperature is $t Celsius @".date('c', $time)."\n";
-     //   echo "Aussen-Humidity is $h % @".date('c', $time)."\n";
-        SetValue(58216 /*[Zentrale Funktionen\Netatmo\Koeppern\Regen Koeppern\sum_rain_24]*/, $t);
-      //  SetValueFloat(33854 /*[Zentrale Funktionen\Netatmo\Koeppern\Aussenmodul\Temperature]*/, $t);
-        }
-
-   $device_id = $deviceList["devices"][0]["_id"];
-    // Ok now retrieve last temperature and humidity from outdoor
-    $params = array("scale" =>"30min",
-    "type"=>"min_temp,max_temp,min_hum,max_hum",
-    "date_end"=>"last",
-    "device_id"=>$device_id,
-    "module_id"=>$carport);
-    $res = $client->api("getmeasure", $params);
-    if(isset($res[0]) && isset($res[0]["beg_time"]))
-        {
-        $time = $res[0]["beg_time"];
-        $tmin = $res[0]["value"][0][0];
-         $tmax = $res[0]["value"][0][1];
-        $hmin = $res[0]["value"][0][2];
-          $hmax = $res[0]["value"][0][3];
-//        echo "Aussentemperature is $t Celsius @".date('c', $time)."\n";
-//        echo "Aussen-Humidity is $h % @".date('c', $time)."\n";
-        SetValue(52286 /*[Zentrale Funktionen\Netatmo\Koeppern\Aussenmodul\Min Humidity]*/, $hmin);
-        SetValue(17470 /*[Zentrale Funktionen\Netatmo\Koeppern\Aussenmodul\Max Humidity]*/, $hmax);
-        SetValueFloat(23563 /*[Zentrale Funktionen\Netatmo\Koeppern\Aussenmodul\Min Temperature]*/, $tmin);
-        SetValueFloat(52406 /*[Zentrale Funktionen\Netatmo\Koeppern\Aussenmodul\Max Temperature]*/, $tmax);
-        }
-    
-    
 }
-catch(NAClientException $ex)
-{
-echo "User does not have any devices\n";
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 // external Classes from Netatmo
-
-
 
 
 define('CURL_ERROR_TYPE', 0);
@@ -1694,7 +1788,8 @@ class NACameraAlimSubStatus
     const CASS_OK = 2;
 }
 
-class NAThermZone {
+class NAThermZone 
+{
 const THERMOSTAT_SCHEDULE_SLOT_DAY      = 0x00;
 const THERMOSTAT_SCHEDULE_SLOT_NIGHT    = 0x01;
 const THERMOSTAT_SCHEDULE_SLOT_AWAY     = 0x02;
@@ -1704,8 +1799,6 @@ const THERMOSTAT_SCHEDULE_SLOT_ECO      = 0x05;
 const THERMOSTAT_SCHEDULE_HOT_WATER_ON  = 0x06;
 const THERMOSTAT_SCHEDULE_HOT_WATER_OFF = 0x07;
 }
-
-
 
 
 /**
@@ -1718,6 +1811,7 @@ class NASDKException extends Exception
         parent::__construct($message, $code);
     }
 }
+
 class NASDKError
 {
     const UNABLE_TO_CAST = 601;
@@ -1725,10 +1819,6 @@ class NASDKError
     const INVALID_FIELD = 603;
     const FORBIDDEN_OPERATION = 604;
 }
-
-
-
-
 
 
 /**
@@ -1805,10 +1895,6 @@ class NANotLoggedErrorType extends NAClientException
         parent::__construct($code, $message, NOT_LOGGED_ERROR_TYPE);
     }
 }
-
-
-
-
 
 
 /**
@@ -1889,315 +1975,6 @@ class NAWSApiClient extends NAApiClient
 
 
 
-function handleError($message, $exit = FALSE)
-{
-    echo $message;
-    if($exit)
-        exit(-1);
-}
-
-function printTimeInTz($time, $timezone, $format)
-{
-    try{
-        $tz = new DateTimeZone($timezone);
-    }
-    catch(Exception $ex)
-    {
-        $tz = new DateTimeZone("GMT");
-    }
-    $date = new DateTime();
-    $date->setTimezone($tz);
-    $date->setTimestamp($time);
-    echo $date->format($format);
-}
-
-function printBorder($message)
-{
-    $size = strlen($message);
-    for($i = 0; $i < $size; $i++)
-        echo("-");
-    echo("\n");
-}
-
-function printMessageWithBorder($message)
-{
-    $message = "- " . $message . " -";
-    printBorder($message);
-    echo $message . "\n";
-    printBorder($message);
-}
-
-function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
-{
-    if(!empty($measurements))
-    {
-        if(!empty($title))
-            printMessageWithBorder($title);
-
-        if($monthly)
-            $dateFormat = 'F: ';
-        else $dateFormat = 'j F: ';
-        //array of requested info type, needed to map result values to what they mean
-        $keys = explode(",", $type);
-
-        foreach($measurements as $timestamp => $values)
-        {
-            printTimeinTz($timestamp, $tz, $dateFormat);
-             echo"\n";
-            foreach($values as $key => $val)
-            {
-                echo $keys[$key] . ": ";
-                if($keys[$key] === "time_utc" || preg_match("/^date_.*/", $keys[$key]))
-                    echo printTimeInTz($val, $tz, "j F H:i");
-                else{
-                    echo $val;
-                    printUnit($keys[$key]);
-                }
-                if(count($values)-1 === $key || $monthly)
-                    echo "\n";
-                else echo ", ";
-            }
-        }
-    }
-}
-
-/**
- * function printing a weather station or modules basic information such as id, name, dashboard data, modules (if main device), type(if module)
- *
- */
-function printWSBasicInfo($device)
-{
-    if(isset($device['station_name']))
-        echo ("- ".$device['station_name']. " -\n");
-    else if($device['module_name'])
-        echo ("- ".$device['module_name']. " -\n");
-
-    echo ("id: " . $device['_id']. "\n");
-
-    if(isset($device['type']))
-    {
-        echo ("type: ");
-        switch($device['type'])
-        {
-            // Outdoor Module
-            case "NAModule1": echo ("Outdoor\n");
-                              break;
-            //Wind Sensor
-            case "NAModule2": echo("Wind Sensor\n");
-                              break;
-
-            //Rain Gauge
-            case "NAModule3": echo("Rain Gauge\n");
-                              break;
-            //Indoor Module
-            case "NAModule4": echo("Indoor\n");
-                              break;
-            case "NAMain" : echo ("Main device \n");
-                            break;
-        }
-
-    }
-
-    if(isset($device['place']['timezone']))
-        $tz = $device['place']['timezone'];
-    else $tz = 'GMT';
-
-    if(isset($device['dashboard_data']))
-    {
-        echo ("Last data: \n");
-        foreach($device['dashboard_data'] as $key => $val)
-        {
-            if($key === 'time_utc' || preg_match("/^date_.*/", $key))
-            {
-                echo $key .": ";
-                printTimeInTz($val, $tz, 'j F H:i');
-                echo ("\n");
-            }
-            else if(is_array($val))
-            {
-                //do nothing : don't print historic
-            }
-            else {
-                echo ($key .": " . $val);
-                printUnit($key);
-                echo "\n";
-            }
-        }
-
-        if(isset($device['modules']))
-        {
-            echo (" \n\nModules: \n");
-            foreach($device['modules'] as $module)
-                printWSBasicInfo($module);
-        }
-    }
-
-    echo"       ----------------------   \n";
-}
-
-function printUnit($key)
-{
-    $typeUnit = array('temp' => '°C', 'hum' => '%', 'noise' => 'db', 'strength' => 'km/h', 'angle' => '°', 'rain' => 'mm', 'pressure' => 'mbar', 'co2' => 'ppm');
-    foreach($typeUnit as $type => $unit)
-    {
-        if(preg_match("/.*$type.*/i", $key))
-        {
-            echo " ".$unit;
-            return;
-        }
-    }
-}
-
-/** THERM Utils function **/
-/*
-* @brief print a thermostat basic information in CLI
-*/
-function printThermBasicInfo($dev)
-{
-    //Device
-    echo (" -".$dev['station_name']."- \n");
-    echo (" id: ".$dev['_id']." \n");
-    echo ("Modules : \n");
-    // Device's modules info
-    foreach($dev['modules'] as $module)
-    {
-        echo ("    - ".$module['module_name']." -\n");
-
-        //module last measurements
-        echo ("    Last Measure date : ");
-        printTimeInTz($module['measured']['time'], $dev['place']['timezone'], 'j F H:i');
-        echo("\n");
-        echo ("    Last Temperature measured: ". $module['measured']['temperature']);
-        printUnit("temperature");
-        echo("\n");
-        echo ("    Last Temperature setpoint: ". $module['measured']['setpoint_temp']);
-        printUnit('setpoint_temp');
-        echo("\n");
-        echo ("    Program List: \n");
-
-        //program list
-        foreach($module['therm_program_list'] as $program)
-        {
-            if(isset($program['name']))
-                echo ("        -".$program['name']."- \n");
-            else echo("        -Standard- \n");
-            echo ("        id: ".$program['program_id']." \n");
-            if(isset($program['selected']) && $program['selected'] === TRUE)
-            {
-                echo "         This is the current program \n";
-            }
-        }
-    }
-
-}
-
-/**
-* @brief returns the current program of a therm module
-*/
-function getCurrentProgram($module)
-{
-    foreach($module['therm_program_list'] as $program)
-    {
-        if(isset($program['selected']) && $program['selected'] === TRUE)
-            return $program['program_id'];
-    }
-    //not found
-    return NULL;
-}
-
-/**
-* @brief returns the current setpoint of a therm module along with its setpoint temperature and endtime if defined
-*/
-function getCurrentMode($module)
-{
-    $initialMode = $module["setpoint"]["setpoint_mode"];
-    $initialTemp = isset($module["setpoint"]["setpoint_temp"]) ? $module["setpoint"]["setpoint_temp"]: NULL;
-    $initialEndtime = isset($module['setpoint']['setpoint_endtime']) ? $module['setpoint']['setpoint_endtime'] : NULL;
-
-    return array($initialMode, $initialTemp, $initialEndtime);
-
-}
-
-function printHomeInformation(NAHome $home)
-{
-    !is_null($home->getName()) ? printMessageWithBorder($home->getName()) : printMessageWithBorder($home->getId());
-    echo ("id: ". $home->getId() ."\n");
-
-    $tz = $home->getTimezone();
-    $persons = $home->getPersons();
-	
-    if(!empty($persons))
-    {
-        printMessageWithBorder("Persons");
-        //print person list
-        foreach($persons as $person)
-        {
-            printPersonInformation($person, $tz);
-        }
-    }
-
-    if((!empty($home->getEvents())))
-    {
-        printMessageWithBorder('Timeline of Events');
-        //print event list
-        foreach($home->getEvents() as $event)
-        {
-            printEventInformation($event, $tz);
-        }
-    }
-
-    if(!empty($home->getCameras()))
-    {
-        printMessageWithBorder("Cameras");
-        foreach($home->getCameras() as $camera)
-        {
-            printCameraInformation($camera);
-        }
-    }
-}
-
-
-function printPersonInformation(NAPerson $person, $tz)
-{
-    $person->isKnown() ? printMessageWithBorder($person->getPseudo()) : printMessageWithBorder("Inconnu");
-    echo("id: ". $person->getId(). "\n");
-    if($person->isAway())
-        echo("is away from home \n" );
-    else echo("is home \n");
-
-    echo ("Last seen on: ");
-    printTimeInTz($person->getLastSeen(), $tz, "j F H:i");
-    echo ("\n");
-}
-
-function printEventInformation(NAEvent $event, $tz)
-{
-  printTimeInTz($event->getTime(), $tz, "j F H:i");
-  $message = removeHTMLTags($event->getMessage());
-  echo(": ".$message. "\n");
-}
-
-function printCameraInformation(NACamera $camera)
-{
-    !is_null($camera->getName()) ? printMessageWithBorder($camera->getName()) : printMessageWithBorder($camera->getId());
-
-    echo("id: ". $camera->getId() ."\n");
-    echo("Monitoring status: ". $camera->getVar(NACameraInfo::CI_STATUS) ."\n");
-    echo("SD card status: " .$camera->getVar(NACameraInfo::CI_SD_STATUS) . "\n");
-    echo ("Power status: ". $camera->getVar(NACameraInfo::CI_ALIM_STATUS) ."\n");
-
-    if($camera->getGlobalStatus())
-        $globalStatus = "OK";
-    else $globalStatus = "NOK";
-
-    echo ("Global Status: ". $globalStatus ."\n");
-
-}
-
-function removeHTMLTags($string)
-{
-   return preg_replace("/<.*/", "", $string);
-}
 
 ?>
 
