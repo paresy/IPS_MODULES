@@ -75,7 +75,7 @@
 			 return $vid;
 		}
 		
-		private function CreateInstanceByIdent($id, $ident, $name, $moduleid = "{485D0419-BE97-4548-AA9C-C083EB82E61E}")
+		private function CreateInstanceByIdent($id, $ident, $name, $moduleid = "{24B57877-C24C-4690-8421-B41DCC22BE1B}")
 		 {
 			 $iid = @IPS_GetObjectIDByIdent($ident, $id);
 			 if($iid === false)
