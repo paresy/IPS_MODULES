@@ -38,29 +38,7 @@
 			&& (IPS_GetProperty($this->InstanceID, "client_id") != "") 
 			&& (IPS_GetProperty($this->InstanceID, "client_secret") != "")
 			){
-			echo "";
-			}
-		}
-
-/**
- * Prints a list of devices
- *
- */
-function printDevices($devices, $title = NULL)
-{
-    if(!is_null($devices) && is_array($devices) && !empty($devices))
-    {
-        if(!is_null($title))
-            printMessageWithBorder($title);
-
-        foreach($devices as $device)
-        {
-            printWSBasicInfo($device);
-        }
-    }
-}
-
-
+			
 
 //App client configuration
 $scope = NAScopes::SCOPE_READ_STATION;
@@ -175,6 +153,28 @@ else
     {
         handleError("An error occcured while retrieving last month info: ".$ex->getMessage() . " \n");
     }
+
+			}
+		}
+
+/**
+ * Prints a list of devices
+ *
+ */
+function printDevices($devices, $title = NULL)
+{
+    if(!is_null($devices) && is_array($devices) && !empty($devices))
+    {
+        if(!is_null($title))
+            printMessageWithBorder($title);
+
+        foreach($devices as $device)
+        {
+            printWSBasicInfo($device);
+        }
+    }
+}
+
     
     
 function handleError($message, $exit = FALSE)
