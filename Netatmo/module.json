@@ -1,1 +1,15 @@
- 
+
+ {
+	"id": " {ccbc149f-0cb0-4e73-ba15-96bce7c6fb65}",
+	"name": "Netatmo",
+	"type": 0,
+	"vendor": "dapor.de",
+	"aliases": 
+	[
+		"Netatmo"
+	],
+	"parentRequirements": [],
+	"childRequirements": [],
+	"implemented": [],
+	"prefix": "NAW"
+}
