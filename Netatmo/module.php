@@ -1,4 +1,4 @@
-<?
+<?php
 	class Netatmo extends IPSModule
 	{
 		
@@ -251,7 +251,7 @@ else
 		
 	
 	}
-?>
+
 
 
 
@@ -259,7 +259,7 @@ else
 
 /// ALTES SCRIPT
 
-<?php
+
 /*
 Authentication to Netatmo Server with the user credentials grant
 */
@@ -455,7 +455,7 @@ catch(NAClientException $ex)
 {
 echo "User does not have any devices\n";
 }
-?>
+
 
 
 
@@ -476,7 +476,7 @@ echo "User does not have any devices\n";
 
 // external Classes from Netatmo
 
-<?php
+
 
 
 define('CURL_ERROR_TYPE', 0);
@@ -1330,9 +1330,9 @@ class NAApiHelper
         return($results);
     }
 }
-?>
 
-<?php
+
+
 class NARestErrorCode
 {
     const ACCESS_TOKEN_MISSING = 1;
@@ -1705,9 +1705,9 @@ const THERMOSTAT_SCHEDULE_HOT_WATER_ON  = 0x06;
 const THERMOSTAT_SCHEDULE_HOT_WATER_OFF = 0x07;
 }
 
-?>
 
-<?php
+
+
 /**
 * Exception thrown by Netatmo SDK
 */
@@ -1725,9 +1725,9 @@ class NASDKError
     const INVALID_FIELD = 603;
     const FORBIDDEN_OPERATION = 604;
 }
-?>
 
-<?php
+
+
 
 
 
@@ -1805,9 +1805,9 @@ class NANotLoggedErrorType extends NAClientException
         parent::__construct($code, $message, NOT_LOGGED_ERROR_TYPE);
     }
 }
-?>
 
-<?php
+
+
 
 
 
@@ -1885,9 +1885,9 @@ class NAWSApiClient extends NAApiClient
 
 }
 
-?>
 
-<?php
+
+
 
 function handleError($message, $exit = FALSE)
 {
@@ -2196,11 +2196,8 @@ function printCameraInformation(NACamera $camera)
 
 function removeHTMLTags($string)
 {
-   return preg_replace("/<.*?>/", "", $string);
+   return preg_replace("/<.*/", "", $string);
 }
 
 ?>
-
-
-
 
