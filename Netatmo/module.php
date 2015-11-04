@@ -162,7 +162,7 @@ else
  * Prints a list of devices
  *
  */
-function printDevices($devices, $title = NULL)
+ function NAW_printDevices($devices, $title = NULL)
 {
     if(!is_null($devices) && is_array($devices) && !empty($devices))
     {
@@ -178,14 +178,14 @@ function printDevices($devices, $title = NULL)
 
     
     
-function handleError($message, $exit = FALSE)
+function NAW_handleError($message, $exit = FALSE)
 {
     echo $message;
     if($exit)
         exit(-1);
 }
 
-function printTimeInTz($time, $timezone, $format)
+function NAW_printTimeInTz($time, $timezone, $format)
 {
     try{
         $tz = new DateTimeZone($timezone);
@@ -200,7 +200,7 @@ function printTimeInTz($time, $timezone, $format)
     echo $date->format($format);
 }
 
-function printBorder($message)
+function NAW_printBorder($message)
 {
     $size = strlen($message);
     for($i = 0; $i < $size; $i++)
@@ -208,7 +208,7 @@ function printBorder($message)
     echo("\n");
 }
 
-function printMessageWithBorder($message)
+function NAW_printMessageWithBorder($message)
 {
     $message = "- " . $message . " -";
     printBorder($message);
@@ -216,7 +216,7 @@ function printMessageWithBorder($message)
     printBorder($message);
 }
 
-function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
+function NAW_printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
 {
     if(!empty($measurements))
     {
@@ -251,10 +251,10 @@ function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE
 }
 
 /**
- * function printing a weather station or modules basic information such as id, name, dashboard data, modules (if main device), type(if module)
+ * function NAW_printing a weather station or modules basic information such as id, name, dashboard data, modules (if main device), type(if module)
  *
  */
-function printWSBasicInfo($device)
+function NAW_printWSBasicInfo($device)
 {
     if(isset($device['station_name']))
         echo ("- ".$device['station_name']. " -\n");
@@ -324,7 +324,7 @@ function printWSBasicInfo($device)
     echo"       ----------------------   \n";
 }
 
-function printUnit($key)
+function NAW_printUnit($key)
 {
     $typeUnit = array('temp' => '°C', 'hum' => '%', 'noise' => 'db', 'strength' => 'km/h', 'angle' => '°', 'rain' => 'mm', 'pressure' => 'mbar', 'co2' => 'ppm');
     foreach($typeUnit as $type => $unit)
@@ -337,11 +337,11 @@ function printUnit($key)
     }
 }
 
-/** THERM Utils function **/
+/** THERM Utils function NAW_**/
 /*
 * @brief print a thermostat basic information in CLI
 */
-function printThermBasicInfo($dev)
+function NAW_printThermBasicInfo($dev)
 {
     //Device
     echo (" -".$dev['station_name']."- \n");
@@ -383,7 +383,7 @@ function printThermBasicInfo($dev)
 /**
 * @brief returns the current program of a therm module
 */
-function getCurrentProgram($module)
+function NAW_getCurrentProgram($module)
 {
     foreach($module['therm_program_list'] as $program)
     {
@@ -397,7 +397,7 @@ function getCurrentProgram($module)
 /**
 * @brief returns the current setpoint of a therm module along with its setpoint temperature and endtime if defined
 */
-function getCurrentMode($module)
+function NAW_getCurrentMode($module)
 {
     $initialMode = $module["setpoint"]["setpoint_mode"];
     $initialTemp = isset($module["setpoint"]["setpoint_temp"]) ? $module["setpoint"]["setpoint_temp"]: NULL;
@@ -407,7 +407,7 @@ function getCurrentMode($module)
 
 }
 
-function printHomeInformation(NAHome $home)
+function NAW_printHomeInformation(NAHome $home)
 {
     !is_null($home->getName()) ? printMessageWithBorder($home->getName()) : printMessageWithBorder($home->getId());
     echo ("id: ". $home->getId() ."\n");
@@ -446,7 +446,7 @@ function printHomeInformation(NAHome $home)
 }
 
 
-function printPersonInformation(NAPerson $person, $tz)
+function NAW_printPersonInformation(NAPerson $person, $tz)
 {
     $person->isKnown() ? printMessageWithBorder($person->getPseudo()) : printMessageWithBorder("Inconnu");
     echo("id: ". $person->getId(). "\n");
@@ -458,14 +458,14 @@ function printPersonInformation(NAPerson $person, $tz)
     echo ("\n");
 }
 
-function printEventInformation(NAEvent $event, $tz)
+function NAW_printEventInformation(NAEvent $event, $tz)
 {
   printTimeInTz($event->getTime(), $tz, "j F H:i");
   $message = removeHTMLTags($event->getMessage());
   echo(": ".$message. "\n");
 }
 
-function printCameraInformation(NACamera $camera)
+function NAW_printCameraInformation(NACamera $camera)
 {
     !is_null($camera->getName()) ? printMessageWithBorder($camera->getName()) : printMessageWithBorder($camera->getId());
 
@@ -482,16 +482,16 @@ function printCameraInformation(NACamera $camera)
 
 }
 
-function removeHTMLTags($string)
+function NAW_removeHTMLTags($string)
 {
    return preg_replace("/<.*?>/", "", $string);
 }
 
-private function ReduceGUIDToIdent($guid) {
+private function NAW_ReduceGUIDToIdent($guid) {
 	return str_replace(Array("{", "-", "}"), "", $guid);
 }
 
-private function CreateCategoryByIdent($id, $ident, $name)
+private function NAW_CreateCategoryByIdent($id, $ident, $name)
  {
  $cid = @IPS_GetObjectIDByIdent($ident, $id);
  if($cid === false)
@@ -504,7 +504,7 @@ private function CreateCategoryByIdent($id, $ident, $name)
 			 return $cid;
 		}
 		
-		private function CreateVariableByIdent($id, $ident, $name, $type, $profile = "")
+		private function NAW_CreateVariableByIdent($id, $ident, $name, $type, $profile = "")
 		 {
 			 $vid = @IPS_GetObjectIDByIdent($ident, $id);
 			 if($vid === false)
@@ -519,7 +519,7 @@ private function CreateCategoryByIdent($id, $ident, $name)
 			 return $vid;
 		}
 		
-		private function CreateInstanceByIdent($id, $ident, $name, $moduleid = "{24B57877-C24C-4690-8421-B41DCC22BE1B}")
+		private function NAW_CreateInstanceByIdent($id, $ident, $name, $moduleid = "{24B57877-C24C-4690-8421-B41DCC22BE1B}")
 		 {
 			 $iid = @IPS_GetObjectIDByIdent($ident, $id);
 			 if($iid === false)
@@ -579,14 +579,14 @@ class NAApiClient
    * @return
    *   The value of the variable.
    */
-    public function getVariable($name, $default = NULL)
+    public function NAW_getVariable($name, $default = NULL)
     {
         return isset($this->conf[$name]) ? $this->conf[$name] : $default;
     }
     /**
     * Returns the current refresh token
     */
-    public function getRefreshToken()
+    public function NAW_getRefreshToken()
     {
         return $this->refresh_token;
     }
@@ -600,12 +600,12 @@ class NAApiClient
     * @param $value
     *   The value to set.
     */
-    public function setVariable($name, $value)
+    public function NAW_setVariable($name, $value)
     {
         $this->conf[$name] = $value;
         return $this;
     }
-    private function updateSession()
+    private function NAW_updateSession()
     {
         $cb = $this->getVariable("func_cb");
         $object = $this->getVariable("object_cb");
@@ -621,7 +621,7 @@ class NAApiClient
             call_user_func_array($cb, array(array("access_token" => $this->access_token, "refresh_token" => $this->refresh_token)));
         }
     }
-    private function setTokens($value)
+    private function NAW_setTokens($value)
     {
         if(isset($value["access_token"]))
         {
@@ -638,14 +638,14 @@ class NAApiClient
     /**
      * Set token stored by application (in session generally) into this object
     **/
-    public function setTokensFromStore($value)
+    public function NAW_setTokensFromStore($value)
     {
          if(isset($value["access_token"]))
             $this->access_token = $value["access_token"];
         if(isset($value["refresh_token"]))
             $this->refresh_token = $value["refresh_token"];
     }
-    public function unsetTokens()
+    public function NAW_unsetTokens()
     {
         $this->access_token = null;
         $this->refresh_token = null;
@@ -665,7 +665,7 @@ class NAApiClient
     *   - object_cb : (optionale) An object for which func_cb method will be applied if object_cb exists
     *   - func_cb : (optional) A method called back to store tokens in its context (session for instance)
     */
-    public function __construct($config = array())
+    public function NAW___construct($config = array())
     {
         // If tokens are provided let's store it
         if(isset($config["access_token"]))
@@ -731,7 +731,7 @@ class NAApiClient
     * @return
     *   The json_decoded result or NAClientException if pb happend
     */
-    public function makeRequest($path, $method = 'GET', $params = array())
+    public function NAW_makeRequest($path, $method = 'GET', $params = array())
     {
         $ch = curl_init();
         $opts = self::$CURL_OPTS;
@@ -827,7 +827,7 @@ class NAApiClient
     *  @throw
     * A NAClientException if unable to retrieve an access_token
     */
-    public function getAccessToken()
+    public function NAW_getAccessToken()
     {
         //find best way to retrieve access_token
         if($this->access_token) return array("access_token" => $this->access_token);
@@ -855,7 +855,7 @@ class NAApiClient
     * @param state
     *   state returned in redirect_uri
     */
-    public function getAuthorizeUrl($state = null)
+    public function NAW_getAuthorizeUrl($state = null)
     {
         $redirect_uri = $this->getRedirectUri();
         if($state == null)
@@ -869,7 +869,7 @@ class NAApiClient
     /**
     * Get access token from OAuth2.0 token endpoint with authorization code.
     *
-    * This function will only be activated if both access token URI, client
+    * This function NAW_will only be activated if both access token URI, client
     * identifier and client secret are setup correctly.
     *
     * @param $code
@@ -881,7 +881,7 @@ class NAApiClient
     * @thrown
     *  A NAClientException if unable to retrieve an access_token
     */
-    private function getAccessTokenFromAuthorizationCode($code)
+    private function NAW_getAccessTokenFromAuthorizationCode($code)
     {
         $redirect_uri = $this->getRedirectUri();
         $scope = $this->getVariable('scope');
@@ -908,7 +908,7 @@ class NAApiClient
    * Get access token from OAuth2.0 token endpoint with basic user
    * credentials.
    *
-   * This function will only be activated if both username and password
+   * This function NAW_will only be activated if both username and password
    * are setup correctly.
    *
    * @param $username
@@ -921,7 +921,7 @@ class NAApiClient
    * @thrown
    *  A NAClientException if unable to retrieve an access_token
    */
-    private function getAccessTokenFromPassword($username, $password)
+    private function NAW_getAccessTokenFromPassword($username, $password)
     {
         $scope = $this->getVariable('scope');
         if ($this->getVariable('access_token_uri') && ($client_id = $this->getVariable('client_id')) != NULL && ($client_secret = $this->getVariable('client_secret')) != NULL)
@@ -948,7 +948,7 @@ class NAApiClient
     * Get access token from OAuth2.0 token endpoint with basic user
     * credentials.
     *
-    * This function will only be activated if both username and password
+    * This function NAW_will only be activated if both username and password
     * are setup correctly.
     *
     * @param $username
@@ -961,7 +961,7 @@ class NAApiClient
     * @thrown
     *  A NAClientException if unable to retrieve an access_token
     */
-    private function getAccessTokenFromRefreshToken()
+    private function NAW_getAccessTokenFromRefreshToken()
     {
         if ($this->getVariable('access_token_uri') && ($client_id = $this->getVariable('client_id')) != NULL && ($client_secret = $this->getVariable('client_secret')) != NULL && ($refresh_token = $this->refresh_token) != NULL)
         {
@@ -1015,7 +1015,7 @@ class NAApiClient
     *
     * @throws OAuth2Exception
     */
-    protected function makeOAuth2Request($path, $method = 'GET', $params = array(), $reget_token = true)
+    protected function NAW_makeOAuth2Request($path, $method = 'GET', $params = array(), $reget_token = true)
     {
         try
         {
@@ -1088,7 +1088,7 @@ class NAApiClient
      *
      * @throws NAClientException
     */
-    public function api($path, $method = 'GET', $params = array(), $secure = false)
+    public function NAW_api($path, $method = 'GET', $params = array(), $secure = false)
     {
         if (is_array($method) && empty($params))
         {
@@ -1122,7 +1122,7 @@ class NAApiClient
      *
      * @throws NAClientException
     */
-    public function noTokenApi($path, $method = 'GET', $params = array())
+    public function NAW_noTokenApi($path, $method = 'GET', $params = array())
     {
         if (is_array($method) && empty($params))
         {
@@ -1139,7 +1139,7 @@ class NAApiClient
         }
         return $this->makeRequest($path, $method, $params);
     }
-    static public function str_replace_once($str_pattern, $str_replacement, $string)
+    static public function NAW_str_replace_once($str_pattern, $str_replacement, $string)
     {
         if (strpos($string, $str_pattern) !== false)
         {
@@ -1152,7 +1152,7 @@ class NAApiClient
     * Since $_SERVER['REQUEST_URI'] is only available on Apache, we
     * generate an equivalent using other environment variables.
     */
-    function getRequestUri()
+    function NAW_getRequestUri()
     {
         if (isset($_SERVER['REQUEST_URI'])) {
             $uri = $_SERVER['REQUEST_URI'];
@@ -1178,7 +1178,7 @@ class NAApiClient
    * @return
    *   The current URL.
    */
-    protected function getCurrentUri()
+    protected function NAW_getCurrentUri()
     {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'
           ? 'https://'
@@ -1207,7 +1207,7 @@ class NAApiClient
      * @return
      *   The current URL.
     */
-    protected function getRedirectUri()
+    protected function NAW_getRedirectUri()
     {
         $redirect_uri = $this->getVariable("redirect_uri");
         if(!empty($redirect_uri)) return $redirect_uri;
@@ -1224,7 +1224,7 @@ class NAApiClient
     * @return
     *   The URL for the given parameters.
     */
-    protected function getUri($path = '', $params = array(), $secure = false)
+    protected function NAW_getUri($path = '', $params = array(), $secure = false)
     {
         $url = $this->getVariable('services_uri') ? $this->getVariable('services_uri') : $this->getVariable('base_uri');
         if($secure == true)
@@ -1242,7 +1242,7 @@ class NAApiClient
             $url .= '?' . http_build_query($params, NULL, '&');
         return $url;
     }
-    public function getPartnerDevices()
+    public function NAW_getPartnerDevices()
     {
         return $this->api("partnerdevices", "POST");
     }
@@ -1251,7 +1251,7 @@ class NAApiClient
     * @param string app_type : type of webhook
     * @brief register a webhook notification sent to your app for the current user
     */
-    protected function addWebhook($url, $app_type)
+    protected function NAW_addWebhook($url, $app_type)
     {
         $params = array('url' => $url, 'app_type' => $app_type);
         $this->api('addwebhook', $params);
@@ -1260,7 +1260,7 @@ class NAApiClient
     * @param string $app_type: type of webhook
     * @brief drop webhook notification for the current user
     */
-    protected function dropWebhook($app_type)
+    protected function NAW_dropWebhook($app_type)
     {
         $params = array('app_type' => $app_type);
         $this->api('dropwebhook', $params);
@@ -1275,17 +1275,17 @@ class NAApiHelper
 {
     public $client;
     public $devices = array();
-    public function __construct($client)
+    public function NAW___construct($client)
     {
         $this->client = $client;
     }
-    public function api($method, $action, $params = array())
+    public function NAW_api($method, $action, $params = array())
     {
         if(isset($this->client))
             return $this->client->api($method, $action, $params);
         else return NULL;
     }
-    public function simplifyDeviceList($app_type = "app_station")
+    public function NAW_simplifyDeviceList($app_type = "app_station")
     {
         $this->devices = $this->client->api("devicelist", "POST", array("app_type" => $app_type));
         foreach($this->devices["devices"] as $d => $device)
@@ -1307,7 +1307,7 @@ class NAApiHelper
         unset($this->devices["modules"]);
         return($this->devices);
     }
-    public function getMeasure($device, $device_type, $date_begin, $module=null, $module_type = null)
+    public function NAW_getMeasure($device, $device_type, $date_begin, $module=null, $module_type = null)
     {
         $params = array("scale" => "max", "date_begin" => $date_begin, "date_end" => $date_begin+5*60, "device_id" => $device);
         $result = array();
@@ -1354,7 +1354,7 @@ class NAApiHelper
         }
         return($result);
     }
-    public function getLastMeasures()
+    public function NAW_getLastMeasures()
     {
         $results = array();
         foreach ($this->devices["devices"] as $device)
@@ -1374,7 +1374,7 @@ class NAApiHelper
         }
         return($results);
     }
-    public function getAllMeasures($date_begin)
+    public function NAW_getAllMeasures($date_begin)
     {
         $results = array();
         foreach ($this->devices["devices"] as $device)
@@ -1777,7 +1777,7 @@ const THERMOSTAT_SCHEDULE_HOT_WATER_OFF = 0x07;
 */
 class NASDKException extends Exception
 {
-    public function __construct($code, $message)
+    public function NAW___construct($code, $message)
     {
         parent::__construct($message, $code);
     }
@@ -1806,7 +1806,7 @@ class NAClientException extends NASDKException
     * @param $result
     *   The result from the API server.
     */
-    public function __construct($code, $message, $error_type)
+    public function NAW___construct($code, $message, $error_type)
     {
         $this->error_type = $error_type;
         parent::__construct($code, $message);
@@ -1819,7 +1819,7 @@ class NAApiErrorType extends NAClientException
     public $http_code;
     public $http_message;
     public $result;
-    function __construct($code, $message, $result)
+    function NAW___construct($code, $message, $result)
     {
         $this->http_code = $code;
         $this->http_message = $message;
@@ -1837,7 +1837,7 @@ class NAApiErrorType extends NAClientException
 
 class NACurlErrorType extends NAClientException
 {
-    function __construct($code, $message)
+    function NAW___construct($code, $message)
     {
         parent::__construct($code, $message, CURL_ERROR_TYPE);
     }
@@ -1845,7 +1845,7 @@ class NACurlErrorType extends NAClientException
 
 class NAJsonErrorType extends NAClientException
 {
-    function __construct($code, $message)
+    function NAW___construct($code, $message)
     {
         parent::__construct($code, $message, JSON_ERROR_TYPE);
     }
@@ -1853,7 +1853,7 @@ class NAJsonErrorType extends NAClientException
 
 class NAInternalErrorType extends NAClientException
 {
-    function __construct($message)
+    function NAW___construct($message)
     {
         parent::__construct(0, $message, INTERNAL_ERROR_TYPE);
     }
@@ -1861,7 +1861,7 @@ class NAInternalErrorType extends NAClientException
 
 class NANotLoggedErrorType extends NAClientException
 {
-    function __construct($code, $message)
+    function NAW___construct($code, $message)
     {
         parent::__construct($code, $message, NOT_LOGGED_ERROR_TYPE);
     }
@@ -1884,7 +1884,7 @@ class NAWSApiClient extends NAApiClient
    * @return array of devices
    * @brief Method used to retrieve data for the given weather station or all weather station linked to the user
    */
-   public function getData($device_id = NULL, $get_favorites = TRUE)
+   public function NAW_getData($device_id = NULL, $get_favorites = TRUE)
    {
        return $this->api('getstationsdata', 'GET', array($device_id, $get_favorites));
    }
@@ -1903,7 +1903,7 @@ class NAWSApiClient extends NAApiClient
     * @return array of measures and timestamp
     * @brief Method used to retrieve specifig measures of the given weather station
     */
-   public function getMeasure($device_id, $module_id, $scale, $type, $start = NULL, $end = NULL, $limit = NULL, $optimize = NULL, $realtime = NULL)
+   public function NAW_getMeasure($device_id, $module_id, $scale, $type, $start = NULL, $end = NULL, $limit = NULL, $optimize = NULL, $realtime = NULL)
    {
         $params = array('device_id' => $device_id,
                         'scale' => $scale,
@@ -1923,7 +1923,7 @@ class NAWSApiClient extends NAApiClient
        return $this->api('getmeasure', 'GET', $params);
    }
 
-   public function getRainMeasure($device_id, $rainGauge_id, $scale, $start = NULL, $end = NULL, $limit = NULL, $optimize = NULL, $realtime = NULL)
+   public function NAW_getRainMeasure($device_id, $rainGauge_id, $scale, $start = NULL, $end = NULL, $limit = NULL, $optimize = NULL, $realtime = NULL)
    {
        if($scale === "max")
        {
@@ -1934,7 +1934,7 @@ class NAWSApiClient extends NAApiClient
        return $this->getMeasure($device_id, $rainGauge_id, $scale, $type, $start, $end, $limit, $optimize, $realtime);
    }
 
-   public function getWindMeasure($device_id, $windSensor_id, $scale, $start = NULL, $end = NULL, $limit = NULL, $optimize = NULL, $realtime = NULL)
+   public function NAW_getWindMeasure($device_id, $windSensor_id, $scale, $start = NULL, $end = NULL, $limit = NULL, $optimize = NULL, $realtime = NULL)
    {
        $type = "WindStrength,WindAngle,GustStrength,GustAngle,date_max_gust";
        return $this->getMeasure($device_id, $windSensor_id, $scale, $type, $start, $end, $limit, $optimize, $realtime);
@@ -1958,7 +1958,7 @@ class NAEvent extends NAObjectWithPicture
     *
     * @brief returns event's snapshot
     */
-    public function getSnapshot()
+    public function NAW_getSnapshot()
     {
         $snapshot = $this->getVar(NACameraEventInfo::CEI_SNAPSHOT);
         return $this->getPictureURL($snapshot);
@@ -1968,7 +1968,7 @@ class NAEvent extends NAObjectWithPicture
     * @return string
     * @brief returns event's description
     */
-    public function getMessage()
+    public function NAW_getMessage()
     {
         return $this->getVar(NACameraEventInfo::CEI_MESSAGE);
     }
@@ -1977,7 +1977,7 @@ class NAEvent extends NAObjectWithPicture
     * @return timestamp
     * @brief returns at which time the event has been triggered
     */
-    public function getTime()
+    public function NAW_getTime()
     {
         return $this->getVar(NACameraEventInfo::CEI_TIME);
     }
@@ -1986,7 +1986,7 @@ class NAEvent extends NAObjectWithPicture
     * @return string
     * @brief returns the event's type
     */
-    public function getEventType()
+    public function NAW_getEventType()
     {
         return $this->getVar(NACameraEventInfo::CEI_TYPE);
     }
@@ -1996,7 +1996,7 @@ class NAEvent extends NAObjectWithPicture
     * @brief returns event's subtype for SD Card & power adapter events
     * @throw NASDKException
     */
-    public function getEventSubType()
+    public function NAW_getEventSubType()
     {
         if($this->getEventType() === NACameraEventType::CET_SD
             || $this->getEventType() === NACameraEventType::CET_ALIM)
@@ -2010,7 +2010,7 @@ class NAEvent extends NAObjectWithPicture
     * @return string
     * @brief returns id of the camera that triggered the event
     */
-    public function getCameraId()
+    public function NAW_getCameraId()
     {
         return $this->getVar(NACameraEventInfo::CEI_CAMERA_ID);
     }
@@ -2020,7 +2020,7 @@ class NAEvent extends NAObjectWithPicture
     * @brief returns id of the person seen in the event
     * @throw NASDKException
     */
-    public function getPersonId()
+    public function NAW_getPersonId()
     {
         if($this->getEventType() === NACameraEventType::CET_PERSON
             || $this->getEventType() === NACameraEventType::CET_PERSON_AWAY
@@ -2032,7 +2032,7 @@ class NAEvent extends NAObjectWithPicture
 
     }
 
-    public function hasVideo()
+    public function NAW_hasVideo()
     {
         if(in_array($this->getEventType(), $this->videoEvents))
             return TRUE;
@@ -2044,7 +2044,7 @@ class NAEvent extends NAObjectWithPicture
     * @brief returns event's video id
     * @throw NASDKException
     */
-    public function getVideo()
+    public function NAW_getVideo()
     {
         if($this->hasVideo())
             return $this->getVar(NACameraEventInfo::CEI_VIDEO_ID);
@@ -2056,7 +2056,7 @@ class NAEvent extends NAObjectWithPicture
     * @brief returns event's video status
     * @throw NASDKException
     */
-    public function getVideoStatus()
+    public function NAW_getVideoStatus()
     {
         if($this->hasVideo())
             return $this->getVar(NACameraEventInfo::CEI_VIDEO_STATUS);
@@ -2069,7 +2069,7 @@ class NAEvent extends NAObjectWithPicture
     * @brief returns whether or not this event corresponds to the moment where the person arrived home
     * @throw NASDKException
     */
-    public function isPersonArrival()
+    public function NAW_isPersonArrival()
     {
         if($this->getEventType() === NACameraEventType::CET_PERSON)
         {
@@ -2092,7 +2092,7 @@ abstract class NAObject
 {
     protected $object = array();
 
-    public function __construct($array)
+    public function NAW___construct($array)
     {
         $this->object = $array;
     }
@@ -2103,7 +2103,7 @@ abstract class NAObject
     * @return object field or default if field is not set
     * @brief returns an object's field
     */
-    public function getVar($field, $default = NULL)
+    public function NAW_getVar($field, $default = NULL)
     {
         if(isset($this->object[$field]))
             return $this->object[$field];
@@ -2115,7 +2115,7 @@ abstract class NAObject
     * @param $value value to set to field
     * @brief set an object's field
     */
-    public function setVar($field, $value)
+    public function NAW_setVar($field, $value)
     {
         $this->object[$field] = $value;
     }
@@ -2124,7 +2124,7 @@ abstract class NAObject
     * @return id
     * @btief returns object id
     */
-    public function getId()
+    public function NAW_getId()
     {
         return $this->getVar("id");
     }
@@ -2133,7 +2133,7 @@ abstract class NAObject
     * @return array $object
     * @brief return this object as an array
     */
-    public function toArray()
+    public function NAW_toArray()
     {
         return $this->object;
     }
@@ -2142,7 +2142,7 @@ abstract class NAObject
     * @return JSON document
     * @brief returns object as a JSON document
     */
-    public function toJson()
+    public function NAW_toJson()
     {
         return json_encode($this->toArray());
     }
@@ -2151,7 +2151,7 @@ abstract class NAObject
     * @return string
     * @brief return string representation of object : JSON doc
     */
-    public function __toString()
+    public function NAW___toString()
     {
         return $this->toJson();
     }
@@ -2160,7 +2160,7 @@ abstract class NAObject
 
 abstract class NAObjectWithPicture extends NAObject
 {
-    public function getPictureURL($picture, $baseURI = 'https://api.netatmo.com/api/getcamerapicture')
+    public function NAW_getPictureURL($picture, $baseURI = 'https://api.netatmo.com/api/getcamerapicture')
     {
         if(isset($picture[NACameraImageInfo::CII_ID]) && isset($picture[NACameraImageInfo::CII_KEY]))
         {
@@ -2182,7 +2182,7 @@ class NAPerson extends NAObjectWithPicture
     * @return bool
     * @brief returns whether or not this person is known
     */
-    public function isKnown()
+    public function NAW_isKnown()
     {
         if($this->getVar(NACameraPersonInfo::CPI_PSEUDO, FALSE))
             return TRUE;
@@ -2194,7 +2194,7 @@ class NAPerson extends NAObjectWithPicture
     * @brief returns whether or not this person is unknown
     */
 
-    public function isUnknown()
+    public function NAW_isUnknown()
     {
         return !$this->isKnown();
     }
@@ -2203,12 +2203,12 @@ class NAPerson extends NAObjectWithPicture
     * @return bool
     * @brief returns whether or not this person is at home
     */
-    public function isAway()
+    public function NAW_isAway()
     {
         return $this->getVar(NACameraPersonInfo::CPI_OUT_OF_SIGHT);
     }
 
-    public function getFace()
+    public function NAW_getFace()
     {
         $face = $this->getVar(NACameraPersonInfo::CPI_FACE);
         return $this->getPictureURL($face);
@@ -2218,7 +2218,7 @@ class NAPerson extends NAObjectWithPicture
     * @return timestamp
     * @brief returns last time this person has been seen
     */
-    public function getLastSeen()
+    public function NAW_getLastSeen()
     {
         return $this->getVar(NACameraPersonInfo::CPI_LAST_SEEN);
     }
@@ -2227,7 +2227,7 @@ class NAPerson extends NAObjectWithPicture
     * @return string
     * @brief returns this person's name
     */
-    public function getPseudo()
+    public function NAW_getPseudo()
     {
         return $this->getVar(NACameraPersonInfo::CPI_PSEUDO);
     }
@@ -2241,7 +2241,7 @@ class NAPerson extends NAObjectWithPicture
 class NAHome extends NAObject
 {
 
-    public function __construct($array)
+    public function NAW___construct($array)
     {
         parent::__construct($array);
 
@@ -2280,7 +2280,7 @@ class NAHome extends NAObject
     * @return string
     * @brief returns home's name
     */
-    public function getName()
+    public function NAW_getName()
     {
         return $this->getVar(NACameraHomeInfo::CHI_NAME);
     }
@@ -2289,7 +2289,7 @@ class NAHome extends NAObject
     * @return array of event objects
     * @brief returns home timeline of event
     */
-    public function getEvents()
+    public function NAW_getEvents()
     {
         return $this->getVar(NACameraHomeInfo::CHI_EVENTS, array());
     }
@@ -2298,7 +2298,7 @@ class NAHome extends NAObject
     * @return array of person objects
     * @brief returns every person belonging to this home
     */
-    public function getPersons()
+    public function NAW_getPersons()
     {
         return $this->getVar(NACameraHomeInfo::CHI_PERSONS, array());
     }
@@ -2307,7 +2307,7 @@ class NAHome extends NAObject
     * @return array of person objects
     * @brief returns every known person belonging to this home
     */
-    public function getKnownPersons()
+    public function NAW_getKnownPersons()
     {
         $knowns = array();
         foreach($this->getVar(NACameraHomeInfo::CHI_PERSONS, array()) as $person)
@@ -2322,7 +2322,7 @@ class NAHome extends NAObject
     * @return array of person objects
     * @brief returns every unknown person belonging to this home
     */
-    public function getUnknownPersons()
+    public function NAW_getUnknownPersons()
     {
         $unknowns = array();
         foreach($this->getVar(NACameraHomeInfo::CHI_PERSONS, array()) as $person)
@@ -2337,7 +2337,7 @@ class NAHome extends NAObject
     * @return array of camera objects
     * @brief returns every camera belonging to this home
     */
-    public function getCameras()
+    public function NAW_getCameras()
     {
         return $this->getVar(NACameraHomeInfo::CHI_CAMERAS, array());
     }
@@ -2346,7 +2346,7 @@ class NAHome extends NAObject
     * @return string
     * @brief returns home's timezone
     */
-    public function getTimezone()
+    public function NAW_getTimezone()
     {
         $place = $this->getVar(NACameraHomeInfo::CHI_PLACE);
         return isset($place['timezone'])? $place['timezone'] : 'GMT';
@@ -2357,7 +2357,7 @@ class NAHome extends NAObject
     * @brief return the camera object corresponding to the id asked
     * @throw NASDKErrorException
     */
-    public function getCamera($camera_id)
+    public function NAW_getCamera($camera_id)
     {
         foreach($this->getVar(NACameraHomeInfo::CHI_CAMERAS, array()) as $camera)
         {
@@ -2374,7 +2374,7 @@ class NAHome extends NAObject
     * @brief returns NAPerson object corresponding to the id in parameter
     * @throw NASDKErrorException
     */
-    public function getPerson($person_id)
+    public function NAW_getPerson($person_id)
     {
         foreach($this->getVar(NACameraHomeInfo::CHI_PERSONS, array()) as $camera)
         {
@@ -2389,7 +2389,7 @@ class NAHome extends NAObject
     * @return array of NAPerson
     * @brief returns every person that are not home
     */
-    public function getPersonAway()
+    public function NAW_getPersonAway()
     {
         $away = array();
 
@@ -2405,7 +2405,7 @@ class NAHome extends NAObject
     * @return array of NAPerson
     * @brief returns every person that are home
     */
-    public function getPersonAtHome()
+    public function NAW_getPersonAtHome()
     {
         $home = array();
 
@@ -2424,7 +2424,7 @@ class NAHome extends NAObject
 */
 class NACamera extends NAObject
 {
-    public function getGlobalStatus()
+    public function NAW_getGlobalStatus()
     {
         $on_off = $this->getVar(NACameraInfo::CI_STATUS);
         $sd = $this->getVar(NACameraInfo::CI_SD_STATUS);
@@ -2443,7 +2443,7 @@ class NACamera extends NAObject
     * @return string $name
     * @brief returns the camera name
     */
-    public function getName()
+    public function NAW_getName()
     {
         return $this->getVar(NACameraInfo::CI_NAME);
     }
@@ -2453,7 +2453,7 @@ class NACamera extends NAObject
     * @brief returns the vpn_url of the camera
     * @throw new NASDKErrorException
     */
-    public function getVpnUrl()
+    public function NAW_getVpnUrl()
     {
         if(!is_null($this->getVar(NACameraInfo::CI_VPN_URL)))
             return $this->getVar(NACameraInfo::CI_VPN_URL);
@@ -2465,24 +2465,24 @@ class NACamera extends NAObject
     * @brief returns whether or not the camera shares the same public address than this application
     * @throw new NASDKErrorException
     */
-    public function isLocal()
+    public function NAW_isLocal()
     {
         if(!is_null($this->getVar(NACameraInfo::CI_IS_LOCAL)))
             return $this->getVar(NACameraInfo::CI_IS_LOCAL);
         else throw new NASDKErrorException(NASDKErrorCode::FORBIDDEN_OPERATION, "You don't have access to this field due to the scope of your application");
     }
 
-    public function getSDCardStatus()
+    public function NAW_getSDCardStatus()
     {
         return $this->getVar(NACameraInfo::CI_SD_STATUS);
     }
 
-    public function getPowerAdapterStatus()
+    public function NAW_getPowerAdapterStatus()
     {
         return $this->getVar(NACameraInfo::CI_ALIM_STATUS);
     }
 
-    public function getMonitoringStatus()
+    public function NAW_getMonitoringStatus()
     {
         return $this->getVar(NACameraInfo::CI_STATUS);
     }
