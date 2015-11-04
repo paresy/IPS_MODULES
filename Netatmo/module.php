@@ -7,10 +7,10 @@
 			//Never delete this line!
 			parent::Create();
 			
-			$this->RegisterPropertyString("Username", "");
-			$this->RegisterPropertyString("Password", "");
-			$this->RegisterPropertyString("Client_ID", "");
-			$this->RegisterPropertyString("Client_Secret", "");
+			$this->RegisterPropertyString("username", "");
+			$this->RegisterPropertyString("password", "");
+			$this->RegisterPropertyString("client_id", "");
+			$this->RegisterPropertyString("client_secret", "");
 		}
 	
 		public function ApplyChanges()
