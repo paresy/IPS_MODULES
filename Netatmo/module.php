@@ -162,7 +162,7 @@ else
  * Prints a list of devices
  *
  */
- function printDevices($devices, $title = NULL)
+ public function printDevices($devices, $title = NULL)
 {
     if(!is_null($devices) && is_array($devices) && !empty($devices))
     {
@@ -178,14 +178,14 @@ else
 
     
     
-function handleError($message, $exit = FALSE)
+public function handleError($message, $exit = FALSE)
 {
     echo $message;
     if($exit)
         exit(-1);
 }
 
-function printTimeInTz($time, $timezone, $format)
+public function printTimeInTz($time, $timezone, $format)
 {
     try{
         $tz = new DateTimeZone($timezone);
@@ -200,7 +200,7 @@ function printTimeInTz($time, $timezone, $format)
     echo $date->format($format);
 }
 
-function printBorder($message)
+public function printBorder($message)
 {
     $size = strlen($message);
     for($i = 0; $i < $size; $i++)
@@ -208,7 +208,7 @@ function printBorder($message)
     echo("\n");
 }
 
-function printMessageWithBorder($message)
+public function printMessageWithBorder($message)
 {
     $message = "- " . $message . " -";
     printBorder($message);
@@ -216,7 +216,7 @@ function printMessageWithBorder($message)
     printBorder($message);
 }
 
-function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
+public function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
 {
     if(!empty($measurements))
     {
@@ -1275,16 +1275,19 @@ class NAApiHelper
 {
     public $client;
     public $devices = array();
+    
     public function __construct($client)
     {
         $this->client = $client;
     }
+    
     public function api($method, $action, $params = array())
     {
         if(isset($this->client))
             return $this->client->api($method, $action, $params);
         else return NULL;
     }
+    
     public function simplifyDeviceList($app_type = "app_station")
     {
         $this->devices = $this->client->api("devicelist", "POST", array("app_type" => $app_type));
@@ -1307,6 +1310,7 @@ class NAApiHelper
         unset($this->devices["modules"]);
         return($this->devices);
     }
+    
     public function getMeasure($device, $device_type, $date_begin, $module=null, $module_type = null)
     {
         $params = array("scale" => "max", "date_begin" => $date_begin, "date_end" => $date_begin+5*60, "device_id" => $device);
@@ -1354,6 +1358,7 @@ class NAApiHelper
         }
         return($result);
     }
+    
     public function getLastMeasures()
     {
         $results = array();
@@ -1374,6 +1379,8 @@ class NAApiHelper
         }
         return($results);
     }
+    
+    
     public function getAllMeasures($date_begin)
     {
         $results = array();
