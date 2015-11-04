@@ -1,4 +1,15 @@
 <?php
+
+define('CURL_ERROR_TYPE', 0);
+define('API_ERROR_TYPE',1);//error return from api
+define('INTERNAL_ERROR_TYPE', 2); //error because internal state is not consistent
+define('JSON_ERROR_TYPE',3);
+define('NOT_LOGGED_ERROR_TYPE', 4); //unable to get access token
+define('BACKEND_BASE_URI', "https://api.netatmo.net/");
+define('BACKEND_SERVICES_URI', "https://api.netatmo.net/api");
+define('BACKEND_ACCESS_TOKEN_URI', "https://api.netatmo.net/oauth2/token");
+define('BACKEND_AUTHORIZE_URI', "https://api.netatmo.net/oauth2/authorize");
+
 	class Netatmo extends IPSModule
 	{
 		
@@ -538,15 +549,6 @@ private function CreateCategoryByIdent($id, $ident, $name)
 // external Classes from Netatmo
 
 
-define('CURL_ERROR_TYPE', 0);
-define('API_ERROR_TYPE',1);//error return from api
-define('INTERNAL_ERROR_TYPE', 2); //error because internal state is not consistent
-define('JSON_ERROR_TYPE',3);
-define('NOT_LOGGED_ERROR_TYPE', 4); //unable to get access token
-define('BACKEND_BASE_URI', "https://api.netatmo.net/");
-define('BACKEND_SERVICES_URI', "https://api.netatmo.net/api");
-define('BACKEND_ACCESS_TOKEN_URI', "https://api.netatmo.net/oauth2/token");
-define('BACKEND_AUTHORIZE_URI', "https://api.netatmo.net/oauth2/authorize");
 /**
  * OAuth2.0 Netatmo client-side implementation.
  *
