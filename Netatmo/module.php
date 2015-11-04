@@ -30,15 +30,30 @@
 			$client_id = $this->ReadPropertyString("client_id");
 			$client_secret = $this->ReadPropertyString("client_secret");
 			
-			if((IPS_GetProperty($this->InstanceID, "Username") != "") && (IPS_GetProperty($this->InstanceID, "Password") != "") ) 
+			if((IPS_GetProperty($this->InstanceID, "username") != "") && (IPS_GetProperty($this->InstanceID, "password") != "") ) 
 			&& (IPS_GetProperty($this->InstanceID, "client_id") != "") && (IPS_GetProperty($this->InstanceID, "client_secret") != "") {
 				
-				
-			$deviceID = $this->CreateInstanceByIdent($this->InstanceID, $this->ReduceGUIDToIdent($_POST['device']), "Device");
+		// Innenmodul		
+			$deviceID = $this->CreateCategoryByIdent($this->InstanceID, "innenmodul", "Innenmodul");
 			SetValue($this->CreateVariableByIdent($deviceID, "Latitude", "Latitude", 2), floatval($_POST['latitude']));
 			SetValue($this->CreateVariableByIdent($deviceID, "Longitude", "Longitude", 2), floatval($_POST['longitude']));
-			SetValue($this->CreateVariableByIdent($deviceID, "Timestamp", "Timestamp", 1, "~UnixTimestamp"), intval(strtotime($_POST['date'])));
-			SetValue($this->CreateVariableByIdent($deviceID, $this->ReduceGUIDToIdent($_POST['id']), utf8_decode($_POST['name']), 0, "~Presence"), intval($_POST['entry']) > 0);
+		
+		// Aussenmodul		
+			$deviceID = $this->CreateCategoryByIdent($this->InstanceID, "aussenmodul", "Aussenmodul");
+			SetValue($this->CreateVariableByIdent($deviceID, "Latitude", "Latitude", 2), floatval($_POST['latitude']));
+			SetValue($this->CreateVariableByIdent($deviceID, "Longitude", "Longitude", 2), floatval($_POST['longitude']));
+		
+		// Regenmesser		
+			$deviceID = $this->CreateCategoryByIdent($this->InstanceID, "regenmesser", "Regenmesser");
+			SetValue($this->CreateVariableByIdent($deviceID, "Latitude", "Latitude", 2), floatval($_POST['latitude']));
+			SetValue($this->CreateVariableByIdent($deviceID, "Longitude", "Longitude", 2), floatval($_POST['longitude']));
+		
+		// Windmesser
+			$deviceID = $this->CreateCategoryByIdent($this->InstanceID, "windmesser", "Windmesser");
+			SetValue($this->CreateVariableByIdent($deviceID, "Latitude", "Latitude", 2), floatval($_POST['latitude']));
+			SetValue($this->CreateVariableByIdent($deviceID, "Longitude", "Longitude", 2), floatval($_POST['longitude']));
+		
+		
 			
 		}
 		
