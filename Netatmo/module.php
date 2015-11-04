@@ -11,7 +11,7 @@
 			$this->RegisterPropertyString("password", "");
 			$this->RegisterPropertyString("client_id", "");
 			$this->RegisterPropertyString("client_secret", "");
-			$this->RegisterPropertyBoolean("debug", true);
+	
 		}
 	
 		public function ApplyChanges()
