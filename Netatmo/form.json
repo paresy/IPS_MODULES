@@ -6,7 +6,7 @@
 		{ "name": "client_id", "type": "ValidationTextBox", "caption": "Client ID" },
 		{ "name": "client_secret", "type": "PasswordTextBox", "caption": "Client Secret" }
 	
-	]
+	],
 	"status":
     [
         { "code": 102, "icon": "active", "caption": "Login information valid" },
