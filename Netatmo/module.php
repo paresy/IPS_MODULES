@@ -181,10 +181,10 @@ function printDevices($devices, $title = NULL)
     if(!is_null($devices) && is_array($devices) && !empty($devices))
     {
         if(!is_null($title))
-            printMessageWithBorder($title);
+            $this->printMessageWithBorder($title);
         foreach($devices as $device)
         {
-            printWSBasicInfo($device);
+            $this->printWSBasicInfo($device);
         }
     }
 }
@@ -220,14 +220,14 @@ function printBorder($message)
         echo("-");
     echo("\n");
 }
-function printMessageWithBorder($message)
+private function printMessageWithBorder($message)
 {
     $message = "- " . $message . " -";
     $this->printBorder($message);
     echo $message . "\n";
     $this->printBorder($message);
 }
-function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
+private function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
 {
     if(!empty($measurements))
     {
@@ -262,7 +262,7 @@ function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE
  * function printing a weather station or modules basic information such as id, name, dashboard data, modules (if main device), type(if module)
  *
  */
-function printWSBasicInfo($device)
+private function printWSBasicInfo($device)
 {
     if(isset($device['station_name']))
         echo ("- ".$device['station_name']. " -\n");
@@ -323,7 +323,7 @@ function printWSBasicInfo($device)
     }
     echo"       ----------------------   \n";
 }
-function printUnit($key)
+private function printUnit($key)
 {
     $typeUnit = array('temp' => '°C', 'hum' => '%', 'noise' => 'db', 'strength' => 'km/h', 'angle' => '°', 'rain' => 'mm', 'pressure' => 'mbar', 'co2' => 'ppm');
     foreach($typeUnit as $type => $unit)
@@ -339,7 +339,7 @@ function printUnit($key)
 /*
 * @brief print a thermostat basic information in CLI
 */
-function printThermBasicInfo($dev)
+private function printThermBasicInfo($dev)
 {
     //Device
     echo (" -".$dev['station_name']."- \n");
@@ -377,7 +377,7 @@ function printThermBasicInfo($dev)
 /**
 * @brief returns the current program of a therm module
 */
-function getCurrentProgram($module)
+private function getCurrentProgram($module)
 {
     foreach($module['therm_program_list'] as $program)
     {
@@ -390,7 +390,7 @@ function getCurrentProgram($module)
 /**
 * @brief returns the current setpoint of a therm module along with its setpoint temperature and endtime if defined
 */
-function getCurrentMode($module)
+private function getCurrentMode($module)
 {
     $initialMode = $module["setpoint"]["setpoint_mode"];
     $initialTemp = isset($module["setpoint"]["setpoint_temp"]) ? $module["setpoint"]["setpoint_temp"]: NULL;
@@ -399,7 +399,7 @@ function getCurrentMode($module)
 }
 
 
-function removeHTMLTags($string)
+private function removeHTMLTags($string)
 {
    return preg_replace("/<.*?>/", "", $string);
 }
