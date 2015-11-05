@@ -171,6 +171,22 @@ else
 	}
 	}
 	
+/**
+ * Prints a list of devices
+ *
+ */
+function printDevices($devices, $title = NULL)
+{
+    if(!is_null($devices) && is_array($devices) && !empty($devices))
+    {
+        if(!is_null($title))
+            printMessageWithBorder($title);
+        foreach($devices as $device)
+        {
+            printWSBasicInfo($device);
+        }
+    }
+}
 
     }
 ?>
