@@ -3,7 +3,7 @@
 	"id": "{24B57877-C24C-4690-8421-B41DCC22BE1B}",
 	"name": "Netatmo",
 	"type": 3,
-	"vendor": "",
+	"vendor": "dapor",
 	"aliases": [ "Netatmo"],
 	"parentRequirements": [],
 	"childRequirements": [],
