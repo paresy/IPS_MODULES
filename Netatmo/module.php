@@ -127,16 +127,16 @@ else
         else $users[] = $device;
     }
     //print first User's device Then friends, then favorite
-    printDevices($users, "User's weather stations");
-    printDevices($friends, "User's friends weather stations");
-    printDevices($fav, "User's favorite weather stations");
+    $this->printDevices($users, "User's weather stations");
+    $this->printDevices($friends, "User's friends weather stations");
+    $this->printDevices($fav, "User's favorite weather stations");
     // now get some daily measurements for the last 30 days
      $type = "temperature,Co2,humidity,noise,pressure";
     //first for the main device
     try
     {
         $measure = $client->getMeasure($device['_id'], NULL, "1day" , $type, time() - 24*3600*30, time(), 30,  FALSE, FALSE);
-        printMeasure($measure, $type, $tz, $device['_id'] ."'s daily measurements of the last 30 days");
+        $this->printMeasure($measure, $type, $tz, $device['_id'] ."'s daily measurements of the last 30 days");
     }
     catch(NAClientException $ex)
     {
@@ -159,7 +159,7 @@ else
         try
         {
             $measure = $client->getMeasure($device['_id'], $module['_id'], "1day" , $type, time()-24*3600*30 , time(), 30,  FALSE, FALSE);
-            printMeasure($measure, $type, $tz, $module['_id']. "'s daily measurements of the last 30 days ");
+            $this->printMeasure($measure, $type, $tz, $module['_id']. "'s daily measurements of the last 30 days ");
         }
         catch(NAClientException $ex)
         {
