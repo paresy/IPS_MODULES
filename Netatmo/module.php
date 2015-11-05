@@ -57,8 +57,9 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 		$tokens = $client->getAccessToken();        
 		$refresh_token = $tokens["refresh_token"];
 		$access_token = $tokens["access_token"];
+		 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
 	}
-	 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
+	
 	catch(NAClientException $ex)
 	{
     	echo "An error happend while trying to retrieve your tokens\n".$ex;
