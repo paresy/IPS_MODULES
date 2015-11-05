@@ -398,35 +398,7 @@ function getCurrentMode($module)
     return array($initialMode, $initialTemp, $initialEndtime);
 }
 
-function printPersonInformation(NAPerson $person, $tz)
-{
-    $person->isKnown() ? $this->printMessageWithBorder($person->getPseudo()) : $this->printMessageWithBorder("Inconnu");
-    echo("id: ". $person->getId(). "\n");
-    if($person->isAway())
-        echo("is away from home \n" );
-    else echo("is home \n");
-    echo ("Last seen on: ");
-    printTimeInTz($person->getLastSeen(), $tz, "j F H:i");
-    echo ("\n");
-}
-function printEventInformation(NAEvent $event, $tz)
-{
-  printTimeInTz($event->getTime(), $tz, "j F H:i");
-  $message = removeHTMLTags($event->getMessage());
-  echo(": ".$message. "\n");
-}
-function printCameraInformation(NACamera $camera)
-{
-    !is_null($camera->getName()) ? printMessageWithBorder($camera->getName()) : printMessageWithBorder($camera->getId());
-    echo("id: ". $camera->getId() ."\n");
-    echo("Monitoring status: ". $camera->getVar(NACameraInfo::CI_STATUS) ."\n");
-    echo("SD card status: " .$camera->getVar(NACameraInfo::CI_SD_STATUS) . "\n");
-    echo ("Power status: ". $camera->getVar(NACameraInfo::CI_ALIM_STATUS) ."\n");
-    if($camera->getGlobalStatus())
-        $globalStatus = "OK";
-    else $globalStatus = "NOK";
-    echo ("Global Status: ". $globalStatus ."\n");
-}
+
 function removeHTMLTags($string)
 {
    return preg_replace("/<.*?>/", "", $string);
