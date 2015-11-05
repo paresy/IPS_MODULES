@@ -12,5 +12,13 @@
         { "code": 102, "icon": "active", "caption": "Login information valid" },
         { "code": 201, "icon": "error", "caption": "Authentication failed" },
         { "code": 202, "icon": "error", "caption": "ERROR" }
-    ]
+    ],
+      "actions":
+            [
+                {
+                    "type": "Button",
+                    "label": "Connection testen",
+                    "onClick": "NAW_GetDeviceList($id);"
+                }
+            ]
 }
