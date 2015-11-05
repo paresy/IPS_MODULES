@@ -1,7 +1,7 @@
 <?
 
 //require_once(__DIR__ . "/netatmo.php");  // Netatmo Helper Klasse
-require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
+require_once(__DIR__ . "/netatmo_api/Clients/NAWSApiClient.php");
 //require_once(__DIR__ . "/netatmo_api/Utils.php");
 //require_once(__DIR__ . "/netatmo_api/Config.php");
 
@@ -56,28 +56,27 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 	$config['client_secret'] = $this->ReadPropertyString("client_secret");
 	//application will have access to station and theromstat
 	$config['scope'] = "read_station";
-	$client = new NAApiClient($config);
+	$client = new NAWSApiClient($config);
     		
     	$username = $this->ReadPropertyString("username");
 	$pwd = $this->ReadPropertyString("password");
 	$client->setVariable("username", $username);
 	$client->setVariable("password", $pwd);
-	 try
-	{
-		 $tokens = $client->getAccessToken();        
-		 $refresh_token = $tokens["refresh_token"];
-		 $access_token = $tokens["access_token"];
+
+	//Authentication with Netatmo server (OAuth2)
+try
+{
+    $tokens = $client->getAccessToken();
+}
+catch(NAClientException $ex)
+{
+    handleError("An error happened while trying to retrieve your tokens: " .$ex->getMessage()."\n", TRUE);
 	     	 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
 		$this->SetStatus(102);// login OK
-     		 
-	}
+     		}
 	
-	catch(NAClientException $ex)
-	{
-	  IPS_LogMessage(__CLASS__, __FUNCTION__. $ex); 
-	   $this->SetStatus(202); //Error Timer is negativ
-	}
-	}
+    
+    }
  
 	
 	public function GetData() {
