@@ -115,7 +115,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 	$this->PrepareConnection();	
 	
 	$deviceList = $client->api("devicelist");	
-	 IPS_LogMessage(__CLASS__, "Devicelist: ". print_R($deviceList));	
+	 IPS_LogMessage(__CLASS__, "Devicelist: ". print_r($deviceList));	
 		
 	}
 	
