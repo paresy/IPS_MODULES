@@ -18,16 +18,18 @@ require_once(__DIR__ . "/netatmo.php");  // Netatmo Helper Klasse
         public function Create() {
             // Diese Zeile nicht löschen.
         	parent::Create();
-	//	$this->RegisterPropertyString("username", "");
-	//	$this->RegisterPropertyString("password", "");
-	//	$this->RegisterPropertyString("client_id", "");
-	//	$this->RegisterPropertyString("client_secret", "");
+	$this->RegisterPropertyString("username", "");
+	$this->RegisterPropertyString("password", "");
+	$this->RegisterPropertyString("client_id", "");
+	$this->RegisterPropertyString("client_secret", "");
         }
  
         // Überschreibt die intere IPS_ApplyChanges($id) Funktion
         public function ApplyChanges() {
             // Diese Zeile nicht löschen
             parent::ApplyChanges();
+      IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
+       IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
         }
  
         /**
