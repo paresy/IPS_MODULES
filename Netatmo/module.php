@@ -504,7 +504,8 @@ private function removeHTMLTags($string)
    return preg_replace("/<.*?>/", "", $string);
 }
 
-private function ReduceGUIDToIdent($guid) {
+private function ReduceGUIDToIdent($guid) 
+{
 	return str_replace(Array("{", "-", "}"), "", $guid);
 }
 
@@ -519,10 +520,10 @@ private function CreateCategoryByIdent($id, $ident, $name)
 				 IPS_SetIdent($cid, $ident);
 			 }
 			 return $cid;
-		}
+}
 		
-		private function CreateVariableByIdent($id, $ident, $name, $type, $profile = "")
-		 {
+private function CreateVariableByIdent($id, $ident, $name, $type, $profile = "")
+ {
 			 $vid = @IPS_GetObjectIDByIdent($ident, $id);
 			 if($vid === false)
 			 {
@@ -536,8 +537,8 @@ private function CreateCategoryByIdent($id, $ident, $name)
 			 return $vid;
 		}
 		
-		private function CreateInstanceByIdent($id, $ident, $name, $moduleid = "{24B57877-C24C-4690-8421-B41DCC22BE1B}")
-		 {
+private function CreateInstanceByIdent($id, $ident, $name, $moduleid = "{24B57877-C24C-4690-8421-B41DCC22BE1B}")
+ {
 			 $iid = @IPS_GetObjectIDByIdent($ident, $id);
 			 if($iid === false)
 			 {
@@ -550,12 +551,6 @@ private function CreateCategoryByIdent($id, $ident, $name)
 		}
 		
 	
-	}
-
-
-
-
-
 
     }
 ?>
