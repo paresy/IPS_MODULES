@@ -18,6 +18,11 @@
                 {
                     "type": "Button",
                     "label": "GetData",
+                    "onClick": "NAW_ShowData($id);"
+                },
+                {
+                    "type": "Button",
+                    "label": "GetData",
                     "onClick": "NAW_GetData($id);"
                 }
             ]
