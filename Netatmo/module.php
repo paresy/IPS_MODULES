@@ -217,7 +217,13 @@ else
         else $users[] = $device;
     }
     //print first User's device Then friends, then favorite
-    $this->printDevices($users, "User's weather stations");
+ //   $this->printDevices($users, "User's weather stations");
+       foreach($users as $device)
+        {
+            $this->saveWSBasicInfo($device)
+        }
+ 
+    
     $this->printDevices($friends, "User's friends weather stations");
     $this->printDevices($fav, "User's favorite weather stations");
     // now get some daily measurements for the last 30 days
@@ -261,7 +267,67 @@ else
 	}
 	}
 	
-	
+private function saveWSBasicInfo($device)
+{
+    if(isset($device['station_name']))
+        echo ("- ".$device['station_name']. " -\n");
+    else if($device['module_name'])
+        echo ("- ".$device['module_name']. " -\n");
+    echo ("id: " . $device['_id']. "\n");
+    if(isset($device['type']))
+    {
+        echo ("type: ");
+        switch($device['type'])
+        {
+            // Outdoor Module
+            case "NAModule1": echo ("Outdoor\n");
+                              break;
+            //Wind Sensor
+            case "NAModule2": echo("Wind Sensor\n");
+                              break;
+            //Rain Gauge
+            case "NAModule3": echo("Rain Gauge\n");
+                              break;
+            //Indoor Module
+            case "NAModule4": echo("Indoor\n");
+                              break;
+            case "NAMain" : echo ("Main device \n");
+                            break;
+        }
+    }
+    if(isset($device['place']['timezone']))
+        $tz = $device['place']['timezone'];
+    else $tz = 'GMT';
+    if(isset($device['dashboard_data']))
+    {
+        echo ("Last data: \n");
+        foreach($device['dashboard_data'] as $key => $val)
+        {
+            if($key === 'time_utc' || preg_match("/^date_.*/", $key))
+            {
+                echo $key .": ";
+                $this->printTimeInTz($val, $tz, 'j F H:i');
+                echo ("\n");
+            }
+            else if(is_array($val))
+            {
+                //do nothing : don't print historic
+            }
+            else {
+                echo ($key .": " . $val);
+                $this->printUnit($key);
+                echo "\n";
+            }
+        }
+        if(isset($device['modules']))
+        {
+            echo (" \n\nModules: \n");
+            foreach($device['modules'] as $module)
+                $this->printWSBasicInfo($module);
+        }
+    }
+    echo"       ----------------------   \n";
+}	
 private function CreateCategoryByIdent($id, $ident, $name)
  {
  $cid = @IPS_GetObjectIDByIdent($ident, $id);
