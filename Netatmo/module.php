@@ -90,11 +90,6 @@ catch(NAClientException $ex)
     	
 	$this->PrepareConnection();	
 	
-//	$deviceList = $client->api("devicelist");	
-//	 IPS_LogMessage(__CLASS__, "Devicelist: ". print_r($deviceList ,1));	
-//	 echo print_r($deviceList);
-		
-		
 	//Retrieve user's Weather Stations Information
 try
 {
@@ -267,7 +262,46 @@ else
 	}
 	
 	
-	
+private function CreateCategoryByIdent($id, $ident, $name)
+ {
+ $cid = @IPS_GetObjectIDByIdent($ident, $id);
+ if($cid === false)
+ {
+				 $cid = IPS_CreateCategory();
+				 IPS_SetParent($cid, $id);
+				 IPS_SetName($cid, $name);
+				 IPS_SetIdent($cid, $ident);
+			 }
+			 return $cid;
+		}
+		
+		private function CreateVariableByIdent($id, $ident, $name, $type, $profile = "")
+		 {
+			 $vid = @IPS_GetObjectIDByIdent($ident, $id);
+			 if($vid === false)
+			 {
+				 $vid = IPS_CreateVariable($type);
+				 IPS_SetParent($vid, $id);
+				 IPS_SetName($vid, $name);
+				 IPS_SetIdent($vid, $ident);
+				 if($profile != "")
+					IPS_SetVariableCustomProfile($vid, $profile);
+			 }
+			 return $vid;
+		}
+		
+private function CreateInstanceByIdent($id, $ident, $name, $moduleid = "{24B57877-C24C-4690-8421-B41DCC22BE1B}")
+	 {
+			 $iid = @IPS_GetObjectIDByIdent($ident, $id);
+			 if($iid === false)
+			 {
+				 $iid = IPS_CreateInstance($moduleid);
+				 IPS_SetParent($iid, $id);
+				 IPS_SetName($iid, $name);
+				 IPS_SetIdent($iid, $ident);
+			 }
+			 return $iid;
+		}	
 	
 	
 /**
