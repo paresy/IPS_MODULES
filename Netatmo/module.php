@@ -79,16 +79,16 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
  
     	public function CheckConnection() {
     		
-    //	global $client;
-    //	global $tokens ;     	
-    //	global $refresh_token ;
-    //	global $access_token ;
+    	global $client;
+    	global $tokens ;     	
+    	global $refresh_token ;
+    	global $access_token ;
     	$this->PrepareConnection();
 	try
 	{
-		 $this->$tokens = $this->$client->getAccessToken();        
-		 $this->$refresh_token = $this->$tokens["refresh_token"];
-		 $this->$access_token = $this->$tokens["access_token"];
+		$tokens = $client->getAccessToken();        
+		$refresh_token = $tokens["refresh_token"];
+		$access_token = $tokens["access_token"];
 		 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
 		$this->SetStatus(102);// login OK
      		  return true;
@@ -115,7 +115,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 	$this->PrepareConnection();	
 	
 	$deviceList = $client->api("devicelist");	
-	 IPS_LogMessage(__CLASS__, "Devicelist: ".$deviceList);	
+	 IPS_LogMessage(__CLASS__, "Devicelist: ". print_R($deviceList));	
 		
 	}
 	
