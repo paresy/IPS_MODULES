@@ -32,6 +32,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 	$this->RegisterPropertyString("password", "");
 	$this->RegisterPropertyString("client_id", "");
 	$this->RegisterPropertyString("client_secret", "");
+	$this->Check_Connection();
         }
  
         // Überschreibt die intere IPS_ApplyChanges($id) Funktion
