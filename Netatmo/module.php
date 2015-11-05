@@ -21,7 +21,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
         public function __construct($InstanceID) {
             // Diese Zeile nicht löschen
             parent::__construct($InstanceID);
- 	$this->PrepareConnection();
+ 
             // Selbsterstellter Code
         }
  
@@ -41,6 +41,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
             parent::ApplyChanges();
       IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
        IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
+   	$this->PrepareConnection();
    	$this->CheckConnection();
         }
  
@@ -67,7 +68,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 		 $tokens = $client->getAccessToken();        
 		 $refresh_token = $tokens["refresh_token"];
 		 $access_token = $tokens["access_token"];
-	     	$this->SetStatus(102);// login OK
+	     
      		 
 	}
 	
@@ -83,7 +84,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
     //	global $tokens ;     	
     //	global $refresh_token ;
     //	global $access_token ;
-    //	$this->PrepareConnection();
+    	$this->PrepareConnection();
 	try
 	{
 		 $this->$tokens = $this->$client->getAccessToken();        
@@ -112,7 +113,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
     	global $access_token ;
 	global $deviceList;
     	
-//	$this->PrepareConnection();	
+	$this->PrepareConnection();	
 	
 	$deviceList = $client->api("devicelist");	
 	 IPS_LogMessage(__CLASS__, "Devicelist: ".$deviceList);	
