@@ -40,12 +40,28 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
     		
     	
 
-$config = array();
-$config['client_id'] = 'YOUR_APP_ID';
-$config['client_secret'] = 'YOUR_APP_SECRET';
-//application will have access to station and theromstat
-$config['scope'] = 'read_station read_thermostat write_thermostat';
-$client = new NAApiClient($config);
+	$config = array();
+	$config['client_id'] = $this->ReadPropertyInteger("client_id");
+	$config['client_secret'] = $this->ReadPropertyInteger("client_secret");
+	//application will have access to station and theromstat
+	$config['scope'] = 'read_station';
+	$this->$client = new NAApiClient($config);
+    		
+    	$username = $this->ReadPropertyInteger("username");
+	$pwd = $this->ReadPropertyInteger("password");
+	$client->setVariable("username", $username);
+	$client->setVariable("password", $pwd);
+	try
+	{
+		$tokens = $client->getAccessToken();        
+		$refresh_token = $tokens["refresh_token"];
+		$access_token = $tokens["access_token"];
+	}
+	catch(NAClientException $ex)
+	{
+    	echo "An error happend while trying to retrieve your tokens\n";
+	}	
+    		
     		
     	}
 	
