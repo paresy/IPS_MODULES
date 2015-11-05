@@ -21,7 +21,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
         public function __construct($InstanceID) {
             // Diese Zeile nicht löschen
             parent::__construct($InstanceID);
- 	$this->CheckConnection();
+ 	$this->PrepareConnection();
             // Selbsterstellter Code
         }
  
@@ -79,16 +79,16 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
  
     	public function CheckConnection() {
     		
-    	global $client;
-    	global $tokens ;     	
-    	global $refresh_token ;
-    	global $access_token ;
+    //	global $client;
+    //	global $tokens ;     	
+    //	global $refresh_token ;
+    //	global $access_token ;
     //	$this->PrepareConnection();
 	try
 	{
-		 $tokens = $client->getAccessToken();        
-		 $refresh_token = $tokens["refresh_token"];
-		 $access_token = $tokens["access_token"];
+		 $this->$tokens = $this->$client->getAccessToken();        
+		 $this->$refresh_token = $this->$tokens["refresh_token"];
+		 $this->$access_token = $this->$tokens["access_token"];
 		 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
 		$this->SetStatus(102);// login OK
      		  return true;
