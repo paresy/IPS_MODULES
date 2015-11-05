@@ -397,40 +397,7 @@ function getCurrentMode($module)
     $initialEndtime = isset($module['setpoint']['setpoint_endtime']) ? $module['setpoint']['setpoint_endtime'] : NULL;
     return array($initialMode, $initialTemp, $initialEndtime);
 }
-function printHomeInformation(NAHome $home)
-{
-    !is_null($home->getName()) ? $this->printMessageWithBorder($home->getName()) : $this->printMessageWithBorder($home->getId());
-    echo ("id: ". $home->getId() ."\n");
-    $tz = $home->getTimezone();
-    $persons = $home->getPersons();
-	
-    if(!empty($persons))
-    {
-        $this->printMessageWithBorder("Persons");
-        //print person list
-        foreach($persons as $person)
-        {
-            $this->printPersonInformation($person, $tz);
-        }
-    }
-    if((!empty($home->getEvents())))
-    {
-        $this->printMessageWithBorder('Timeline of Events');
-        //print event list
-        foreach($home->getEvents() as $event)
-        {
-            $this->printEventInformation($event, $tz);
-        }
-    }
-    if(!empty($home->getCameras()))
-    {
-        $this->printMessageWithBorder("Cameras");
-        foreach($home->getCameras() as $camera)
-        {
-            $this->printCameraInformation($camera);
-        }
-    }
-}
+
 function printPersonInformation(NAPerson $person, $tz)
 {
     $person->isKnown() ? $this->printMessageWithBorder($person->getPseudo()) : $this->printMessageWithBorder("Inconnu");
