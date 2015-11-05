@@ -1,2 +1,2 @@
 
-API fieles from http://dev.netatmo.com
+API files from http://dev.netatmo.com
