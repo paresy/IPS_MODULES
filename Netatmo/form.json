@@ -20,5 +20,12 @@
                     "label": "Connection testen",
                     "onClick": "NAW_Check_Connection($id);"
                 }
+            ],
+             [
+                {
+                    "type": "Button",
+                    "label": "GetData",
+                    "onClick": "NAW_GetData($id);"
+                }
             ]
 }
