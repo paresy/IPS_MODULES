@@ -18,7 +18,7 @@
                 {
                     "type": "Button",
                     "label": "Connection testen",
-                    "onClick": "NAW_Check_Connection($id);"
+                    "onClick": "NAW_CheckConnection($id);"
                 },
                 {
                     "type": "Button",
