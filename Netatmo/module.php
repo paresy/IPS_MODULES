@@ -44,25 +44,25 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
    	$this->Check_Connection();
         }
  
+ 
     	public function Check_Connection() {
     	
-
 	$config = array();
 	$config['client_id'] = $this->ReadPropertyString("client_id");
 	$config['client_secret'] = $this->ReadPropertyString("client_secret");
 	//application will have access to station and theromstat
 	$config['scope'] = "read_station";
-	$client = new NAApiClient($config);
+	global $client = new NAApiClient($config);
     		
     	$username = $this->ReadPropertyString("username");
 	$pwd = $this->ReadPropertyString("password");
-	$client->setVariable("username", $username);
-	$client->setVariable("password", $pwd);
+	global $client->setVariable("username", $username);
+	global $client->setVariable("password", $pwd);
 	try
 	{
-		$tokens = $client->getAccessToken();        
-		$refresh_token = $tokens["refresh_token"];
-		$access_token = $tokens["access_token"];
+		global $tokens = $client->getAccessToken();        
+		global $refresh_token = $tokens["refresh_token"];
+		global $access_token = $tokens["access_token"];
 		 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
 		$this->SetStatus(102);// login OK
      		  return true;
