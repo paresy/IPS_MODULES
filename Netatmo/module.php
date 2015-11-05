@@ -15,6 +15,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
     private $tokens ;     	
     private $refresh_token ;
     private $access_token ;
+    private $deviceList;
         // Der Konstruktor des Moduls
         // Überschreibt den Standard Kontruktor von IPS
         public function __construct($InstanceID) {
@@ -83,7 +84,8 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 	
 	
 	public function GetData() {
-		
+	global $client;	
+	global $deviceList;
 	$deviceList = $client->api("devicelist");	
 	 IPS_LogMessage(__CLASS__, "Devicelist: ".$deviceList);	
 		
