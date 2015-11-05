@@ -78,6 +78,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 	}
  
     	public function CheckConnection() {
+    	global $client;
     	$this->PrepareConnection();
 	try
 	{
