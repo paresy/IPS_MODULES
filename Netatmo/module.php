@@ -45,12 +45,12 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
    	$this->Check_Connection();
         }
  
- 
-    	public function Check_Connection() {
-    	global $client;
-    global $tokens ;     	
-    global $refresh_token ;
-    global $access_token ;
+	private function PrepareConnection() 
+	{
+ 	global $client;
+    	global $tokens ;     	
+    	global $refresh_token ;
+    	global $access_token ;
     	
 	$config = array();
 	$config['client_id'] = $this->ReadPropertyString("client_id");
@@ -61,8 +61,25 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
     		
     	$username = $this->ReadPropertyString("username");
 	$pwd = $this->ReadPropertyString("password");
-	 $client->setVariable("username", $username);
-	 $client->setVariable("password", $pwd);
+	$client->setVariable("username", $username);
+	$client->setVariable("password", $pwd);
+	 try
+	{
+		 $tokens = $client->getAccessToken();        
+		 $refresh_token = $tokens["refresh_token"];
+		 $access_token = $tokens["access_token"];
+	    	$this->SetStatus(102);// login OK
+     		 
+	}
+	
+	catch(NAClientException $ex)
+	{
+	  IPS_LogMessage(__CLASS__, __FUNCTION__. $ex); 
+	}
+	}
+ 
+    	public function Check_Connection() {
+    	$this->PrepareConnection();
 	try
 	{
 		 $tokens = $client->getAccessToken();        
