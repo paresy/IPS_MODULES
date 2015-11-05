@@ -18,7 +18,7 @@
                 {
                     "type": "Button",
                     "label": "Connection testen",
-                    "onClick": "NAW_GetDeviceList($id);"
+                    "onClick": "NAW_Check_Connection($id);"
                 }
             ]
 }
