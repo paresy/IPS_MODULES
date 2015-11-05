@@ -1,8 +1,12 @@
 <?
 
 //require_once(__DIR__ . "/netatmo.php");  // Netatmo Helper Klasse
+require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
+//require_once(__DIR__ . "/netatmo_api/Utils.php");
+//require_once(__DIR__ . "/netatmo_api/Config.php");
 
     // Klassendefinition
+    
     class Netatmo extends IPSModule {
  
         // Der Konstruktor des Moduls
@@ -32,7 +36,18 @@
        IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
         }
  
-    
+    	public function GetDeviceList() {
+    		
+    	
+
+$config = array();
+$config['client_id'] = 'YOUR_APP_ID';
+$config['client_secret'] = 'YOUR_APP_SECRET';
+//application will have access to station and theromstat
+$config['scope'] = 'read_station read_thermostat write_thermostat';
+$client = new NAApiClient($config);
+    		
+    	}
 	
 
     }
