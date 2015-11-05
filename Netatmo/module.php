@@ -80,7 +80,7 @@ catch(NAClientException $ex)
     }
  
 	
-	public function ShowData() {
+	public function SaveData() {
 	
 	global $client;
     	global $tokens ;     	
@@ -171,6 +171,104 @@ else
 		
 	}
 	}
+	
+// SAVE
+
+public function ShowData() {
+	
+	global $client;
+    	global $tokens ;     	
+    	global $refresh_token ;
+    	global $access_token ;
+	global $deviceList;
+    	
+	$this->PrepareConnection();	
+	
+//	$deviceList = $client->api("devicelist");	
+//	 IPS_LogMessage(__CLASS__, "Devicelist: ". print_r($deviceList ,1));	
+//	 echo print_r($deviceList);
+		
+		
+	//Retrieve user's Weather Stations Information
+try
+{
+    //retrieve all stations belonging to the user, and also his favorite ones
+    $data = $client->getData(NULL, TRUE);
+    $this->printMessageWithBorder("Weather Stations Basic Information");
+}
+catch(NAClientException $ex)
+{
+    $this->handleError("An error occured while retrieving data: ". $ex->getMessage()."\n", TRUE);
+}
+if(empty($data['devices']))
+{
+    echo 'No devices affiliated to user';
+}
+else
+{
+    $users = array();
+    $friends = array();
+    $fav = array();
+    $device = $data['devices'][0];
+    $tz = isset($device['place']['timezone']) ? $device['place']['timezone'] : "GMT";
+    //devices are already sorted in the following way: first weather stations owned by user, then "friend" WS, and finally favorites stations. Still let's store them in different arrays according to their type
+    foreach($data['devices'] as $device)
+    {
+        //favorites have both "favorite" and "read_only" flag set to true, whereas friends only have read_only
+        if(isset($device['favorite']) && $device['favorite'])
+            $fav[] = $device;
+        else if(isset($device['read_only']) && $device['read_only'])
+            $friends[] = $device;
+        else $users[] = $device;
+    }
+    //print first User's device Then friends, then favorite
+    $this->printDevices($users, "User's weather stations");
+    $this->printDevices($friends, "User's friends weather stations");
+    $this->printDevices($fav, "User's favorite weather stations");
+    // now get some daily measurements for the last 30 days
+     $type = "temperature,Co2,humidity,noise,pressure";
+    //first for the main device
+    try
+    {
+        $measure = $client->getMeasure($device['_id'], NULL, "1day" , $type, time() - 24*3600*30, time(), 30,  FALSE, FALSE);
+        $this->printMeasure($measure, $type, $tz, $device['_id'] ."'s daily measurements of the last 30 days");
+    }
+    catch(NAClientException $ex)
+    {
+        $this->handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
+    }
+    //Then for its modules
+    foreach($device['modules'] as $module)
+    {
+        //requested data type depends on the module's type
+        switch($module['type'])
+        {
+            case "NAModule3": $type = "sum_rain";
+                              break;
+            case "NAModule2": $type = "WindStrength,WindAngle,GustStrength,GustAngle,date_max_gust";
+                              break;
+            case "NAModule1" : $type = "temperature,humidity";
+                               break;
+            default : $type = "temperature,Co2,humidity,noise,pressure";
+        }
+        try
+        {
+            $measure = $client->getMeasure($device['_id'], $module['_id'], "1day" , $type, time()-24*3600*30 , time(), 30,  FALSE, FALSE);
+            $this->printMeasure($measure, $type, $tz, $module['_id']. "'s daily measurements of the last 30 days ");
+        }
+        catch(NAClientException $ex)
+        {
+            $this->handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
+        }
+    }
+	
+		
+	}
+	}
+	
+	
+	
+	
 	
 /**
  * Prints a list of devices
