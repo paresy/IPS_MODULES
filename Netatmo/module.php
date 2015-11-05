@@ -170,8 +170,8 @@ else
         handleError("An error occcured while retrieving last month info: ".$ex->getMessage() . " \n");
     }
 
-			}
-		}
+	}
+}
 }
 
 
