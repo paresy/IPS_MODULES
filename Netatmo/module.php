@@ -36,9 +36,11 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
        IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
      if (  $this->GetDeviceList() )
      {
-     	  $this->SetStatus(102); //Error Timer is negativ
+     	  $this->SetStatus(102);// login OK
+     	  return true;
      }else{
      	  $this->SetStatus(201); //Error Timer is negativ
+     	   return false;
      }
         }
  
