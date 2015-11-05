@@ -10,7 +10,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
     
     class Netatmo extends IPSModule {
     	
-    require_once(__DIR__ . "/netatmo_api/Utils.php");
+   
     	
     private $client ;
     private $tokens ;     	
@@ -22,7 +22,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
         public function __construct($InstanceID) {
             // Diese Zeile nicht löschen
             parent::__construct($InstanceID);
- 
+  	require_once(__DIR__ . "/netatmo_api/Utils.php");
             // Selbsterstellter Code
         }
  
