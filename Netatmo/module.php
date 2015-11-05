@@ -223,16 +223,16 @@ function printBorder($message)
 function printMessageWithBorder($message)
 {
     $message = "- " . $message . " -";
-    printBorder($message);
+    $this->printBorder($message);
     echo $message . "\n";
-    printBorder($message);
+    $this->printBorder($message);
 }
 function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
 {
     if(!empty($measurements))
     {
         if(!empty($title))
-            printMessageWithBorder($title);
+            $this->printMessageWithBorder($title);
         if($monthly)
             $dateFormat = 'F: ';
         else $dateFormat = 'j F: ';
@@ -240,16 +240,16 @@ function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE
         $keys = explode(",", $type);
         foreach($measurements as $timestamp => $values)
         {
-            printTimeinTz($timestamp, $tz, $dateFormat);
+            $this->printTimeinTz($timestamp, $tz, $dateFormat);
              echo"\n";
             foreach($values as $key => $val)
             {
                 echo $keys[$key] . ": ";
                 if($keys[$key] === "time_utc" || preg_match("/^date_.*/", $keys[$key]))
-                    echo printTimeInTz($val, $tz, "j F H:i");
+                    echo $this->printTimeInTz($val, $tz, "j F H:i");
                 else{
                     echo $val;
-                    printUnit($keys[$key]);
+                    $this->printUnit($keys[$key]);
                 }
                 if(count($values)-1 === $key || $monthly)
                     echo "\n";
@@ -301,7 +301,7 @@ function printWSBasicInfo($device)
             if($key === 'time_utc' || preg_match("/^date_.*/", $key))
             {
                 echo $key .": ";
-                printTimeInTz($val, $tz, 'j F H:i');
+                $this->printTimeInTz($val, $tz, 'j F H:i');
                 echo ("\n");
             }
             else if(is_array($val))
@@ -310,7 +310,7 @@ function printWSBasicInfo($device)
             }
             else {
                 echo ($key .": " . $val);
-                printUnit($key);
+                $this->printUnit($key);
                 echo "\n";
             }
         }
@@ -318,7 +318,7 @@ function printWSBasicInfo($device)
         {
             echo (" \n\nModules: \n");
             foreach($device['modules'] as $module)
-                printWSBasicInfo($module);
+                $this->printWSBasicInfo($module);
         }
     }
     echo"       ----------------------   \n";
@@ -351,13 +351,13 @@ function printThermBasicInfo($dev)
         echo ("    - ".$module['module_name']." -\n");
         //module last measurements
         echo ("    Last Measure date : ");
-        printTimeInTz($module['measured']['time'], $dev['place']['timezone'], 'j F H:i');
+        $this->printTimeInTz($module['measured']['time'], $dev['place']['timezone'], 'j F H:i');
         echo("\n");
         echo ("    Last Temperature measured: ". $module['measured']['temperature']);
-        printUnit("temperature");
+        $this->printUnit("temperature");
         echo("\n");
         echo ("    Last Temperature setpoint: ". $module['measured']['setpoint_temp']);
-        printUnit('setpoint_temp');
+        $this->printUnit('setpoint_temp');
         echo("\n");
         echo ("    Program List: \n");
         //program list
@@ -399,41 +399,41 @@ function getCurrentMode($module)
 }
 function printHomeInformation(NAHome $home)
 {
-    !is_null($home->getName()) ? printMessageWithBorder($home->getName()) : printMessageWithBorder($home->getId());
+    !is_null($home->getName()) ? $this->printMessageWithBorder($home->getName()) : $this->printMessageWithBorder($home->getId());
     echo ("id: ". $home->getId() ."\n");
     $tz = $home->getTimezone();
     $persons = $home->getPersons();
 	
     if(!empty($persons))
     {
-        printMessageWithBorder("Persons");
+        $this->printMessageWithBorder("Persons");
         //print person list
         foreach($persons as $person)
         {
-            printPersonInformation($person, $tz);
+            $this->printPersonInformation($person, $tz);
         }
     }
     if((!empty($home->getEvents())))
     {
-        printMessageWithBorder('Timeline of Events');
+        $this->printMessageWithBorder('Timeline of Events');
         //print event list
         foreach($home->getEvents() as $event)
         {
-            printEventInformation($event, $tz);
+            $this->printEventInformation($event, $tz);
         }
     }
     if(!empty($home->getCameras()))
     {
-        printMessageWithBorder("Cameras");
+        $this->printMessageWithBorder("Cameras");
         foreach($home->getCameras() as $camera)
         {
-            printCameraInformation($camera);
+            $this->printCameraInformation($camera);
         }
     }
 }
 function printPersonInformation(NAPerson $person, $tz)
 {
-    $person->isKnown() ? printMessageWithBorder($person->getPseudo()) : printMessageWithBorder("Inconnu");
+    $person->isKnown() ? $this->printMessageWithBorder($person->getPseudo()) : $this->printMessageWithBorder("Inconnu");
     echo("id: ". $person->getId(). "\n");
     if($person->isAway())
         echo("is away from home \n" );
