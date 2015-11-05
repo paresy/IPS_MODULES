@@ -6,14 +6,15 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 //require_once(__DIR__ . "/netatmo_api/Config.php");
 
     // Klassendefinition
+
+    
+    
+    class Netatmo extends IPSModule {
+    	
     private $client ;
     private $tokens ;     	
     private $refresh_token ;
     private $access_token ;
-    
-    
-    class Netatmo extends IPSModule {
- 
         // Der Konstruktor des Moduls
         // Überschreibt den Standard Kontruktor von IPS
         public function __construct($InstanceID) {
