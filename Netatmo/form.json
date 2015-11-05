@@ -17,11 +17,6 @@
             [
                 {
                     "type": "Button",
-                    "label": "Connection testen",
-                    "onClick": "NAW_CheckConnection($id);"
-                },
-                {
-                    "type": "Button",
                     "label": "GetData",
                     "onClick": "NAW_GetData($id);"
                 }
