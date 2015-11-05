@@ -70,7 +70,7 @@ try
 }
 catch(NAClientException $ex)
 {
-    handleError("An error happened while trying to retrieve your tokens: " .$ex->getMessage()."\n", TRUE);
+    $this->handleError("An error happened while trying to retrieve your tokens: " .$ex->getMessage()."\n", TRUE);
 	     	 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
 		$this->SetStatus(102);// login OK
      		}
@@ -99,11 +99,11 @@ try
 {
     //retrieve all stations belonging to the user, and also his favorite ones
     $data = $client->getData(NULL, TRUE);
-    printMessageWithBorder("Weather Stations Basic Information");
+    $this->printMessageWithBorder("Weather Stations Basic Information");
 }
 catch(NAClientException $ex)
 {
-    handleError("An error occured while retrieving data: ". $ex->getMessage()."\n", TRUE);
+    $this->handleError("An error occured while retrieving data: ". $ex->getMessage()."\n", TRUE);
 }
 if(empty($data['devices']))
 {
@@ -140,7 +140,7 @@ else
     }
     catch(NAClientException $ex)
     {
-        handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
+        $this->handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
     }
     //Then for its modules
     foreach($device['modules'] as $module)
@@ -163,7 +163,7 @@ else
         }
         catch(NAClientException $ex)
         {
-            handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
+            $this->handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
         }
     }
 	
