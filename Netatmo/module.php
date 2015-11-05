@@ -34,14 +34,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
             parent::ApplyChanges();
       IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
        IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
-     if (  $this->GetDeviceList() )
-     {
-     	  $this->SetStatus(102);// login OK
-     	  return true;
-     }else{
-     	  $this->SetStatus(201); //Error Timer is negativ
-     	   return false;
-     }
+   
         }
  
     	public function GetDeviceList() {
@@ -65,12 +58,14 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 		$refresh_token = $tokens["refresh_token"];
 		$access_token = $tokens["access_token"];
 		 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
+		$this->SetStatus(102);// login OK
+     		  return true;
 	}
 	
 	catch(NAClientException $ex)
 	{
-	$this->SetStatus(202); 
-    	echo "An error happend while trying to retrieve your tokens\n".$ex;
+	  $this->SetStatus(202); //Error Timer is negativ
+     	  return false;
 	}	
     		
     		
