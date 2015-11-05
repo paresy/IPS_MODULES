@@ -1,5 +1,5 @@
 <?php
-
+ 
 function handleError($message, $exit = FALSE)
 {
     echo $message;
