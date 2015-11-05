@@ -41,7 +41,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
             parent::ApplyChanges();
       IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
        IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
-   	$this->CheckConnection();
+   	$this->PrepareConnection();
         }
  
 	private function PrepareConnection() 
@@ -67,42 +67,18 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 		 $tokens = $client->getAccessToken();        
 		 $refresh_token = $tokens["refresh_token"];
 		 $access_token = $tokens["access_token"];
-	     
+	     	 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
+		$this->SetStatus(102);// login OK
      		 
 	}
 	
 	catch(NAClientException $ex)
 	{
 	  IPS_LogMessage(__CLASS__, __FUNCTION__. $ex); 
+	   $this->SetStatus(202); //Error Timer is negativ
 	}
 	}
  
-    	public function CheckConnection() {
-    		
-    	global $client;
- //   	global $tokens ;     	
-    //	global $refresh_token ;
-   // 	global $access_token ;
-    	$this->PrepareConnection();
-	try
-	{
-		$tokens = $client->getAccessToken();        
-		$refresh_token = $tokens["refresh_token"];
-		$access_token = $tokens["access_token"];
-		 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
-		$this->SetStatus(102);// login OK
-     		  return true;
-	}
-	
-	catch(NAClientException $ex)
-	{
-	  $this->SetStatus(202); //Error Timer is negativ
-     	  return false;
-	}	
-    		
-    		
-    	}
-	
 	
 	public function GetData() {
 	
