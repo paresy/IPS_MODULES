@@ -34,6 +34,7 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
             parent::ApplyChanges();
       IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
        IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
+       $this->GetDeviceList();
         }
  
     	public function GetDeviceList() {
@@ -41,14 +42,14 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
     	
 
 	$config = array();
-	$config['client_id'] = $this->ReadPropertyInteger("client_id");
-	$config['client_secret'] = $this->ReadPropertyInteger("client_secret");
+	$config['client_id'] = $this->ReadPropertyString("client_id");
+	$config['client_secret'] = $this->ReadPropertyString("client_secret");
 	//application will have access to station and theromstat
-	$config['scope'] = 'read_station';
-	$this->$client = new NAApiClient($config);
+	$config['scope'] = "read_station";
+	$client = new NAApiClient($config);
     		
-    	$username = $this->ReadPropertyInteger("username");
-	$pwd = $this->ReadPropertyInteger("password");
+    	$username = $this->ReadPropertyString("username");
+	$pwd = $this->ReadPropertyString("password");
 	$client->setVariable("username", $username);
 	$client->setVariable("password", $pwd);
 	try
@@ -57,9 +58,10 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 		$refresh_token = $tokens["refresh_token"];
 		$access_token = $tokens["access_token"];
 	}
+	 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
 	catch(NAClientException $ex)
 	{
-    	echo "An error happend while trying to retrieve your tokens\n";
+    	echo "An error happend while trying to retrieve your tokens\n".$ex;
 	}	
     		
     		
