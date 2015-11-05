@@ -3,13 +3,14 @@
 //require_once(__DIR__ . "/netatmo.php");  // Netatmo Helper Klasse
 require_once(__DIR__ . "/netatmo_api/Clients/NAWSApiClient.php");
 require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
-require_once(__DIR__ . "/netatmo_api/Utils.php");
-require_once(__DIR__ . "/netatmo_api/Config.php");
+
 
     // Klassendefinition
 
     
     class Netatmo extends IPSModule {
+    	
+    require_once(__DIR__ . "/netatmo_api/Utils.php");
     	
     private $client ;
     private $tokens ;     	
