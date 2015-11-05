@@ -102,7 +102,10 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 	
 	public function GetData() {
 	
-	global $client;	
+	global $client;
+    	global $tokens ;     	
+    	global $refresh_token ;
+    	global $access_token ;
 	global $deviceList;
     	
 	$this->PrepareConnection();	
