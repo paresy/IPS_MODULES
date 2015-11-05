@@ -6,6 +6,11 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
 //require_once(__DIR__ . "/netatmo_api/Config.php");
 
     // Klassendefinition
+    private $client ;
+    private $tokens ;     	
+    private $refresh_token ;
+    private $access_token ;
+    
     
     class Netatmo extends IPSModule {
  
@@ -34,11 +39,10 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
             parent::ApplyChanges();
       IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
        IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
-   
+   	$this->Check_Connection();
         }
  
-    	public function GetDeviceList() {
-    		
+    	public function Check_Connection() {
     	
 
 	$config = array();
