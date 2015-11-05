@@ -76,6 +76,16 @@ require_once(__DIR__ . "/netatmo_api/Clients/NAApiClient.php");
     		
     	}
 	
+	
+	public function GetData() {
+		
+	$deviceList = $client->api("devicelist");	
+	 IPS_LogMessage(__CLASS__, "Devicelist: ".$deviceList);	
+		
+		
+		
+	}
+	
 
     }
 ?>
