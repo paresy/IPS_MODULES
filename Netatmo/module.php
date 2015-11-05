@@ -1,6 +1,6 @@
 <?
 
-require_once(__DIR__ . "/netatmo.php");  // Netatmo Helper Klasse
+//require_once(__DIR__ . "/netatmo.php");  // Netatmo Helper Klasse
 
     // Klassendefinition
     class Netatmo extends IPSModule {
