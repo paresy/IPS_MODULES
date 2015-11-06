@@ -2,5 +2,5 @@
 
 Multiple Modules for IP-Symcon from Dapor
 
-- Netatmo (ALPHA)
-- ORACLE DB Connector (EMPTY)
+- Netatmo (BETA)
+
