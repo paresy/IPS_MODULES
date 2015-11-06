@@ -330,7 +330,7 @@ private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profi
 			 }
 	
 		//	SetValue($vid,$value);
-			 echo ($name .": " . $value);
+			 IPS_LogMessage($_IPS['SELF'],$name .": " . $value);
 			 return $vid;
 		}
 		
