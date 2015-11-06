@@ -23,7 +23,7 @@
                 {
                     "type": "Button",
                     "label": "GetData",
-                    "onClick": "NAW_GetData($id);"
+                    "onClick": "NAW_SaveData($id);"
                 }
             ]
 }
