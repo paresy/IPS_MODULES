@@ -327,8 +327,8 @@ private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profi
 					IPS_SetVariableCustomProfile($vid, $profile);
 			 }
 	
-		//	SetValue($vid,$value);
-			 IPS_LogMessage('NETATMO',$name .": " . $value);
+			SetValue($vid,$value);
+		//	 IPS_LogMessage('NETATMO',$name .": " . $value);
 			 return $vid;
 		}
 		
