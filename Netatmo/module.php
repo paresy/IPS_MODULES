@@ -395,7 +395,7 @@ private  function printBorder($message)
         echo("-");
     echo("\n");
 }
-private private function printMessageWithBorder($message)
+private function printMessageWithBorder($message)
 {
     $message = "- " . $message . " -";
     $this->printBorder($message);
