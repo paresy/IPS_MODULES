@@ -190,7 +190,7 @@ try
 {
     //retrieve all stations belonging to the user, and also his favorite ones
     $data = $client->getData(NULL, TRUE);
-    $this->printMessageWithBorder("Weather Stations Basic Information");
+  //  $this->printMessageWithBorder("Weather Stations Basic Information");
 }
 catch(NAClientException $ex)
 {
