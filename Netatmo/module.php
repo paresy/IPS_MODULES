@@ -220,12 +220,19 @@ else
  //   $this->printDevices($users, "User's weather stations");
        foreach($users as $device)
         {
-            $this->saveWSBasicInfo($device)
+            $this->saveWSBasicInfo($device);
         }
- 
+  	foreach($fav as $device)
+        {
+            $this->saveWSBasicInfo($device);
+        }
+         foreach($friends as $device)
+        {
+            $this->saveWSBasicInfo($device);
+        }
     
-    $this->printDevices($friends, "User's friends weather stations");
-    $this->printDevices($fav, "User's favorite weather stations");
+ //   $this->printDevices($friends, "User's friends weather stations");
+  //  $this->printDevices($fav, "User's favorite weather stations");
     // now get some daily measurements for the last 30 days
      $type = "temperature,Co2,humidity,noise,pressure";
     //first for the main device
