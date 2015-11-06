@@ -276,11 +276,17 @@ else
 	
 private function saveWSBasicInfo($device)
 {
-    if(isset($device['station_name']))
-        echo ("- ".$device['station_name']. " -\n");
-    else if($device['module_name'])
-        echo ("- ".$device['module_name']. " -\n");
-    echo ("id: " . $device['_id']. "\n");
+ $instance_id = $this->InstanceID;	
+ // echo ("id: " . $device['_id']. "\n");
+$instance_id = $this->CreateCategoryByIdent($instance_id, 'id' , $device['_id'] );
+    if(isset($device['station_name'])){
+  //     echo ("- ".$device['station_name']. " -\n");
+ $this->CreateVariableByIdent($instance_id, 'station_name','station_name', $device['station_name'], 3);
+    }
+    else if($device['module_name']){
+     //echo ("- ".$device['module_name']. " -\n");
+  $this->CreateVariableByIdent($instance_id, 'module_name', 'module_name',$device['module_name'], 3)  ;
+    }
     if(isset($device['type']))
     {
         echo ("type: ");
@@ -288,17 +294,22 @@ private function saveWSBasicInfo($device)
         {
             // Outdoor Module
             case "NAModule1": echo ("Outdoor\n");
+             $this->CreateVariableByIdent($instance_id, 'type','type', 'Outdoor', 3)  ;
                               break;
             //Wind Sensor
             case "NAModule2": echo("Wind Sensor\n");
+               $this->CreateVariableByIdent($instance_id, 'type', 'type','Wind Sensor', 3)  ;
                               break;
             //Rain Gauge
             case "NAModule3": echo("Rain Gauge\n");
+              $this->CreateVariableByIdent($instance_id, 'type', 'type','Rain Gauge', 3)  ;
                               break;
             //Indoor Module
             case "NAModule4": echo("Indoor\n");
+            $this->CreateVariableByIdent($instance_id, 'type', 'type','Indoor', 3)  ;
                               break;
             case "NAMain" : echo ("Main device \n");
+            $this->CreateVariableByIdent($instance_id, 'type', 'type','Main device', 3)  ;
                             break;
         }
     }
@@ -312,28 +323,26 @@ private function saveWSBasicInfo($device)
         {
             if($key === 'time_utc' || preg_match("/^date_.*/", $key))
             {
-                echo $key .": ";
-                $this->printTimeInTz($val, $tz, 'j F H:i');
-                echo ("\n");
+                
             }
             else if(is_array($val))
             {
                 //do nothing : don't print historic
             }
             else {
-                echo ($key .": " . $val);
-                $this->printUnit($key);
-                echo "\n";
+         //       echo ($key .": " . $val);
+               $this->CreateVariableByIdent($instance_id, $key,$key,$val , 2)  ;
+            //    echo "\n";
             }
         }
         if(isset($device['modules']))
         {
-            echo (" \n\nModules: \n");
+         //   echo (" \n\nModules: \n");
             foreach($device['modules'] as $module)
-                $this->printWSBasicInfo($module);
+                $this->saveWSBasicInfo($module);
         }
     }
-    echo"       ----------------------   \n";
+  //  echo"       ----------------------   \n";
 }	
 private function CreateCategoryByIdent($id, $ident, $name)
  {
@@ -348,10 +357,10 @@ private function CreateCategoryByIdent($id, $ident, $name)
 			 return $cid;
 		}
 		
-		private function CreateVariableByIdent($id, $ident, $name, $type, $profile = "")
+private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profile = "")
 		 {
 			 $vid = @IPS_GetObjectIDByIdent($ident, $id);
-			 if($vid === false)
+		 if($vid === false)
 			 {
 				 $vid = IPS_CreateVariable($type);
 				 IPS_SetParent($vid, $id);
@@ -360,6 +369,7 @@ private function CreateCategoryByIdent($id, $ident, $name)
 				 if($profile != "")
 					IPS_SetVariableCustomProfile($vid, $profile);
 			 }
+			 IPS_SetValue($vid,$value);
 			 return $vid;
 		}
 		
