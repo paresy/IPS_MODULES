@@ -169,7 +169,7 @@ else
 	
 // SAVE
 
-public function ShowData() {
+public function SaveData() {
 	
 	global $client;
     	global $tokens ;     	
