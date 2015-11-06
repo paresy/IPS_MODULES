@@ -328,14 +328,9 @@ private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profi
 				 if($profile != "")
 					IPS_SetVariableCustomProfile($vid, $profile);
 			 }
-			 try
-			 {
-			SetValue($vid,$value);
-			 }
-			catch(Exception $ex)
-        		{
-        		 echo ($vid .": " . $value." EX".$ex);
-        		}
+	
+		//	SetValue($vid,$value);
+			 echo ($name .": " . $value);
 			 return $vid;
 		}
 		
