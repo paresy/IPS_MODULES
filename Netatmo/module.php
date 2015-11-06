@@ -79,8 +79,8 @@ catch(NAClientException $ex)
     
     }
  
-	
-	public function SaveData() {
+	//ShowData
+	public function ShowData() {
 	
 	global $client;
     	global $tokens ;     	
