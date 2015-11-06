@@ -231,48 +231,11 @@ else
             $this->saveWSBasicInfo($device);
         }
     
- //   $this->printDevices($friends, "User's friends weather stations");
-  //  $this->printDevices($fav, "User's favorite weather stations");
-    // now get some daily measurements for the last 30 days
-     $type = "temperature,Co2,humidity,noise,pressure";
-    //first for the main device
-    try
-    {
-        $measure = $client->getMeasure($device['_id'], NULL, "1day" , $type, time() - 24*3600*30, time(), 30,  FALSE, FALSE);
-        $this->printMeasure($measure, $type, $tz, $device['_id'] ."'s daily measurements of the last 30 days");
-    }
-    catch(NAClientException $ex)
-    {
-        $this->handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
-    }
-    //Then for its modules
-    foreach($device['modules'] as $module)
-    {
-        //requested data type depends on the module's type
-        switch($module['type'])
-        {
-            case "NAModule3": $type = "sum_rain";
-                              break;
-            case "NAModule2": $type = "WindStrength,WindAngle,GustStrength,GustAngle,date_max_gust";
-                              break;
-            case "NAModule1" : $type = "temperature,humidity";
-                               break;
-            default : $type = "temperature,Co2,humidity,noise,pressure";
-        }
-        try
-        {
-            $measure = $client->getMeasure($device['_id'], $module['_id'], "1day" , $type, time()-24*3600*30 , time(), 30,  FALSE, FALSE);
-            $this->printMeasure($measure, $type, $tz, $module['_id']. "'s daily measurements of the last 30 days ");
-        }
-        catch(NAClientException $ex)
-        {
-            $this->handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
-        }
-    }
-	
 		
-	}
-	}
+   }
+
+	
+}
 	
 private function saveWSBasicInfo($device)
 {
@@ -321,16 +284,12 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
         echo ("Last data: \n");
         foreach($device['dashboard_data'] as $key => $val)
         {
-            if($key === 'time_utc' || preg_match("/^date_.*/", $key))
-            {
-                
-            }
-            else if(is_array($val))
+         if(is_array($val))
             {
                 //do nothing : don't print historic
             }
             else {
-         //       echo ($key .": " . $val);
+                echo ($key .": " . $val);
                $this->CreateVariableByIdent($instance_id, $key,$key,$val , 2)  ;
             //    echo "\n";
             }
@@ -369,7 +328,13 @@ private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profi
 				 if($profile != "")
 					IPS_SetVariableCustomProfile($vid, $profile);
 			 }
-			 SetValue($vid,$value);
+			 try
+			 {
+			SetValue($vid,$value);
+			catch(NAClientException $ex)
+        		{
+        		 echo ($vid .": " . $value." EX".$ex);
+        		}
 			 return $vid;
 		}
 		
