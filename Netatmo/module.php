@@ -253,7 +253,7 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
     }
     if(isset($device['type']))
     {
-        echo ("type: ");
+      //  echo ("type: ");
         switch($device['type'])
         {
             // Outdoor Module
@@ -282,13 +282,13 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
     else $tz = 'GMT';
     if(isset($device['dashboard_data']))
     {
-        echo ("Last data: \n");
+     //   echo ("Last data: \n");
         foreach($device['dashboard_data'] as $key => $val)
         {
          if( preg_match("/.*_trend/", $key))
                   $this->CreateVariableByIdent($instance_id, $key,$key,$val , 3)  ;
             else {
-                echo ($key .": " . $val);
+             //   echo ($key .": " . $val);
                $this->CreateVariableByIdent($instance_id, $key,$key,$val , 2)  ;
             //    echo "\n";
             }
