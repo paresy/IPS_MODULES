@@ -257,22 +257,26 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
         {
             // Outdoor Module
             case "NAModule1": echo ("Outdoor\n");
-             $this->CreateVariableByIdent($instance_id, 'type','type', 'Outdoor', 3)  ;
+             $instance_id = $this->CreateCategoryByIdent($instance_id, 'type' , 'Outdoor' );
                               break;
             //Wind Sensor
             case "NAModule2": echo("Wind Sensor\n");
-               $this->CreateVariableByIdent($instance_id, 'type', 'type','Wind Sensor', 3)  ;
+           //    $this->CreateVariableByIdent($instance_id, 'type', 'type','Wind Sensor', 3)  ;
+               $instance_id = $this->CreateCategoryByIdent($instance_id, 'type' , 'Wind Sensor' );
                               break;
             //Rain Gauge
             case "NAModule3": echo("Rain Gauge\n");
-              $this->CreateVariableByIdent($instance_id, 'type', 'type','Rain Gauge', 3)  ;
+          //    $this->CreateVariableByIdent($instance_id, 'type', 'type','Rain Gauge', 3)  ;
+              $instance_id = $this->CreateCategoryByIdent($instance_id, 'type' , 'Rain Gauge' );
                               break;
             //Indoor Module
             case "NAModule4": echo("Indoor\n");
-            $this->CreateVariableByIdent($instance_id, 'type', 'type','Indoor', 3)  ;
+       //     $this->CreateVariableByIdent($instance_id, 'type', 'type','Indoor', 3)  ;
+            $instance_id = $this->CreateCategoryByIdent($instance_id, 'type' , 'Indoor' );
                               break;
             case "NAMain" : echo ("Main device \n");
-            $this->CreateVariableByIdent($instance_id, 'type', 'type','Main device', 3)  ;
+            //$this->CreateVariableByIdent($instance_id, 'type', 'type','Main device', 3)  ;
+            $instance_id = $this->CreateCategoryByIdent($instance_id, 'type' , 'Main device' );
                             break;
         }
     }
@@ -284,10 +288,8 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
         echo ("Last data: \n");
         foreach($device['dashboard_data'] as $key => $val)
         {
-         if(is_array($val))
-            {
-                //do nothing : don't print historic
-            }
+         if( preg_match("/ .*_trend/", $keys[$key]))
+                  $this->CreateVariableByIdent($instance_id, $key,$key,$val , 3)  ;
             else {
                 echo ($key .": " . $val);
                $this->CreateVariableByIdent($instance_id, $key,$key,$val , 2)  ;
