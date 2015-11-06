@@ -351,7 +351,7 @@ private function CreateInstanceByIdent($id, $ident, $name, $moduleid = "{24B5787
  * Prints a list of devices
  *
  */
-function printDevices($devices, $title = NULL)
+private  function printDevices($devices, $title = NULL)
 {
     if(!is_null($devices) && is_array($devices) && !empty($devices))
     {
@@ -368,13 +368,13 @@ function printDevices($devices, $title = NULL)
 
 // UTILS.php
 
-function handleError($message, $exit = FALSE)
+private function handleError($message, $exit = FALSE)
 {
     echo $message;
     if($exit)
         exit(-1);
 }
-function printTimeInTz($time, $timezone, $format)
+private function printTimeInTz($time, $timezone, $format)
 {
     try{
         $tz = new DateTimeZone($timezone);
@@ -388,14 +388,14 @@ function printTimeInTz($time, $timezone, $format)
     $date->setTimestamp($time);
     echo $date->format($format);
 }
-function printBorder($message)
+private  function printBorder($message)
 {
     $size = strlen($message);
     for($i = 0; $i < $size; $i++)
         echo("-");
     echo("\n");
 }
-private function printMessageWithBorder($message)
+private private function printMessageWithBorder($message)
 {
     $message = "- " . $message . " -";
     $this->printBorder($message);
