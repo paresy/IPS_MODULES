@@ -288,7 +288,7 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
         echo ("Last data: \n");
         foreach($device['dashboard_data'] as $key => $val)
         {
-         if( preg_match("/ .*_trend/", $key))
+         if( preg_match("/.*_trend/", $key))
                   $this->CreateVariableByIdent($instance_id, $key,$key,$val , 3)  ;
             else {
                 echo ($key .": " . $val);
