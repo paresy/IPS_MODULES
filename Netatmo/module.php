@@ -281,11 +281,11 @@ private function saveWSBasicInfo($device)
 $instance_id = $this->CreateCategoryByIdent($instance_id, 'id' , $device['_id'] );
     if(isset($device['station_name'])){
   //     echo ("- ".$device['station_name']. " -\n");
- $this->CreateVariableByIdent($instance_id, 'station_name','station_name', $device['station_name'], 3);
+$instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $device['station_name'] );
     }
     else if($device['module_name']){
      //echo ("- ".$device['module_name']. " -\n");
-  $this->CreateVariableByIdent($instance_id, 'module_name', 'module_name',$device['module_name'], 3)  ;
+  $instance_id = $this->CreateCategoryByIdent($instance_id, 'module_name' , $device['module_name'] );
     }
     if(isset($device['type']))
     {
