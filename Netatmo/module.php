@@ -34,7 +34,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 	$this->RegisterPropertyString("password", "");
 	$this->RegisterPropertyString("client_id", "");
 	$this->RegisterPropertyString("client_secret", "");
-	$this->RegisterTimer("ReadNetatmo", 3000, 'NAW_SaveData();');
+	$this->RegisterTimer("ReadNetatmo", 300, 'NAW_SaveData($_IPS[\'TARGET\']);');
         }
  
         // Überschreibt die intere IPS_ApplyChanges($id) Funktion
