@@ -369,7 +369,7 @@ private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profi
 				 if($profile != "")
 					IPS_SetVariableCustomProfile($vid, $profile);
 			 }
-			 IPS_SetValue($vid,$value);
+			 SetValue($vid,$value);
 			 return $vid;
 		}
 		
