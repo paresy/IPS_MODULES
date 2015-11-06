@@ -331,6 +331,7 @@ private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profi
 			 try
 			 {
 			SetValue($vid,$value);
+			 }
 			catch(NAClientException $ex)
         		{
         		 echo ($vid .": " . $value." EX".$ex);
