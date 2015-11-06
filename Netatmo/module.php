@@ -256,27 +256,23 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
         switch($device['type'])
         {
             // Outdoor Module
-            case "NAModule1": echo ("Outdoor\n");
-             $instance_id = $this->CreateCategoryByIdent($instance_id, 'type' , 'Outdoor' );
+            case "NAModule1": 	 IPS_LogMessage('NETATMO',"Outdoor");
+             $instance_id = $this->CreateCategoryByIdent($instance_id, 'Outdoor' , 'Outdoor' );
                               break;
             //Wind Sensor
-            case "NAModule2": echo("Wind Sensor\n");
-           //    $this->CreateVariableByIdent($instance_id, 'type', 'type','Wind Sensor', 3)  ;
-               $instance_id = $this->CreateCategoryByIdent($instance_id, 'type' , 'Wind Sensor' );
+            case "NAModule2": 	 IPS_LogMessage('NETATMO',"Wind Sensor");
+               $instance_id = $this->CreateCategoryByIdent($instance_id, 'Wind Sensor' , 'Wind Sensor' );
                               break;
             //Rain Gauge
-            case "NAModule3": echo("Rain Gauge\n");
-          //    $this->CreateVariableByIdent($instance_id, 'type', 'type','Rain Gauge', 3)  ;
-              $instance_id = $this->CreateCategoryByIdent($instance_id, 'type' , 'Rain Gauge' );
+            case "NAModule3": 	 IPS_LogMessage('NETATMO',"Rain Gauge");
+              $instance_id = $this->CreateCategoryByIdent($instance_id, 'Rain Gauge' , 'Rain Gauge' );
                               break;
             //Indoor Module
-            case "NAModule4": echo("Indoor\n");
-       //     $this->CreateVariableByIdent($instance_id, 'type', 'type','Indoor', 3)  ;
-            $instance_id = $this->CreateCategoryByIdent($instance_id, 'type' , 'Indoor' );
+            case "NAModule4": 	 IPS_LogMessage('NETATMO',"Indoor");
+            $instance_id = $this->CreateCategoryByIdent($instance_id, 'Indoor' , 'Indoor' );
                               break;
-            case "NAMain" : echo ("Main device \n");
-            //$this->CreateVariableByIdent($instance_id, 'type', 'type','Main device', 3)  ;
-            $instance_id = $this->CreateCategoryByIdent($instance_id, 'type' , 'Main device' );
+            case "NAMain" : 	 IPS_LogMessage('NETATMO',"Main device");
+            $instance_id = $this->CreateCategoryByIdent($instance_id, 'Main device' , 'Main device' );
                             break;
         }
     }
@@ -332,7 +328,7 @@ private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profi
 			 }
 	
 		//	SetValue($vid,$value);
-			 IPS_LogMessage($_IPS['SELF'],$name .": " . $value);
+			 IPS_LogMessage('NETATMO',$name .": " . $value);
 			 return $vid;
 		}
 		
