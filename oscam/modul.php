@@ -67,8 +67,8 @@ $uptime1 =intval($xml->xpath('/oscam')[0]->attributes()[3][0]);
 //$result = mysql_query("SELECT val_num FROM system_params where name = 'oscam_runtime'",$dbh);
 //$row = mysql_fetch_assoc($result);
 $name= ( "Server");
-vars("$name",14040 /*[Archive Handler]*/,35483,'Uptime',$uptime1,1,"dapor.zaehler", true,0);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Start',"$start",3,"", false, 99);
+vars("$name",$this->InstanceID,'Uptime',$uptime1,1,"dapor.zaehler", true,0);
+vars("$name",$this->InstanceID,'Start',"$start",3,"", false, 99);
 //$val_num = $row['val_num'] ;
 
 //echo "val_num = " .$val_num;
@@ -172,7 +172,7 @@ vars("$name",$this->InstanceID,'Useronline',$useronline,1,"dapor.zaehler", true,
 
 
 
-function vars($system, $arhid,$ParentID, $Variname, $wert, $VariTyp, $VariProfile ,$logging, $position)
+function vars($system, $ParentID, $Variname, $wert, $VariTyp, $VariProfile ,$logging, $position)
 {
 $systemID = @IPS_GetInstanceIDByName($system, $ParentID);
 //echo "SYSTEM= ".$system;
@@ -189,9 +189,6 @@ $VariID = @IPS_GetVariableIDByName($Variname, $systemID);
         $VariID = IPS_CreateVariable ($VariTyp);
         IPS_SetVariableCustomProfile($VariID, $VariProfile);
         IPS_SetName($VariID,$Variname);
-          AC_SetLoggingStatus($arhid, $VariID, $logging);
-          AC_SetGraphStatus($arhid,$VariID, $logging);
-          IPS_ApplyChanges($arhid);
         IPS_SetParent($VariID,$systemID);
     }
    //     AC_SetLoggingStatus($arhid, $VariID, $logging);
