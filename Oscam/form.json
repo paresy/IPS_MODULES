@@ -3,7 +3,7 @@
 	[
 		{ "name": "username", "type": "ValidationTextBox", "caption": "Username" },
 		{ "name": "password", "type": "PasswordTextBox", "caption": "Password" },
-		{ "name": "url", "type": "ValidationTextBox", "caption": "ServerURL" },
+		{ "name": "url", "type": "ValidationTextBox", "caption": "ServerURL" }
 
 	
 	],
