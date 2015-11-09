@@ -274,7 +274,7 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
             $instance_id = $this->CreateCategoryByIdent($instance_id, 'Indoor' , 'Indoor' );
                               break;
             case "NAMain" : //	 IPS_LogMessage('NETATMO',"Main device");
-     //       $instance_id = $this->CreateCategoryByIdent($instance_id, 'Main' , 'Main device' );
+            $instance_id = $this->CreateCategoryByIdent($instance_id, 'Main' , 'Main device' );
                             break;
         }
     }
