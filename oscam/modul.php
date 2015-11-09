@@ -1,4 +1,5 @@
-<?php
+﻿<?php
+
 
   
     class Oscam extends IPSModule {
