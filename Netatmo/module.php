@@ -17,6 +17,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
     private $refresh_token ;
     private $access_token ;
     private $deviceList;
+    private $echoString;
         // Der Konstruktor des Moduls
         // Überschreibt den Standard Kontruktor von IPS
         public function __construct($InstanceID) {
@@ -73,7 +74,8 @@ try
 }
 catch(NAClientException $ex)
 {
-    $this->handleError("An error happened while trying to retrieve your tokens: " .$ex->getMessage()."\n", TRUE);
+		
+	$this->handleError("An error happened while trying to retrieve your tokens: " .$ex->getMessage()."\n", TRUE);
 	     	 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
 		$this->SetStatus(102);// login OK
      		}
@@ -83,7 +85,7 @@ catch(NAClientException $ex)
  
 	//ShowData
 	public function ShowData() {
-	
+	global $echoString;
 	global $client;
     	global $tokens ;     	
     	global $refresh_token ;
@@ -167,6 +169,8 @@ else
 	
 		
 	}
+		IPS_LogMessage('Netatmo_Modul', $echoString);
+		echo "done...siehe Logs";
 	}
 	
 // SAVE
@@ -406,8 +410,9 @@ private function printMessageWithBorder($message)
 
 private function echoLog($message) 
 {
-	
-	IPS_LogMessage('Netatmo_Modul', $message);
+global $echoString;	
+$echoString = $echoString . $message;
+
 }
 
 
