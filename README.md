@@ -7,6 +7,7 @@ Multiple Modules for IP-Symcon from Dapor
 -
 | Version  | FIX | IMPROVEMENT| COMMENT
 | ------------- | ------------- |------------- |------------- |
-| v0.2 |   | | First Release|
 | v0.3 |   | Showdata logt ins Log und nicht ins Popup.| |
+| v0.2 |   | | First Release|
+
 
