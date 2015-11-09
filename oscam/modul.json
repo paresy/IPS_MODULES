@@ -1,1 +1,13 @@
 
+ {
+	"id": "{24B57877-C24C-4690-8421-B51DCC11BE1B}",
+	"name": "Oscam",
+	"type": 3,
+	"vendor": "dapor",
+	"aliases": [ "oscam"],
+	"parentRequirements": [],
+	"childRequirements": [],
+	"implemented": [],
+	"prefix": "OSC"
+}
+
