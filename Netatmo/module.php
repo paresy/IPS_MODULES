@@ -105,7 +105,7 @@ catch(NAClientException $ex)
 }
 if(empty($data['devices']))
 {
-    echo 'No devices affiliated to user';
+    $this->echo 'No devices affiliated to user';
 }
 else
 {
@@ -183,7 +183,7 @@ public function SaveData() {
 	
 //	$deviceList = $client->api("devicelist");	
 //	 IPS_LogMessage(__CLASS__, "Devicelist: ". print_r($deviceList ,1));	
-//	 echo print_r($deviceList);
+//	 $this->echo print_r($deviceList);
 		
 		
 	//Retrieve user's Weather Stations Information
@@ -199,7 +199,7 @@ catch(NAClientException $ex)
 }
 if(empty($data['devices']))
 {
-    echo 'No devices affiliated to user';
+    $this->echo 'No devices affiliated to user';
 }
 else
 {
@@ -242,19 +242,19 @@ else
 private function saveWSBasicInfo($device)
 {
  $instance_id = $this->InstanceID;	
- // echo ("id: " . $device['_id']. "\n");
+ // $this->echo ("id: " . $device['_id']. "\n");
 $instance_id = $this->CreateCategoryByIdent($instance_id, 'id' , $device['_id'] );
     if(isset($device['station_name'])){
-  //     echo ("- ".$device['station_name']. " -\n");
+  //     $this->echo ("- ".$device['station_name']. " -\n");
 $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $device['station_name'] );
     }
     else if($device['module_name']){
-     //echo ("- ".$device['module_name']. " -\n");
+     //$this->echo ("- ".$device['module_name']. " -\n");
   $instance_id = $this->CreateCategoryByIdent($instance_id, 'module_name' , $device['module_name'] );
     }
     if(isset($device['type']))
     {
-      //  echo ("type: ");
+      //  $this->echo ("type: ");
         switch($device['type'])
         {
             // Outdoor Module
@@ -283,25 +283,25 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
     else $tz = 'GMT';
     if(isset($device['dashboard_data']))
     {
-     //   echo ("Last data: \n");
+     //   $this->echo ("Last data: \n");
         foreach($device['dashboard_data'] as $key => $val)
         {
          if( preg_match("/.*_trend/", $key))
                   $this->CreateVariableByIdent($instance_id, $key,$key,$val , 3)  ;
             else {
-             //   echo ($key .": " . $val);
+             //   $this->echo ($key .": " . $val);
                $this->CreateVariableByIdent($instance_id, $key,$key,$val , 2)  ;
-            //    echo "\n";
+            //    $this->echo "\n";
             }
         }
         if(isset($device['modules']))
         {
-         //   echo (" \n\nModules: \n");
+         //   $this->echo (" \n\nModules: \n");
             foreach($device['modules'] as $module)
                 $this->saveWSBasicInfo($module);
         }
     }
-  //  echo"       ----------------------   \n";
+  //  $this->echo"       ----------------------   \n";
 }	
 private function CreateCategoryByIdent($id, $ident, $name)
  {
@@ -371,7 +371,7 @@ private  function printDevices($devices, $title = NULL)
 
 private function handleError($message, $exit = FALSE)
 {
-    echo $message;
+    $this->echo $message;
     if($exit)
         exit(-1);
 }
@@ -387,24 +387,24 @@ private function printTimeInTz($time, $timezone, $format)
     $date = new DateTime();
     $date->setTimezone($tz);
     $date->setTimestamp($time);
-    echo $date->format($format);
+    $this->echo $date->format($format);
 }
 private  function printBorder($message)
 {
     $size = strlen($message);
     for($i = 0; $i < $size; $i++)
-        echo("-");
-    echo("\n");
+        $this->echo("-");
+    $this->echo("\n");
 }
 private function printMessageWithBorder($message)
 {
     $message = "- " . $message . " -";
     $this->printBorder($message);
-    echo $message . "\n";
+    $this->echo $message . "\n";
     $this->printBorder($message);
 }
 
-private function echo ($message) 
+private function $this->echo ($message) 
 {
 	
 	IPS_LogMessage('Netatmo_Modul', $message);
@@ -425,19 +425,19 @@ private function printMeasure($measurements, $type, $tz, $title = NULL, $monthly
         foreach($measurements as $timestamp => $values)
         {
             $this->printTimeinTz($timestamp, $tz, $dateFormat);
-             echo"\n";
+             $this->echo"\n";
             foreach($values as $key => $val)
             {
-                echo $keys[$key] . ": ";
+                $this->echo $keys[$key] . ": ";
                 if($keys[$key] === "time_utc" || preg_match("/^date_.*/", $keys[$key]))
-                    echo $this->printTimeInTz($val, $tz, "j F H:i");
+                    $this->echo $this->printTimeInTz($val, $tz, "j F H:i");
                 else{
-                    echo $val;
+                    $this->echo $val;
                     $this->printUnit($keys[$key]);
                 }
                 if(count($values)-1 === $key || $monthly)
-                    echo "\n";
-                else echo ", ";
+                    $this->echo "\n";
+                else $this->echo ", ";
             }
         }
     }
@@ -449,28 +449,28 @@ private function printMeasure($measurements, $type, $tz, $title = NULL, $monthly
 private function printWSBasicInfo($device)
 {
     if(isset($device['station_name']))
-        echo ("- ".$device['station_name']. " -\n");
+        $this->echo ("- ".$device['station_name']. " -\n");
     else if($device['module_name'])
-        echo ("- ".$device['module_name']. " -\n");
-    echo ("id: " . $device['_id']. "\n");
+        $this->echo ("- ".$device['module_name']. " -\n");
+    $this->echo ("id: " . $device['_id']. "\n");
     if(isset($device['type']))
     {
-        echo ("type: ");
+        $this->echo ("type: ");
         switch($device['type'])
         {
             // Outdoor Module
-            case "NAModule1": echo ("Outdoor\n");
+            case "NAModule1": $this->echo ("Outdoor\n");
                               break;
             //Wind Sensor
-            case "NAModule2": echo("Wind Sensor\n");
+            case "NAModule2": $this->echo("Wind Sensor\n");
                               break;
             //Rain Gauge
-            case "NAModule3": echo("Rain Gauge\n");
+            case "NAModule3": $this->echo("Rain Gauge\n");
                               break;
             //Indoor Module
-            case "NAModule4": echo("Indoor\n");
+            case "NAModule4": $this->echo("Indoor\n");
                               break;
-            case "NAMain" : echo ("Main device \n");
+            case "NAMain" : $this->echo ("Main device \n");
                             break;
         }
     }
@@ -479,33 +479,33 @@ private function printWSBasicInfo($device)
     else $tz = 'GMT';
     if(isset($device['dashboard_data']))
     {
-        echo ("Last data: \n");
+        $this->echo ("Last data: \n");
         foreach($device['dashboard_data'] as $key => $val)
         {
             if($key === 'time_utc' || preg_match("/^date_.*/", $key))
             {
-                echo $key .": ";
+                $this->echo $key .": ";
                 $this->printTimeInTz($val, $tz, 'j F H:i');
-                echo ("\n");
+                $this->echo ("\n");
             }
             else if(is_array($val))
             {
                 //do nothing : don't print historic
             }
             else {
-                echo ($key .": " . $val);
+                $this->echo ($key .": " . $val);
                 $this->printUnit($key);
-                echo "\n";
+                $this->echo "\n";
             }
         }
         if(isset($device['modules']))
         {
-            echo (" \n\nModules: \n");
+            $this->echo (" \n\nModules: \n");
             foreach($device['modules'] as $module)
                 $this->printWSBasicInfo($module);
         }
     }
-    echo"       ----------------------   \n";
+    $this->echo"       ----------------------   \n";
 }
 private function printUnit($key)
 {
@@ -514,7 +514,7 @@ private function printUnit($key)
     {
         if(preg_match("/.*$type.*/i", $key))
         {
-            echo " ".$unit;
+            $this->echo " ".$unit;
             return;
         }
     }
@@ -526,34 +526,34 @@ private function printUnit($key)
 private function printThermBasicInfo($dev)
 {
     //Device
-    echo (" -".$dev['station_name']."- \n");
-    echo (" id: ".$dev['_id']." \n");
-    echo ("Modules : \n");
+    $this->echo (" -".$dev['station_name']."- \n");
+    $this->echo (" id: ".$dev['_id']." \n");
+    $this->echo ("Modules : \n");
     // Device's modules info
     foreach($dev['modules'] as $module)
     {
-        echo ("    - ".$module['module_name']." -\n");
+        $this->echo ("    - ".$module['module_name']." -\n");
         //module last measurements
-        echo ("    Last Measure date : ");
+        $this->echo ("    Last Measure date : ");
         $this->printTimeInTz($module['measured']['time'], $dev['place']['timezone'], 'j F H:i');
-        echo("\n");
-        echo ("    Last Temperature measured: ". $module['measured']['temperature']);
+        $this->echo("\n");
+        $this->echo ("    Last Temperature measured: ". $module['measured']['temperature']);
         $this->printUnit("temperature");
-        echo("\n");
-        echo ("    Last Temperature setpoint: ". $module['measured']['setpoint_temp']);
+        $this->echo("\n");
+        $this->echo ("    Last Temperature setpoint: ". $module['measured']['setpoint_temp']);
         $this->printUnit('setpoint_temp');
-        echo("\n");
-        echo ("    Program List: \n");
+        $this->echo("\n");
+        $this->echo ("    Program List: \n");
         //program list
         foreach($module['therm_program_list'] as $program)
         {
             if(isset($program['name']))
-                echo ("        -".$program['name']."- \n");
-            else echo("        -Standard- \n");
-            echo ("        id: ".$program['program_id']." \n");
+                $this->echo ("        -".$program['name']."- \n");
+            else $this->echo("        -Standard- \n");
+            $this->echo ("        id: ".$program['program_id']." \n");
             if(isset($program['selected']) && $program['selected'] === TRUE)
             {
-                echo "         This is the current program \n";
+                $this->echo "         This is the current program \n";
             }
         }
     }
