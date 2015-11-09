@@ -403,6 +403,14 @@ private function printMessageWithBorder($message)
     echo $message . "\n";
     $this->printBorder($message);
 }
+
+private function echo ($message) 
+{
+	
+	IPS_LogMessage('Netatmo_Modul', $message);
+}
+
+
 private function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
 {
     if(!empty($measurements))
