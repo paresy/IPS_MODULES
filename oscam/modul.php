@@ -39,7 +39,7 @@ $url = $this->ReadPropertyString("serverurl");
 $user = $this->ReadPropertyString("username");
 $pw = $this->ReadPropertyString("password");
 $context  = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
-$url = "http://$url/oscamapi.html?part=userstats";
+$url = "$url/oscamapi.html?part=userstats";
 $ch = curl_init();
 $file =fopen ("c:\\tmp\\temp.html", "a+" );
 curl_setopt($ch, CURLOPT_URL, $url);
@@ -72,35 +72,6 @@ vars("$name",14040 /*[Archive Handler]*/,35483,'Start',"$start",3,"", false, 99)
 //$val_num = $row['val_num'] ;
 
 //echo "val_num = " .$val_num;
- 
- if (false){
- // restart oscam
-
-$query1= "uupdate oscam_archiv a
-,(select a.* from oscam_run a, oscam_archiv b where b.name = a.name) b
-set
-a.status=b.status,
-a.ip=b.ip,
-a.cwok=0.0+a.cwok+b.cwok,
-a.cwnok=0.0+a.cwnok+b.cwnok,
-a.cwignore=0.0+a.cwignore+b.cwignore,
-a.cwtimeout=0.0+a.cwtimeout+b.cwtimeout,
-a.cwcache=0.0+a.cwcache+b.cwcache,
-a.cwtun=0.0+a.cwtun+b.cwtun,
-a.cwlastresptime=b.cwlastresptime,
-a.emmok=0.0+a.emmok+b.emmok,
-a.emmnok=0.0+a.emmnok+b.emmnok,
-a.cwrate=b.cwrate,
-a.timeonchannel=b.timeonchannel,
-a.expectsleep=b.expectsleep
-where a.name = b.name";
-    
- $result = mysql_query ($query1, $dbh);
-
-$query2="Delete * from oscam_run";
-$result = mysql_query ($query2, $dbh);
-
-}
 
 foreach( $xml->xpath('/oscam/users/user') as $child){
 //echo $child;
@@ -128,16 +99,16 @@ $position=99;
     $position=1;
      }
 //$system = (vars("$name",14040 /*[Archive Handler]*/,35483,"Name","$name",3,"", false));
-vars("$name",14040 /*[Archive Handler]*/,35483,'Status',"$status",3,"", false, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Ip',"$ip",3,"", false, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'OK',$cwok,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Not-OK',$cwnok,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Cache',$cwcache,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Response',$cwlastresptime,1,"dapor.oscam.response", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Belastung',$cwrate,2,"", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'TimeOnChannel',$timeon,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'EMM-OK',$emmok,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'EMM-NotOK',$emmnok,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Status',"$status",3,"", false, $position);
+vars("$name",$this->InstanceID,'Ip',"$ip",3,"", false, $position);
+vars("$name",$this->InstanceID,'OK',$cwok,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Not-OK',$cwnok,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Cache',$cwcache,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Response',$cwlastresptime,1,"dapor.oscam.response", true, $position);
+vars("$name",$this->InstanceID,'Belastung',$cwrate,2,"", true, $position);
+vars("$name",$this->InstanceID,'TimeOnChannel',$timeon,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'EMM-OK',$emmok,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'EMM-NotOK',$emmnok,1,"dapor.zaehler", true, $position);
 //  insert / update
 
 //echo $query;
@@ -177,18 +148,18 @@ $position=0;
 //$system = (vars("$name",14040 /*[Archive Handler]*/,35483,"Name","$name",3,"", false));
 
 //vars("$name",14040 /*[Archive Handler]*/,35483,'Ip',"$ip",3,"", false, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'OK',$cwok,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Not-OK',$cwnok,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Cache',$cwcache,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Ignore',$cwignore,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Timeout',$cwtimeout,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'OK',$cwok,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Not-OK',$cwnok,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Cache',$cwcache,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Ignore',$cwignore,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Timeout',$cwtimeout,1,"dapor.zaehler", true, $position);
 
-vars("$name",14040 /*[Archive Handler]*/,35483,'Usertotal', $usertotal,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Userdisabled',$userdisabled,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Userexpired',$userexpired,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Useractive',$useractive,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Userconnected',$userconnected,1,"dapor.zaehler", true, $position);
-vars("$name",14040 /*[Archive Handler]*/,35483,'Useronline',$useronline,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Usertotal', $usertotal,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Userdisabled',$userdisabled,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Userexpired',$userexpired,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Useractive',$useractive,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Userconnected',$userconnected,1,"dapor.zaehler", true, $position);
+vars("$name",$this->InstanceID,'Useronline',$useronline,1,"dapor.zaehler", true, $position);
 
 
 //echo $query;
