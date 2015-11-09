@@ -2,7 +2,7 @@
 
 Multiple Modules for IP-Symcon from Dapor
 
-- Netatmo (BETA)
+Netatmo (BETA)
 - 
 |DATUM| Version  | FIX | IMPROVEMENT| COMMENT
 | -------------| ------------- | ------------- |------------- |------------- |
