@@ -404,7 +404,7 @@ private function printMessageWithBorder($message)
     $this->printBorder($message);
 }
 
-private function $this->echo($message) 
+private function echo($message) 
 {
 	
 	IPS_LogMessage('Netatmo_Modul', $message);
