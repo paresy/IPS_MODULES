@@ -311,13 +311,13 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
 
 private function maskUmlaute($text)
 {
-$text = str_replace ("ä", "a;", $text);
-$text = str_replace ("Ä", "AE;", $text);
-$text = str_replace ("ö", "oe;", $text);
-$text = str_replace ("Ö", "OE;", $text);
-$text = str_replace ("ü", "ue;", $text);
+$text = str_replace ("ä", "a", $text);
+$text = str_replace ("Ä", "AE", $text);
+$text = str_replace ("ö", "oe", $text);
+$text = str_replace ("Ö", "OE", $text);
+$text = str_replace ("ü", "ue", $text);
 $text = str_replace ("Ü", "UE", $text);
-$text = str_replace ("ß", "ss;", $text);
+$text = str_replace ("ß", "ss", $text);
 	
 	return $text;
 }
