@@ -9,6 +9,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 
     
     class Netatmo extends IPSModule {
+   
     	
    
     	
