@@ -1,8 +1,5 @@
-﻿<?php
-
-
-  
-    class Oscam extends IPSModule {
+﻿<?
+﻿class Oscam extends IPSModule {
     	
         // Der Konstruktor des Moduls
         // Überschreibt den Standard Kontruktor von IPS
