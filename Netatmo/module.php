@@ -315,7 +315,7 @@ private function CreateCategoryByIdent($id, $ident, $name)
 				 $cid = IPS_CreateCategory();
 				 IPS_SetParent($cid, $id);
 				 IPS_SetName($cid, $name);
-				 IPS_SetIdent($cid, $ident);
+				 IPS_SetIdent($cid, utf8_encode($ident));
 			 }
 			 return $cid;
 		}
