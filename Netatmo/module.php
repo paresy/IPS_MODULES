@@ -307,28 +307,43 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
     }
   //  $this->echoLog("       ----------------------   \n");
 }	
+
+
+private function maskUmlaute($text)
+{
+$text = str_replace ("ä", "a;", $text);
+$text = str_replace ("Ä", "AE;", $text);
+$text = str_replace ("ö", "oe;", $text);
+$text = str_replace ("Ö", "OE;", $text);
+$text = str_replace ("ü", "ue;", $text);
+$text = str_replace ("Ü", "UE", $text);
+$text = str_replace ("ß", "ss;", $text);
+	
+	return $text;
+}
+
 private function CreateCategoryByIdent($id, $ident, $name)
  {
- $cid = @IPS_GetObjectIDByIdent($ident, $id);
+ $cid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
  if($cid === false)
  {
 				 $cid = IPS_CreateCategory();
 				 IPS_SetParent($cid, $id);
 				 IPS_SetName($cid, $name);
-				 IPS_SetIdent($cid, utf8_encode($ident));
+				 IPS_SetIdent($cid, $this->maskUmlaute($ident));
 			 }
 			 return $cid;
 		}
 		
 private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profile = "")
 		 {
-			 $vid = @IPS_GetObjectIDByIdent($ident, $id);
+			 $vid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
 		 if($vid === false)
 			 {
 				 $vid = IPS_CreateVariable($type);
 				 IPS_SetParent($vid, $id);
 				 IPS_SetName($vid, $name);
-				 IPS_SetIdent($vid, $ident);
+				 IPS_SetIdent($vid, $this->maskUmlaute($ident));
 				 if($profile != "")
 					IPS_SetVariableCustomProfile($vid, $profile);
 			 }
@@ -340,13 +355,13 @@ private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profi
 		
 private function CreateInstanceByIdent($id, $ident, $name, $moduleid = "{24B57877-C24C-4690-8421-B41DCC22BE1B}")
 	 {
-			 $iid = @IPS_GetObjectIDByIdent($ident, $id);
+			 $iid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
 			 if($iid === false)
 			 {
 				 $iid = IPS_CreateInstance($moduleid);
 				 IPS_SetParent($iid, $id);
 				 IPS_SetName($iid, $name);
-				 IPS_SetIdent($iid, $ident);
+				 IPS_SetIdent($iid, $this->maskUmlaute($ident));
 			 }
 			 return $iid;
 		}	
