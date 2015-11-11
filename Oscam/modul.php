@@ -3,7 +3,7 @@
 ﻿
 ﻿class Oscam extends IPSModule {
     	require_once("../public_functions.php");
-        // Der Konstruktor des Moduls
+    // Der Konstruktor des Moduls
         // Überschreibt den Standard Kontruktor von IPS
         public function __construct($InstanceID) {
             // Diese Zeile nicht löschen
@@ -67,7 +67,7 @@ $uptime1 =intval($xml->xpath('/oscam')[0]->attributes()[3][0]);
 //$result = mysql_query("SELECT val_num FROM system_params where name = 'oscam_runtime'",$dbh);
 //$row = mysql_fetch_assoc($result);
 $name= ( "Server");
-vars("$name",$this->InstanceID,'Uptime',$uptime1,1,"dapor.zaehler", true,0);
+vars("$name",$this->InstanceID,'Uptime',$uptime1,1,"", true,0);
 vars("$name",$this->InstanceID,'Start',"$start",3,"", false, 99);
 //$val_num = $row['val_num'] ;
 
@@ -174,38 +174,15 @@ vars("$name",$this->InstanceID,'Useronline',$useronline,1,"dapor.zaehler", true,
 
 function vars($system, $ParentID, $Variname, $wert, $VariTyp, $VariProfile ,$logging, $position)
 {
-$systemID = @IPS_GetInstanceIDByName($system, $ParentID);
+$systemID = $this->CreateCategoryByIdent($ParentID, $Variname , $Variname );
 //echo "SYSTEM= ".$system;
- if ($systemID == false)
-    {
-        $systemID = IPS_CreateInstance("{485D0419-BE97-4548-AA9C-C083EB82E61E}");
-        IPS_SetName($systemID,$system);
-        IPS_SetParent($systemID,$ParentID);
-      IPS_ApplyChanges($systemID);
-    }
-$VariID = @IPS_GetVariableIDByName($Variname, $systemID);
-    if ($VariID == false)
-    {
-        $VariID = IPS_CreateVariable ($VariTyp);
-        IPS_SetVariableCustomProfile($VariID, $VariProfile);
-        IPS_SetName($VariID,$Variname);
-        IPS_SetParent($VariID,$systemID);
-    }
-   //     AC_SetLoggingStatus($arhid, $VariID, $logging);
-    //        AC_SetGraphStatus($arhid,$VariID, $logging);
-    //        IPS_ApplyChanges($arhid);
-   // IPS_SetVariableCustomProfile($VariID, $VariProfile);
-    SetValue($VariID, $wert);
+
+$VariID = $this->CreateVariableByIdent($ParentID, $Variname, $Variname, $wert, $VariTyp, $VariProfile = "")
 	 IPS_SetPosition($systemID,  $position);
 }
 
-
-
-       
-       
-       
-        
-        
-    }      
+   
+ // CLASS ENDE      
+}      
         
 ?>
