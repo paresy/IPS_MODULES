@@ -11,3 +11,11 @@ Netatmo (BETA)
 | 04.11.2015 | v0.2 |   | | First Release|
 
 
+Oscam (BETA)
+- 
+|DATUM| Version  | FIX | IMPROVEMENT| COMMENT
+| :-------------| -------------: | :------------- |:------------- |:------------- |
+| 11.11.2015 |v0.1 |   | | Start des Projects|
+
+
+
