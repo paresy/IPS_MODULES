@@ -291,13 +291,24 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
      //   $this->echoLog("Last data: \n");
         foreach($device['dashboard_data'] as $key => $val)
         {
-         if( preg_match("/.*_trend/", $key))
-                  $this->CreateVariableByIdent($instance_id, $key,$key,$val , 3)  ;
-            else {
-             //   $this->echoLog($key .": " . $val);
-               $this->CreateVariableByIdent($instance_id, $key,$key,$val , 2)  ;
-            //    $this->echoLog("\n");
-            }
+        	
+        switch (gettype($val)) {
+    		case "double":
+        		$ips_type = 2;
+			break;
+		case "integer":
+        		$ips_type = 1;
+        		break;
+        	case "string":
+        		$ips_type = 3;
+        		break;
+        	case "boolean":
+			$ips_type = 0;
+			break;	
+}
+  	$this->CreateVariableByIdent($instance_id, $key,$key,$val , $ips_type)  ;
+  
+        
         }
         if(isset($device['modules']))
         {
@@ -319,7 +330,14 @@ $text = str_replace ("Ö", "OE", $text);
 $text = str_replace ("ü", "ue", $text);
 $text = str_replace ("Ü", "UE", $text);
 $text = str_replace ("ß", "ss", $text);
-$text = str_replace (" ", "_", $text);
+$text = str_replace ("(", "_", $text);
+$text = str_replace (")", "_", $text);
+$text = str_replace ("&", "_", $text);
+$text = str_replace ("§", "_", $text);
+$text = str_replace ("/", "_", $text);
+$text = str_replace ("=", "_", $text);
+$text = str_replace ("{", "_", $text);
+$text = str_replace ("}", "_", $text);
 	
 	return $text;
 }
