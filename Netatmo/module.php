@@ -330,6 +330,7 @@ $text = str_replace ("Ö", "OE", $text);
 $text = str_replace ("ü", "ue", $text);
 $text = str_replace ("Ü", "UE", $text);
 $text = str_replace ("ß", "ss", $text);
+$text = str_replace (" ", "_", $text);
 $text = str_replace ("(", "_", $text);
 $text = str_replace (")", "_", $text);
 $text = str_replace ("&", "_", $text);
