@@ -36,6 +36,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 	$this->RegisterPropertyString("password", "");
 	$this->RegisterPropertyString("client_id", "");
 	$this->RegisterPropertyString("client_secret", "");
+	$this->RegisterPropertyBoolean("logging", false);
 	$this->RegisterTimer("ReadNetatmo", 300, 'NAW_SaveData($_IPS[\'TARGET\']);');
         }
  
@@ -55,7 +56,9 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
     	global $tokens ;     	
     	global $refresh_token ;
     	global $access_token ;
+    	global $logging ;
     	
+    	$logging = $this->ReadPropertyBoolean("logging");	
 	$config = array();
 	$config['client_id'] = $this->ReadPropertyString("client_id");
 	$config['client_secret'] = $this->ReadPropertyString("client_secret");
@@ -346,6 +349,7 @@ private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profi
 				 IPS_SetParent($vid, $id);
 				 IPS_SetName($vid, $name);
 				 IPS_SetIdent($vid, $this->maskUmlaute($ident));
+				 
 				 if($profile != "")
 					IPS_SetVariableCustomProfile($vid, $profile);
 			 }
