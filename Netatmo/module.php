@@ -247,6 +247,20 @@ else
 
 	
 }
+
+private function getModuleName($device)
+{
+	If array_key_exists('module_name',$device) 
+	{
+		return $device['module_name'];
+	}else if array_key_exists('_id',$device) {
+		return $device['_id'];
+	} else {
+		return "unknown";
+	}
+	}
+	
+}
 	
 private function saveWSBasicInfo($device)
 {
@@ -257,9 +271,9 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'id' , $device['_id'] 
   //     $this->echoLog("- ".$device['station_name']. " -\n");
 $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $device['station_name'] );
     }
-    else if(isset($device['module_name'])){
-     //$this->echoLog("- ".$device['module_name']. " -\n");
-  $instance_id = $this->CreateCategoryByIdent($instance_id, 'module_name' , $device['module_name'] );
+    else if(isset(this->getModuleName($device))){
+     //$this->echoLog("- ".this->getModuleName($device). " -\n");
+  $instance_id = $this->CreateCategoryByIdent($instance_id, 'module_name' , this->getModuleName($device) );
     }
     if(isset($device['type']))
     {
@@ -268,22 +282,22 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
         {
             // Outdoor Module
             case "NAModule1": //	 IPS_LogMessage('NETATMO',"Outdoor");
-             $instance_id = $this->CreateCategoryByIdent($instance_id, $device['module_name'] , $device['module_name'] );
+             $instance_id = $this->CreateCategoryByIdent($instance_id, this->getModuleName($device) , this->getModuleName($device) );
                               break;
             //Wind Sensor
             case "NAModule2": 	// IPS_LogsMessage('NETATMO',"Wind Sensor");
-               $instance_id = $this->CreateCategoryByIdent($instance_id, $device['module_name'] , $device['module_name'] );
+               $instance_id = $this->CreateCategoryByIdent($instance_id, this->getModuleName($device) , this->getModuleName($device) );
                               break;
             //Rain Gauge
             case "NAModule3": //	 IPS_LogMessage('NETATMO',"Rain Gauge");
-              $instance_id = $this->CreateCategoryByIdent($instance_id, $device['module_name'] , $device['module_name'] );
+              $instance_id = $this->CreateCategoryByIdent($instance_id, this->getModuleName($device) , this->getModuleName($device) );
                               break;
             //Indoor Module
             case "NAModule4": //	 IPS_LogMessage('NETATMO',"Indoor");
-            $instance_id = $this->CreateCategoryByIdent($instance_id, $device['module_name'] , $device['module_name'] );
+            $instance_id = $this->CreateCategoryByIdent($instance_id, this->getModuleName($device) , this->getModuleName($device) );
                               break;
             case "NAMain" : //	 IPS_LogMessage('NETATMO',"Main device");
-            $instance_id = $this->CreateCategoryByIdent($instance_id, $device['module_name'] , $device['module_name'] );
+            $instance_id = $this->CreateCategoryByIdent($instance_id, this->getModuleName($device) , this->getModuleName($device) );
                             break;
         }
     }
@@ -496,8 +510,8 @@ private function printWSBasicInfo($device)
 {
     if(isset($device['station_name']))
         $this->echoLog("- ".$device['station_name']. " -\n");
-    else if($device['module_name'])
-        $this->echoLog("- ".$device['module_name']. " -\n");
+    else if(this->getModuleName($device))
+        $this->echoLog("- ".this->getModuleName($device). " -\n");
     $this->echoLog("id: " . $device['_id']. "\n");
     if(isset($device['type']))
     {
