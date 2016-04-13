@@ -254,10 +254,10 @@ private function saveModules($device)
 $instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, trim($device['main_device']) , $device['main_device'] );
   //$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['_id'] , $device['_id'] );
     
-		if(isset($device['module_name'])){
+		$module = $this->getModuleName($device);
      //$this->echoLog("- ".getModuleName($device). " -\n");
- // $instance_id = $this->CreateCategoryByIdent($instance_id,  $device['module_name'] , $device['module_name'] );
-    }
+ $instance_id = $this->CreateCategoryByIdent($instance_id,  $module , $module );
+    
     if(isset($device['type']))
     {
 		$module = $this->getModuleName($device);
