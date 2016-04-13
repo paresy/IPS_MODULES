@@ -251,7 +251,7 @@ private function saveModules($device)
 {
  $instance_id_parent = $this->InstanceID;	
   //$this->echoLog("id: " . $device['_id']. "\n");
-$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['main_device'] , $device['main_device'] );
+$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, trim($device['main_device']) , $device['main_device'] );
   //$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['_id'] , $device['_id'] );
     
 		if(isset($device['module_name'])){
@@ -323,7 +323,7 @@ private function saveWSBasicInfo($device)
 {
  $instance_id_parent = $this->InstanceID;	
   //$this->echoLog("id: " . $device['_id']. "\n");
-$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['_id'] , $device['_id'] );
+$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, trim($device['_id']) , $device['_id'] );
     if(isset($device['station_name'])){
      //  $this->echoLog("- ".$device['station_name']. " -\n");
 $instance_id = $this->CreateCategoryByIdent($instance_id_station, $device['station_name'] , $device['station_name'] );
@@ -412,6 +412,9 @@ $text = str_replace ("/", "_", $text);
 $text = str_replace ("=", "_", $text);
 $text = str_replace ("{", "_", $text);
 $text = str_replace ("}", "_", $text);
+$text = str_replace (":", "_", $text);
+$text = str_replace (",", "_", $text);
+$text = str_replace (";", "_", $text);
 	
 	return $text;
 }
