@@ -250,10 +250,10 @@ else
 
 private function getModuleName($device)
 {
-	If array_key_exists('module_name',$device) 
+	if (array_key_exists('module_name',$device) )
 	{
 		return $device['module_name'];
-	}else if array_key_exists('_id',$device) {
+	}else if (array_key_exists('_id',$device)) {
 		return $device['_id'];
 	} else {
 		return "unknown";
