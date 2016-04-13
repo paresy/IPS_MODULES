@@ -272,7 +272,7 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
     }
     else if(isset($device['module_name'])){
      //$this->echoLog("- ".getModuleName($device). " -\n");
-  $instance_id = $this->CreateCategoryByIdent($instance_id, 'module_name' , getModuleName($device) );
+  $instance_id = $this->CreateCategoryByIdent($instance_id, 'module_name' , $device['module_name'] );
     }
     if(isset($device['type']))
     {
@@ -509,7 +509,7 @@ private function printWSBasicInfo($device)
 {
     if(isset($device['station_name']))
         $this->echoLog("- ".$device['station_name']. " -\n");
-    else if($device['module_name'])
+    else if(isset($device['module_name']))
         $this->echoLog("- ".getModuleName($device). " -\n");
     $this->echoLog("id: " . $device['_id']. "\n");
     if(isset($device['type']))
