@@ -251,12 +251,12 @@ private function saveModules($device)
 {
  $instance_id_parent = $this->InstanceID;	
   $this->echoLog("id: " . $device['_id']. "\n");
-$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, trim($device['main_device']) , $device['main_device'] );
+//$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, trim($device['main_device']) , $device['main_device'] );
   //$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['_id'] , $device['_id'] );
     
 		$module = $this->getModuleName($device);
    
- $instance_id = $this->CreateCategoryByIdent($instance_id_station,  $module , $module );
+ $instance_id = $this->CreateCategoryByIdent($instance_id_parent,  $module , $module );
     
     if(isset($device['type']))
     {
@@ -323,10 +323,10 @@ private function saveWSBasicInfo($device)
 {
  $instance_id_parent = $this->InstanceID;	
   //$this->echoLog("id: " . $device['_id']. "\n");
-$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, trim($device['_id']) , $device['_id'] );
+//$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, trim($device['_id']) , $device['_id'] );
     if(isset($device['station_name'])){
      //  $this->echoLog("- ".$device['station_name']. " -\n");
-$instance_id = $this->CreateCategoryByIdent($instance_id_station, $device['station_name'] , $device['station_name'] );
+$instance_id = $this->CreateCategoryByIdent($instance_id_parent, $device['station_name'] , $device['station_name'] );
     }
     
 		if(isset($device['module_name'])){
