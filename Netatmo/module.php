@@ -310,7 +310,7 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
             foreach($device['modules'] as $module)
            //     $this->saveWSBasicInfo($module);
         }
-    }
+    
   //  $this->echoLog("       ----------------------   \n");
 }	
 
