@@ -256,7 +256,7 @@ $instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, trim($d
     
 		$module = $this->getModuleName($device);
      //$this->echoLog("- ".getModuleName($device). " -\n");
- $instance_id = $this->CreateCategoryByIdent($instance_id,  $module , $module );
+ $instance_id = $this->CreateCategoryByIdent($instance_id_station,  $module , $module );
     
     if(isset($device['type']))
     {
