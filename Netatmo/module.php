@@ -378,6 +378,7 @@ private function CreateCategoryByIdent($id, $ident, $name)
 		
 private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profile = "")
 		 {
+			 	 IPS_LogMessage('394',$name .": " . print_r($value));
 			 $vid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
 		 if($vid === false)
 			 {
@@ -391,7 +392,7 @@ private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profi
 			 }
 	
 			SetValue($vid,$value);
-			 IPS_LogMessage('NETATMO',$name .": " . $value);
+			// IPS_LogMessage('NETATMO',$name .": " . print_r($value));
 			 return $vid;
 		}
 		
