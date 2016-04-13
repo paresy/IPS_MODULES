@@ -270,7 +270,7 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'id' , $device['_id'] 
   //     $this->echoLog("- ".$device['station_name']. " -\n");
 $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $device['station_name'] );
     }
-    else if(@isset($device['module_name'])){
+    else if(isset($device['module_name'])){
      //$this->echoLog("- ".getModuleName($device). " -\n");
   $instance_id = $this->CreateCategoryByIdent($instance_id, 'module_name' , getModuleName($device) );
     }
@@ -327,7 +327,7 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
   
         
         }
-        if(@isset($device['modules']))
+        if(isset($device['modules']))
         {
          //   $this->echoLog(" \n\nModules: \n");
             foreach($device['modules'] as $module)
