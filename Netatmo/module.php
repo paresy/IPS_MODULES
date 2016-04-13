@@ -224,7 +224,7 @@ else
     }
    
       
-     foreach($data['modules'] as $module)
+     foreach($deviceList['modules'] as $module)
                 $this->saveModules($module);
         }
 		
