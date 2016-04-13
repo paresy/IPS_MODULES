@@ -103,6 +103,7 @@ try
 {
     //retrieve all stations belonging to the user, and also his favorite ones
     $data = $client->getData(NULL, TRUE);
+    print_r($data);
     $this->printMessageWithBorder("Weather Stations Basic Information");
 }
 catch(NAClientException $ex)
@@ -270,7 +271,7 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
              $instance_id = $this->CreateCategoryByIdent($instance_id, $device['module_name'] , $device['module_name'] );
                               break;
             //Wind Sensor
-            case "NAModule2": 	// IPS_LogMessage('NETATMO',"Wind Sensor");
+            case "NAModule2": 	// IPS_LogsMessage('NETATMO',"Wind Sensor");
                $instance_id = $this->CreateCategoryByIdent($instance_id, $device['module_name'] , $device['module_name'] );
                               break;
             //Rain Gauge
