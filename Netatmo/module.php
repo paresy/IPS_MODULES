@@ -192,7 +192,7 @@ public function SaveData() {
 	
 	$deviceList = $client->api("devicelist");	
 	// IPS_LogMessage(__CLASS__, "Devicelist: ". print_r($deviceList ,1));	
-	 $this->echoLog(print_r($deviceList));
+	// $this->echoLog(print_r($deviceList));
 		
 		
 	//Retrieve user's Weather Stations Information
