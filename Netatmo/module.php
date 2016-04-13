@@ -248,10 +248,10 @@ private function saveWSBasicInfo($device)
  $instance_id_parent = $this->InstanceID;	
   $this->echoLog("id: " . $device['_id']. "\n");
 $instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, 'id' , $device['_id'] );
-    if(isset($device['station_name'])){
+   // if(isset($device['station_name'])){
   //     $this->echoLog("- ".$device['station_name']. " -\n");
-$instance_id = $this->CreateCategoryByIdent($instance_id_station, 'station_name' , $device['station_name'] );
-    }
+//$instance_id = $this->CreateCategoryByIdent($instance_id_station, 'station_name' , $device['station_name'] );
+  //  }
     else if(isset($device['module_name'])){
      //$this->echoLog("- ".getModuleName($device). " -\n");
   $instance_id = $this->CreateCategoryByIdent($instance_id, 'module_name' , $device['module_name'] );
