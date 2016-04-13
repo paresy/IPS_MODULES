@@ -217,31 +217,12 @@ else
     $fav = array();
     $device = $data['devices'][0];
     $tz = isset($device['place']['timezone']) ? $device['place']['timezone'] : "GMT";
-    //devices are already sorted in the following way: first weather stations owned by user, then "friend" WS, and finally favorites stations. Still let's store them in different arrays according to their type
+    //devicaes are already sorted in the following way: first weather stations owned by user, then "friend" WS, and finally favorites stations. Still let's store them in different arrays according to their type
     foreach($data['devices'] as $device)
     {
-        //favorites have both "favorite" and "read_only" flag set to true, whereas friends only have read_only
-        if(isset($device['favorite']) && $device['favorite'])
-            $fav[] = $device;
-        else if(isset($device['read_only']) && $device['read_only'])
-            $friends[] = $device;
-        else $users[] = $device;
+     $this->saveWSBasicInfo($device);
     }
-    //print first User's device Then friends, then favorite
- //   $this->printDevices($users, "User's weather stations");
-       foreach($users as $device)
-        {
-         //   IPS_LogMessage('DEVICE', print_r($device));
-			$this->saveWSBasicInfo($device);
-        }
-  	foreach($fav as $device)
-        {
-            $this->saveWSBasicInfo($device);
-        }
-         foreach($friends as $device)
-        {
-            $this->saveWSBasicInfo($device);
-        }
+   
     
 		
    }
