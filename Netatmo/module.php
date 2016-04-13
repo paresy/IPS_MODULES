@@ -231,7 +231,8 @@ else
  //   $this->printDevices($users, "User's weather stations");
        foreach($users as $device)
         {
-            $this->saveWSBasicInfo($device);
+            IPS_LogMessage('DEVICE', print_r($device));
+			$this->saveWSBasicInfo($device);
         }
   	foreach($fav as $device)
         {
