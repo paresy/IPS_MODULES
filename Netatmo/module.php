@@ -103,7 +103,7 @@ try
 {
     //retrieve all stations belonging to the user, and also his favorite ones
     $data = $client->getData(NULL, TRUE);
-    $this->echoLog( print_r($data));
+   // $this->echoLog( print_r($data));
     $this->printMessageWithBorder("Weather Stations Basic Information");
 }
 catch(NAClientException $ex)
@@ -323,7 +323,7 @@ private function saveWSBasicInfo($device)
 {
  $instance_id_parent = $this->InstanceID;	
   //$this->echoLog("id: " . $device['_id']. "\n");
-$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, trim($device['_id']) , $device['_id'] );
+$instance_id = $this->CreateCategoryByIdent($instance_id_parent, trim($device['_id']) , $device['_id'] );
   
     
 		if(isset($device['module_name'])){
