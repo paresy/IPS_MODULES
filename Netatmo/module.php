@@ -215,8 +215,8 @@ else
     $users = array();
     $friends = array();
     $fav = array();
-    $device = $data['devices'][0];
-    $tz = isset($device['place']['timezone']) ? $device['place']['timezone'] : "GMT";
+ //   $device = $data['devices'][0];
+ //   $tz = isset($device['place']['timezone']) ? $device['place']['timezone'] : "GMT";
     //devicaes are already sorted in the following way: first weather stations owned by user, then "friend" WS, and finally favorites stations. Still let's store them in different arrays according to their type
     foreach($data['devices'] as $device)
     {
@@ -246,13 +246,13 @@ private function getModuleName($device)
 private function saveWSBasicInfo($device)
 {
  $instance_id_parent = $this->InstanceID;	
-  $this->echoLog("id: " . $device['_id']. "\n");
-$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, 'id' , $device['_id'] );
-   // if(isset($device['station_name'])){
-  //     $this->echoLog("- ".$device['station_name']. " -\n");
-//$instance_id = $this->CreateCategoryByIdent($instance_id_station, 'station_name' , $device['station_name'] );
-  //  }
-   // else 
+  //$this->echoLog("id: " . $device['_id']. "\n");
+$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['_id'] , $device['_id'] );
+    if(isset($device['station_name'])){
+       $this->echoLog("- ".$device['station_name']. " -\n");
+$instance_id = $this->CreateCategoryByIdent($instance_id_station, 'station_name' , $device['station_name'] );
+    }
+    else 
 		if(isset($device['module_name'])){
      //$this->echoLog("- ".getModuleName($device). " -\n");
   $instance_id = $this->CreateCategoryByIdent($instance_id, 'module_name' , $device['module_name'] );
