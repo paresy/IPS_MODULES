@@ -281,7 +281,7 @@ $instance_id = $this->CreateCategoryByIdent($instance_id_station, $device['stati
             $instance_id = $this->CreateCategoryByIdent($instance_id, $module, $module );
                               break;
             case "NAMain" : //	 IPS_LogMessage('NETATMO',"Main device");
-            $instance_id = $this->CreateCategoryByIdent($instance_id, $device['station_name'] , $device['station_name'] );
+            $instance_id = $this->CreateCategoryByIdent($instance_id,  $module, $module );
                             break;
         }
     }
