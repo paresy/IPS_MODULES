@@ -276,10 +276,11 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
     }
     if(isset($device['type']))
     {
+		$module = this->getModuleName($device);
       //  $this->echoLog("type: ");
         switch($device['type'])
         {
-			$module = this->getModuleName($device);
+			
             // Outdoor Module
             case "NAModule1": //	 IPS_LogMessage('NETATMO',"Outdoor");
              $instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
