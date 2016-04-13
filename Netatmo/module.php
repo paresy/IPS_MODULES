@@ -296,7 +296,7 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
             $instance_id = $this->CreateCategoryByIdent($instance_id, getModuleName($device) , getModuleName($device) );
                               break;
             case "NAMain" : //	 IPS_LogMessage('NETATMO',"Main device");
-            $instance_id = $this->CreateCategoryByIdent($instance_id, getModuleName($device) , getModuleName($device) );
+            $instance_id = $this->CreateCategoryByIdent($instance_id, $device['station_name'] , $device['station_name'] );
                             break;
         }
     }
@@ -509,7 +509,7 @@ private function printWSBasicInfo($device)
 {
     if(isset($device['station_name']))
         $this->echoLog("- ".$device['station_name']. " -\n");
-    else if(getModuleName($device))
+    else if($device['module_name'])
         $this->echoLog("- ".getModuleName($device). " -\n");
     $this->echoLog("id: " . $device['_id']. "\n");
     if(isset($device['type']))
