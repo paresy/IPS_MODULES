@@ -279,21 +279,22 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
       //  $this->echoLog("type: ");
         switch($device['type'])
         {
+			$module = this->getModuleName($device);
             // Outdoor Module
             case "NAModule1": //	 IPS_LogMessage('NETATMO',"Outdoor");
-             $instance_id = $this->CreateCategoryByIdent($instance_id, getModuleName($device) , getModuleName($device) );
+             $instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
                               break;
             //Wind Sensor
             case "NAModule2": 	// IPS_LogsMessage('NETATMO',"Wind Sensor");
-               $instance_id = $this->CreateCategoryByIdent($instance_id, getModuleName($device) , getModuleName($device) );
+               $instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
                               break;
             //Rain Gauge
             case "NAModule3": //	 IPS_LogMessage('NETATMO',"Rain Gauge");
-              $instance_id = $this->CreateCategoryByIdent($instance_id, getModuleName($device) , getModuleName($device) );
+              $instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
                               break;
             //Indoor Module
             case "NAModule4": //	 IPS_LogMessage('NETATMO',"Indoor");
-            $instance_id = $this->CreateCategoryByIdent($instance_id, getModuleName($device) , getModuleName($device) );
+            $instance_id = $this->CreateCategoryByIdent($instance_id, $module, $module );
                               break;
             case "NAMain" : //	 IPS_LogMessage('NETATMO',"Main device");
             $instance_id = $this->CreateCategoryByIdent($instance_id, $device['station_name'] , $device['station_name'] );
