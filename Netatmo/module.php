@@ -258,7 +258,6 @@ private function getModuleName($device)
 	} else {
 		return "unknown";
 	}
-	}
 	
 }
 	
