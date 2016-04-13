@@ -44,8 +44,8 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
         public function ApplyChanges() {
             // Diese Zeile nicht löschen
             parent::ApplyChanges();
-      IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
-       IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
+    //  IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
+     //  IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
    	$this->PrepareConnection();
    	$this->SetStatus(102);// login OK
         }
@@ -80,7 +80,7 @@ catch(NAClientException $ex)
 {
 		
 	$this->handleError("An error happened while trying to retrieve your tokens: " .$ex->getMessage()."\n", TRUE);
-	     	 IPS_LogMessage(__CLASS__, "ALL OK !!!!");
+	     	// IPS_LogMessage(__CLASS__, "ALL OK !!!!");
 		$this->SetStatus(102);// login OK
      		}
 	
@@ -174,7 +174,7 @@ else
 	
 		
 	}
-		IPS_LogMessage('Netatmo_Modul', $echoString);
+		//IPS_LogMessage('Netatmo_Modul', $echoString);
 		echo "done...siehe Logs";
 	}
 	
@@ -191,7 +191,7 @@ public function SaveData() {
 	$this->PrepareConnection();	
 	
 	$deviceList = $client->api("devicelist");	
-	 IPS_LogMessage(__CLASS__, "Devicelist: ". print_r($deviceList ,1));	
+	// IPS_LogMessage(__CLASS__, "Devicelist: ". print_r($deviceList ,1));	
 	 $this->echoLog(print_r($deviceList));
 		
 		
@@ -231,7 +231,7 @@ else
  //   $this->printDevices($users, "User's weather stations");
        foreach($users as $device)
         {
-            IPS_LogMessage('DEVICE', print_r($device));
+         //   IPS_LogMessage('DEVICE', print_r($device));
 			$this->saveWSBasicInfo($device);
         }
   	foreach($fav as $device)
@@ -265,7 +265,7 @@ private function getModuleName($device)
 private function saveWSBasicInfo($device)
 {
  $instance_id_parent = $this->InstanceID;	
- // $this->echoLog("id: " . $device['_id']. "\n");
+  $this->echoLog("id: " . $device['_id']. "\n");
 $instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, 'id' , $device['_id'] );
     if(isset($device['station_name'])){
   //     $this->echoLog("- ".$device['station_name']. " -\n");
