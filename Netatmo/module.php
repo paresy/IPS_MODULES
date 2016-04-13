@@ -200,7 +200,7 @@ try
 {
     //retrieve all stations belonging to the user, and also his favorite ones
     $data = $client->getData(NULL, TRUE);
-    //  $this->printMessageWithBorder("Weather Stations Basic Information");
+  //  $this->printMessageWithBorder("Weather Stations Basic Information");
 }
 catch(NAClientException $ex)
 {
@@ -228,8 +228,8 @@ else
         else $users[] = $device;
     }
     //print first User's device Then friends, then favorite
-    //$this->printDevices($users, "User's weather stations");
-        foreach($users as $device)
+ //   $this->printDevices($users, "User's weather stations");
+       foreach($users as $device)
         {
             IPS_LogMessage('DEVICE', print_r($device));
 			$this->saveWSBasicInfo($device);
@@ -275,8 +275,34 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
      //$this->echoLog("- ".getModuleName($device). " -\n");
   $instance_id = $this->CreateCategoryByIdent($instance_id, 'module_name' , $device['module_name'] );
     }
-		
-    
+    if(isset($device['type']))
+    {
+		$module = $this->getModuleName($device);
+      //  $this->echoLog("type: ");
+        switch($device['type'])
+        {
+			
+            // Outdoor Module
+            case "NAModule1": //	 IPS_LogMessage('NETATMO',"Outdoor");
+             $instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
+                              break;
+            //Wind Sensor
+            case "NAModule2": 	// IPS_LogsMessage('NETATMO',"Wind Sensor");
+               $instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
+                              break;
+            //Rain Gauge
+            case "NAModule3": //	 IPS_LogMessage('NETATMO',"Rain Gauge");
+              $instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
+                              break;
+            //Indoor Module
+            case "NAModule4": //	 IPS_LogMessage('NETATMO',"Indoor");
+            $instance_id = $this->CreateCategoryByIdent($instance_id, $module, $module );
+                              break;
+            case "NAMain" : //	 IPS_LogMessage('NETATMO',"Main device");
+            $instance_id = $this->CreateCategoryByIdent($instance_id, $device['station_name'] , $device['station_name'] );
+                            break;
+        }
+    }
     if(isset($device['place']['timezone']))
         $tz = $device['place']['timezone'];
     else $tz = 'GMT';
@@ -304,13 +330,13 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
   
         
         }
-        if(isset($device['modules']))
-        {
-         //   $this->echoLog(" \n\nModules: \n");
-            foreach($device['modules'] as $module)
-           //     $this->saveWSBasicInfo($module);
-        }
-    
+//        if(isset($device['modules']))
+//        {
+//         //   $this->echoLog(" \n\nModules: \n");
+//            foreach($device['modules'] as $module)
+//                $this->saveWSBasicInfo($module);
+//        }
+    }
   //  $this->echoLog("       ----------------------   \n");
 }	
 
