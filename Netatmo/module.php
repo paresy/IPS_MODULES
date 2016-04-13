@@ -314,16 +314,16 @@ $instance_id = $this->CreateCategoryByIdent($instance_id, 'station_name' , $devi
         switch (gettype($val)) {
     		case "double":
         		$ips_type = 2;
-			break;
-		case "integer":
+				break;
+			case "integer":
         		$ips_type = 1;
         		break;
         	case "string":
         		$ips_type = 3;
         		break;
         	case "boolean":
-			$ips_type = 0;
-			break;	
+				$ips_type = 0;
+				break;	
 }
   	$this->CreateVariableByIdent($instance_id, $key,$key,$val , $ips_type)  ;
   
@@ -513,7 +513,7 @@ private function printWSBasicInfo($device)
     if(isset($device['station_name']))
         $this->echoLog("- ".$device['station_name']. " -\n");
     else if(isset($device['module_name']))
-        $this->echoLog("- ".getModuleName($device). " -\n");
+        $this->echoLog("- ".$device['module_name']). " -\n");
     $this->echoLog("id: " . $device['_id']. "\n");
     if(isset($device['type']))
     {
