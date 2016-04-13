@@ -370,8 +370,7 @@ private function CreateCategoryByIdent($id, $ident, $name)
 				 $cid = IPS_CreateCategory();
 				 IPS_SetParent($cid, $id);
 				 IPS_SetName($cid, $name);
-				 $this->maskUmlaute($ident
-				  IPS_LogMessage('373', $this->maskUmlaute($ident));
+				 IPS_LogMessage('373', $this->maskUmlaute($ident));
 				 IPS_SetIdent($cid, $this->maskUmlaute($ident));
 			 }
 			 return $cid;
