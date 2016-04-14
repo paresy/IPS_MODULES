@@ -251,20 +251,17 @@ private function saveModules($device)
 {
  $instance_id_parent = $this->InstanceID;	
   $this->echoLog("id: " . $device['_id']. "\n");
-$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, trim($device['main_device']) , $device['main_device'] );
+$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['main_device'] , $device['main_device'] );
   //$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['_id'] , $device['_id'] );
     
 		$module = $this->getModuleName($device);
    
  $instance_id = $instance_id_station;
-    
+ 
     if(isset($device['type']))
     {
-		$module = $this->getModuleName($device);
-      //  $this->echoLog("type: ");
         switch($device['type'])
         {
-			
             // Outdoor Module
             case "NAModule1": //	 IPS_LogMessage('NETATMO',"Outdoor");
              $instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
@@ -294,43 +291,34 @@ $instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, trim($d
      //   $this->echoLog("Last data: \n");
         foreach($device['dashboard_data'] as $key => $val)
         {
-        	
-        switch (gettype($val)) {
-    		case "double":
-        		$ips_type = 2;
+   
+        	switch (gettype($val)) {
+    			case "double":
+        			$ips_type = 2;
 				break;
 			case "integer":
-        		$ips_type = 1;
-        		break;
-        	case "string":
-        		$ips_type = 3;
-        		break;
-        	case "boolean":
+        			$ips_type = 1;
+        			break;
+        		case "string":
+        			$ips_type = 3;
+        			break;
+        		case "boolean":
 				$ips_type = 0;
 				break;	
-}
-  	$this->CreateVariableByIdent($instance_id, $key,$key,$val , $ips_type)  ;
-  
-        
+		}
+  		$this->CreateVariableByIdent($instance_id, $key,$key,$val , $ips_type)  ;
         }
-      
     }
-  //  $this->echoLog("       ----------------------   \n");
 }	
 	
 	
 private function saveWSBasicInfo($device)
 {
  $instance_id_parent = $this->InstanceID;	
-  //$this->echoLog("id: " . $device['_id']. "\n");
 $instance_id = $this->CreateCategoryByIdent($instance_id_parent, trim($device['_id']) , $device['_id'] );
-  
-    
 		if(isset($device['module_name'])){
-     //$this->echoLog("- ".getModuleName($device). " -\n");
- // $instance_id = $this->CreateCategoryByIdent($instance_id,  $device['module_name'] , $device['module_name'] );
     }
-    if(isset($device['type']))
+ /*   if(isset($device['type']))
     {
 		$module = $this->getModuleName($device);
       //  $this->echoLog("type: ");
@@ -358,6 +346,7 @@ $instance_id = $this->CreateCategoryByIdent($instance_id_parent, trim($device['_
                             break;
         }
     }
+    */
     if(isset($device['place']['timezone']))
         $tz = $device['place']['timezone'];
     else $tz = 'GMT';
