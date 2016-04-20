@@ -29,7 +29,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		$this->RegisterPropertyString("client_id", "");
 		$this->RegisterPropertyString("client_secret", "");
 		$this->RegisterPropertyBoolean("logging", false);
-		$this->RegisterPropertyBoolean("archive", false);
+		$this->RegisterPropertyInteger("archive", 0);
 		$this->RegisterTimer("ReadNetatmo", 300, 'NAW_SaveData($_IPS[\'TARGET\']);');
         }
  
