@@ -13,7 +13,7 @@
 	 "status":
     [
     	{ "code": 101, "icon": "active", "caption": "status unknown" },
-        { "code": 102, "icon": "active", "caption": "Server not reachable" },
+        { "code": 102, "icon": "active", "caption": "Settings saved" },
         { "code": 201, "icon": "error", "caption": "Authentication failed" },
         { "code": 202, "icon": "error", "caption": "ERROR" }
     ],
