@@ -419,7 +419,12 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 			IPS_SetName($vid, $name);
 			IPS_SetIdent($vid, $this->maskUmlaute($ident));
 			if($profile != "")
-			IPS_SetVariableCustomProfile($vid, $profile);
+			{
+				IPS_SetVariableCustomProfile($vid, $profile);
+			} else if (preg_match("/^date_.*/", $ident)) 
+			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
+				
+			}
 		}
 		@SetValue($vid,$value);
 		// IPS_LogMessage('NETATMO',$name .": " . print_r($value));
