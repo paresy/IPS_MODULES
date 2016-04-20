@@ -3,7 +3,8 @@
 	[
 		{ "name": "username", "type": "ValidationTextBox", "caption": "Username" },
 		{ "name": "password", "type": "PasswordTextBox", "caption": "Password" },
-		{ "name": "url", "type": "ValidationTextBox", "caption": "ServerURL" }
+		{ "name": "url", "type": "ValidationTextBox", "caption": "ServerURL / IP" },
+		{ "name": "port", "type": "NumberSpinner",  "caption": "Port" }
 
 	
 	],
@@ -19,7 +20,7 @@
                 {
                     "type": "Button",
                     "label": "GetData",
-                    "onClick": "NAW_SaveData($id);"
+                    "onClick": "OSCAM_SaveData($id);"
                 }
             ]
 }
