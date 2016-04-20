@@ -1,28 +1,33 @@
 {
 	"elements":
 	[
-		{ "name": "username", "type": "ValidationTextBox", "caption": "Username" },
-		{ "name": "password", "type": "PasswordTextBox", "caption": "Password" },
+		{ "name": "register", "type": "ValidationTextBox", "caption": "Register-ID" },
+		{ "name": "default_addr", "type": "ValidationTextBox", "caption": "Default XMPP Address like username@chat.xmpp.org" },
+		{ "type": "Label", "label": "Advanced:" }
+		{ "type": "Label", "label": "Folgende Felder nur bei eigenem XMPP-Server füllen" }
 		{ "name": "url", "type": "ValidationTextBox", "caption": "ServerURL / IP" },
-		{ "name": "port", "type": "NumberSpinner",  "caption": "Port" },
-		{ "name": "logging", "type": "CheckBox",  "caption": "Logging" },
-		{ "name": "archive", "type": "SelectInstance",  "caption": "Archive Handler" }
+		{ "name": "port", "type": "NumberSpinner",  "caption": "Port" }
 
 	
 	],
 	 "status":
     [
     	{ "code": 101, "icon": "active", "caption": "status unknown" },
-        { "code": 102, "icon": "active", "caption": "Login information valid" },
+        { "code": 102, "icon": "active", "caption": "Server not reachable" },
         { "code": 201, "icon": "error", "caption": "Authentication failed" },
         { "code": 202, "icon": "error", "caption": "ERROR" }
     ],
       "actions":
             [
+            	  {
+                    "type": "Button",
+                    "label": "Register new ID",
+                    "onClick": "XMPP_registerID($id);"
+                },
                 {
                     "type": "Button",
-                    "label": "GetData",
-                    "onClick": "OSCAM_SaveData($id);"
+                    "label": "Test connection with Defaultuser",
+                    "onClick": "XMPP_sendTest($id);"
                 }
             ]
 }
