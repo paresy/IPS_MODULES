@@ -357,7 +357,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 	        				$ips_type = 2;
 						break;
 					case "integer":
-        					$ips_type = 1;
+        					$ips_type = 2;
         					break;
         				case "string":
         					$ips_type = 3;
@@ -421,6 +421,17 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		$vid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
 		if($vid === false)
 		{
+			 if (preg_match("/^date_.*/", $ident)) 
+			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
+					$logging = false;
+					$type = 1;
+				
+			} else if (preg_match("/^time_.*/", $ident)) 
+			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
+					$logging = false;
+					$type = 1;
+				
+			}
 			if (preg_match("/^Rain.*/", $ident) || preg_match("/^sum_rain.*/", $ident)) 
 			{	
 				$type = 2;
@@ -432,15 +443,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 			if($profile != "")
 			{
 				IPS_SetVariableCustomProfile($vid, $profile);
-			} else if (preg_match("/^date_.*/", $ident)) 
-			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
-					$logging = false;
-				
-			} else if (preg_match("/^time_.*/", $ident)) 
-			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
-					$logging = false;
-				
-			}
+			} 
 			if ($logging) 
 			{
 				AC_SetLoggingStatus($archive, $vid, true);
