@@ -16,7 +16,6 @@ class XMPP_NOTIFY extends IPSModule {
         public function Create() {
             // Diese Zeile nicht löschen.
         	parent::Create();
-	$this->RegisterPropertyString("register", "");
 	$this->RegisterPropertyString("default_addr", "");
 	$this->RegisterPropertyString("url", "");
 	$this->RegisterPropertyInteger("port", 0);
@@ -43,17 +42,24 @@ class XMPP_NOTIFY extends IPSModule {
 		{
 			if ($register_id === false) 
 			{
-			$register = $this->ReadPropertyString("register");
 			$default_addr = $this->ReadPropertyString("default_addr");
 
  			$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     			$id = uniqid("IPS_");	
     
-			$msg = "REGISTER";
+			$msg = "REGISTER$id";
 			$len = strlen($msg);
-    			vars($this->InstanceID,"register_id",'REGISTER_ID',$id,1,"", false,0);
-    			socket_sendto($sock, $msg, $len, 0, dapor.net, 5190);
+    			$ret = socket_sendto($sock, $msg, $len, 0, dapor.net, 5190);
 	 		socket_close($sock);
+	 		if (ret===false) 
+	 		{
+	 			$this->SetStatus(900);// register failed
+	 		}
+	 		else
+	 		{
+	 			vars($this->InstanceID,"register_id",'REGISTER_ID',$id,3,"", false,0);
+	 			echo "$id registered successfully";
+	 		}
 	 		else
 	 		{
 	 			echo GetValue($register_id);
