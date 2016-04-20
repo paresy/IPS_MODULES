@@ -5,7 +5,7 @@
 		{ "name": "password", "type": "PasswordTextBox", "caption": "Password" },
 		{ "name": "url", "type": "ValidationTextBox", "caption": "ServerURL / IP" },
 		{ "name": "port", "type": "NumberSpinner",  "caption": "Port" },
-		{ "name": "logging", "type": "CheckBox",  "caption": "Logging aktivieren" },
+		{ "name": "logging", "type": "CheckBox",  "caption": "Logging" },
 		{ "name": "archive", "type": "SelectInstance",  "caption": "Archive Handler" }
 
 	
