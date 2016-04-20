@@ -70,6 +70,48 @@ class XMPP_NOTIFY extends IPSModule {
 			echo "Register is only awailable at DAPOR Hosting with empty server-url";
 		}
 	}
+	
+	
+	
+	public function sendTest()
+	{
+		$url = $this->ReadPropertyString("url");
+		$register_id = @IPS_GetObjectIDByIdent("register_id", $this->InstanceID);
+		if ($url === "" )
+		{
+			$url = "dapor.net";
+			$port = 5190;
+		}else
+		{
+			$port = $this->ReadPropertyString("port");
+		}
+			if ($register_id === false) 
+			{
+				echo "You have to register first";
+			}
+			$default_addr = $this->ReadPropertyString("default_addr");
+ 			$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+    			
+    
+			$msg = "$register_id;$default_addr;Test XMPP Notify by Dapor";
+			$len = strlen($msg);
+    			$ret = socket_sendto($sock, $msg, $len, 0, $url, $port);
+	 		socket_close($sock);
+	 		if (ret===false) 
+	 		{
+	 			$this->SetStatus(901);// register failed
+	 		}
+	 		else
+	 		{
+	 			vars($this->InstanceID,"register_id",'REGISTER_ID',$id,3,"", false,0);
+	 			echo "$id registered successfully";
+	 		}
+	 		else
+	 		{
+	 			echo GetValue($register_id);
+	 		}
+		
+	}
 	/*
 $pw = $this->ReadPropertyString("password");
 $context  = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
