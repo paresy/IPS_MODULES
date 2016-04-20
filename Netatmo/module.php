@@ -420,6 +420,10 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		$vid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
 		if($vid === false)
 		{
+			if (preg_match("/^RAIN.*/", $ident) || (preg_match("/^sum_rain.*/", $ident)) 
+			{	
+				$type = 2
+			}
 			$vid = IPS_CreateVariable($type);
 			IPS_SetParent($vid, $id);
 			IPS_SetName($vid, $name);
