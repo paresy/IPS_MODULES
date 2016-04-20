@@ -19,13 +19,12 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
     private $access_token ;
     private $deviceList;
     private $echoString;
+        
         // Der Konstruktor des Moduls
         // Überschreibt den Standard Kontruktor von IPS
         public function __construct($InstanceID) {
             // Diese Zeile nicht löschen
             parent::__construct($InstanceID);
-  
-            // Selbsterstellter Code
         }
  
         // Überschreibt die interne IPS_Create($id) Funktion
@@ -41,8 +40,9 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
         }
  
         // Überschreibt die intere IPS_ApplyChanges($id) Funktion
-        public function ApplyChanges() {
-            // Diese Zeile nicht löschen
+        public function ApplyChanges() 
+        {
+            	// Diese Zeile nicht löschen
             	parent::ApplyChanges();
     		//  IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
      		//  IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
@@ -85,7 +85,8 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 	}
  
 	//ShowData
-	public function ShowData() {
+	public function ShowData() 
+	{
 		global $echoString;
 		global $client;
     		global $tokens ;     	
@@ -178,7 +179,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 	}
 	
 
-	// SAVE
+	// SAVE DATA
 	public function SaveData() 
 	{
 		global $client;
@@ -309,13 +310,14 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 	}	
 	
 	
-private function saveWSBasicInfo($device)
-{
- $instance_id_parent = $this->InstanceID;	
-$instance_id = $this->CreateCategoryByIdent($instance_id_parent, trim($device['_id']) , $device['_id'] );
-		if(isset($device['module_name'])){
-    }
- /*   if(isset($device['type']))
+	private function saveWSBasicInfo($device)
+	{
+ 		$instance_id_parent = $this->InstanceID;	
+		$instance_id = $this->CreateCategoryByIdent($instance_id_parent, trim($device['_id']) , $device['_id'] );
+ /*		if(isset($device['module_name']))
+		{
+    		}
+   if(isset($device['type']))
     {
 		$module = $this->getModuleName($device);
       //  $this->echoLog("type: ");
@@ -344,128 +346,125 @@ $instance_id = $this->CreateCategoryByIdent($instance_id_parent, trim($device['_
         }
     }
     */
-    if(isset($device['place']['timezone']))
-        $tz = $device['place']['timezone'];
-    else $tz = 'GMT';
-    if(isset($device['dashboard_data']))
-    {
-     //   $this->echoLog("Last data: \n");
-        foreach($device['dashboard_data'] as $key => $val)
-        {
-        	
-        switch (gettype($val)) {
-    		case "double":
-        		$ips_type = 2;
-				break;
-			case "integer":
-        		$ips_type = 1;
-        		break;
-        	case "string":
-        		$ips_type = 3;
-        		break;
-        	case "boolean":
-				$ips_type = 0;
-				break;	
-}
-  	$this->CreateVariableByIdent($instance_id, $key,$key,$val , $ips_type)  ;
-  
-        
-        }
+    	if(isset($device['place']['timezone']))
+		$tz = $device['place']['timezone'];
+    	else $tz = 'GMT';
+    		if(isset($device['dashboard_data']))
+    		{
+		 	//   $this->echoLog("Last data: \n");
+        		foreach($device['dashboard_data'] as $key => $val)
+        		{
+        			switch (gettype($val)) 
+        			{
+    					case "double":
+	        				$ips_type = 2;
+						break;
+					case "integer":
+        					$ips_type = 1;
+        					break;
+        				case "string":
+        					$ips_type = 3;
+        					break;
+        				case "boolean":
+						$ips_type = 0;
+						break;	
+				}
+  			$this->CreateVariableByIdent($instance_id, $key,$key,$val , $ips_type);
+        		}
       
-    }
-  //  $this->echoLog("       ----------------------   \n");
-}	
+    		}
+  		//  $this->echoLog("       ----------------------   \n");
+	}	
 
 
-private function maskUmlaute($text)
-{
-$text = str_replace ("ä", "a", $text);
-$text = str_replace ("Ä", "AE", $text);
-$text = str_replace ("ö", "oe", $text);
-$text = str_replace ("Ö", "OE", $text);
-$text = str_replace ("ü", "ue", $text);
-$text = str_replace ("Ü", "UE", $text);
-$text = str_replace ("ß", "ss", $text);
-$text = str_replace (" ", "_", $text);
-$text = str_replace ("(", "_", $text);
-$text = str_replace (")", "_", $text);
-$text = str_replace ("&", "_", $text);
-$text = str_replace ("§", "_", $text);
-$text = str_replace ("/", "_", $text);
-$text = str_replace ("=", "_", $text);
-$text = str_replace ("{", "_", $text);
-$text = str_replace ("}", "_", $text);
-$text = str_replace (":", "_", $text);
-$text = str_replace (",", "_", $text);
-$text = str_replace (";", "_", $text);
+	private function maskUmlaute($text)
+	{
+		$text = str_replace ("ä", "a", $text);
+		$text = str_replace ("Ä", "AE", $text);
+		$text = str_replace ("ö", "oe", $text);
+		$text = str_replace ("Ö", "OE", $text);
+		$text = str_replace ("ü", "ue", $text);
+		$text = str_replace ("Ü", "UE", $text);
+		$text = str_replace ("ß", "ss", $text);
+		$text = str_replace (" ", "_", $text);
+		$text = str_replace ("(", "_", $text);
+		$text = str_replace (")", "_", $text);
+		$text = str_replace ("&", "_", $text);
+		$text = str_replace ("§", "_", $text);
+		$text = str_replace ("/", "_", $text);
+		$text = str_replace ("=", "_", $text);
+		$text = str_replace ("{", "_", $text);
+		$text = str_replace ("}", "_", $text);
+		$text = str_replace (":", "_", $text);
+		$text = str_replace (",", "_", $text);
+		$text = str_replace (";", "_", $text);
 	
-	return $text;
-}
+		return $text;
+	}
 
-private function CreateCategoryByIdent($id, $ident, $name)
- {
- $cid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
- if($cid === false)
- {
-				 $cid = IPS_CreateCategory();
-				 IPS_SetParent($cid, $id);
-				 IPS_SetName($cid, $name);
-			//	 IPS_LogMessage('373', $this->maskUmlaute($ident));
-				 IPS_SetIdent($cid, $this->maskUmlaute($ident));
-			 }
-			 return $cid;
+	private function CreateCategoryByIdent($id, $ident, $name)
+ 	{
+ 		$cid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
+ 		if($cid === false)
+ 		{
+			 $cid = IPS_CreateCategory();
+			 IPS_SetParent($cid, $id);
+			 IPS_SetName($cid, $name);
+		//	 IPS_LogMessage('373', $this->maskUmlaute($ident));
+			 IPS_SetIdent($cid, $this->maskUmlaute($ident));
 		}
+		return $cid;
+	}
 		
-private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profile = "")
-		 {
-			 	
-			 $vid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
-		 if($vid === false)
-			 {
-				 $vid = IPS_CreateVariable($type);
-				 IPS_SetParent($vid, $id);
-				 IPS_SetName($vid, $name);
-				 IPS_SetIdent($vid, $this->maskUmlaute($ident));
-				 
-				 if($profile != "")
-					IPS_SetVariableCustomProfile($vid, $profile);
-			 }
-	
-			@SetValue($vid,$value);
-			// IPS_LogMessage('NETATMO',$name .": " . print_r($value));
-			 return $vid;
+	private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profile = "")
+	{
+		$vid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
+		if($vid === false)
+		{
+			$vid = IPS_CreateVariable($type);
+			IPS_SetParent($vid, $id);
+			IPS_SetName($vid, $name);
+			IPS_SetIdent($vid, $this->maskUmlaute($ident));
+			if($profile != "")
+			IPS_SetVariableCustomProfile($vid, $profile);
 		}
+		@SetValue($vid,$value);
+		// IPS_LogMessage('NETATMO',$name .": " . print_r($value));
+		return $vid;
+	}
 		
-private function CreateInstanceByIdent($id, $ident, $name, $moduleid = "{24B57877-C24C-4690-8421-B41DCC22BE1B}")
-	 {
-			 $iid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
-			 if($iid === false)
-			 {
-				 $iid = IPS_CreateInstance($moduleid);
-				 IPS_SetParent($iid, $id);
-				 IPS_SetName($iid, $name);
-				 IPS_SetIdent($iid, $this->maskUmlaute($ident));
-			 }
-			 return $iid;
-		}	
+	private function CreateInstanceByIdent($id, $ident, $name, $moduleid = "{24B57877-C24C-4690-8421-B41DCC22BE1B}")
+	{
+		$iid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
+		if($iid === false)
+		{
+			$iid = IPS_CreateInstance($moduleid);
+			IPS_SetParent($iid, $id);
+			IPS_SetName($iid, $name);
+			IPS_SetIdent($iid, $this->maskUmlaute($ident));
+		}
+		return $iid;
+	}	
 	
 	
-/**
- * Prints a list of devices
- *
- */
-private  function printDevices($devices, $title = NULL)
-{
-    if(!is_null($devices) && is_array($devices) && !empty($devices))
-    {
-        if(!is_null($title))
-            $this->printMessageWithBorder($title);
-        foreach($devices as $device)
-        {
-            $this->printWSBasicInfo($device);
-        }
-    }
-}
+	/**
+	* Prints a list of devices
+ 	*
+	*/
+	private  function printDevices($devices, $title = NULL)
+	{
+    		if(!is_null($devices) && is_array($devices) && !empty($devices))
+    		{	
+        		if(!is_null($title))
+        		{
+            			$this->printMessageWithBorder($title);
+        		}
+        		foreach($devices as $device)
+        		{
+            			$this->printWSBasicInfo($device);
+        		}
+    		}
+	}
 
 
 
