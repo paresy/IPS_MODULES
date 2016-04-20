@@ -414,6 +414,9 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		
 	private function CreateVariableByIdent($id, $ident, $name, $value, $type, $profile = "")
 	{
+    		global $logging;
+    		global $archive;
+    		
 		$vid = @IPS_GetObjectIDByIdent($this->maskUmlaute($ident), $id);
 		if($vid === false)
 		{
