@@ -99,7 +99,6 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		{
 			 //retrieve all stations belonging to the user, and also his favorite ones
     			$data = $client->getData(NULL, TRUE);
-     			$this->echoLog( print_r($data));
     			$this->printMessageWithBorder("Weather Stations Basic Information");
 		}
 		catch(NAClientException $ex)
@@ -178,8 +177,8 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		echo "done...siehe Logs";
 	}
 	
-// SAVE
 
+	// SAVE
 	public function SaveData() 
 	{
 		global $client;
@@ -196,40 +195,36 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		//Retrieve user's Weather Stations Information
 		try
 		{
-    //retrieve all stations belonging to the user, and also his favorite ones
-    $data = $client->getData(NULL, TRUE);
-  //  $this->printMessageWithBorder("Weather Stations Basic Information");
-}
-catch(NAClientException $ex)
-{
-    $this->handleError("An error occured while retrieving data: ". $ex->getMessage()."\n", TRUE);
-}
-if(empty($data['devices']))
-{
-    $this->echoLog( 'No devices affiliated to user');
-}
-else
-{
-    $users = array();
-    $friends = array();
-    $fav = array();
- //   $device = $data['devices'][0];
- //   $tz = isset($device['place']['timezone']) ? $device['place']['timezone'] : "GMT";
-    //devicaes are already sorted in the following way: first weather stations owned by user, then "friend" WS, and finally favorites stations. Still let's store them in different arrays according to their type
-    foreach($data['devices'] as $device)
-    {
-     $this->saveWSBasicInfo($device);
-    }
-   
-      
-     foreach($deviceList['modules'] as $module)
-                $this->saveModules($module);
-        }
-		
-   
-
-	
-}
+    			//retrieve all stations belonging to the user, and also his favorite ones
+    			$data = $client->getData(NULL, TRUE);
+  			//  $this->printMessageWithBorder("Weather Stations Basic Information");
+		}
+		catch(NAClientException $ex)
+		{
+			 $this->handleError("An error occured while retrieving data: ". $ex->getMessage()."\n", TRUE);
+		}
+		if(empty($data['devices']))
+		{
+    			$this->echoLog( 'No devices affiliated to user');
+		}
+		else
+		{
+    			$users = array();
+    			$friends = array();
+    			$fav = array();
+ 			//   $device = $data['devices'][0];
+ 			//   $tz = isset($device['place']['timezone']) ? $device['place']['timezone'] : "GMT";
+    			//devicaes are already sorted in the following way: first weather stations owned by user, then "friend" WS, and finally favorites stations. Still let's store them in different arrays according to their type
+    			foreach($data['devices'] as $device)
+    			{
+     				$this->saveWSBasicInfo($device);
+    			}
+     			foreach($deviceList['modules'] as $module)
+                	{
+                		$this->saveModules($module);
+        		}
+		}	
+	}
 
 private function getModuleName($device)
 {
