@@ -223,86 +223,88 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
                 	{
                 		$this->saveModules($module);
         		}
-		}	
-	}
-
-private function getModuleName($device)
-{
-	if (array_key_exists('module_name',$device) )
-	{
-		return $device['module_name'];
-	}else if (array_key_exists('_id',$device)) {
-		return $device['_id'];
-	} else {
-		return "unknown";
-	}
-	
-}
-	
-
-private function saveModules($device)
-{
- $instance_id_parent = $this->InstanceID;	
-  $this->echoLog("id: " . $device['_id']. "\n");
-$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['main_device'] , $device['main_device'] );
-  //$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['_id'] , $device['_id'] );
-    
-		$module = $this->getModuleName($device);
-   
- $instance_id = $instance_id_station;
- 
-    if(isset($device['type']))
-    {
-        switch($device['type'])
-        {
-            // Outdoor Module
-            case "NAModule1": //	 IPS_LogMessage('NETATMO',"Outdoor");
-             $instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
-                              break;
-            //Wind Sensor
-            case "NAModule2": 	// IPS_LogsMessage('NETATMO',"Wind Sensor");
-               $instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
-                              break;
-            //Rain Gauge
-            case "NAModule3": //	 IPS_LogMessage('NETATMO',"Rain Gauge");
-              $instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
-                              break;
-            //Indoor Module
-            case "NAModule4": //	 IPS_LogMessage('NETATMO',"Indoor");
-            $instance_id = $this->CreateCategoryByIdent($instance_id, $module, $module );
-                              break;
-            case "NAMain" : //	 IPS_LogMessage('NETATMO',"Main device");
-            $instance_id = $this->CreateCategoryByIdent($instance_id,  $module, $module );
-                            break;
-        }
-    }
-    if(isset($device['place']['timezone']))
-        $tz = $device['place']['timezone'];
-    else $tz = 'GMT';
-    if(isset($device['dashboard_data']))
-    {
-     //   $this->echoLog("Last data: \n");
-        foreach($device['dashboard_data'] as $key => $val)
-        {
-   
-        	switch (gettype($val)) {
-    			case "double":
-        			$ips_type = 2;
-				break;
-			case "integer":
-        			$ips_type = 1;
-        			break;
-        		case "string":
-        			$ips_type = 3;
-        			break;
-        		case "boolean":
-				$ips_type = 0;
-				break;	
 		}
-  		$this->CreateVariableByIdent($instance_id, $key,$key,$val , $ips_type)  ;
-        }
-    }
-}	
+		IPS_LogMessage('Netatmo_Modul', $echoString);
+	}
+
+	private function getModuleName($device)
+	{
+		if (array_key_exists('module_name',$device) )
+		{
+			return $device['module_name'];
+		}
+		else if (array_key_exists('_id',$device)) 
+		{
+			return $device['_id'];
+		} 
+		else 
+		{
+			return "unknown";
+		}
+	}
+	
+
+	private function saveModules($device)
+	{
+ 		$instance_id_parent = $this->InstanceID;	
+  		$this->echoLog("id: " . $device['_id']. "\n");
+		$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['main_device'] , $device['main_device'] );
+  		//$instance_id_station = $this->CreateCategoryByIdent($instance_id_parent, $device['_id'] , $device['_id'] );
+		$module = $this->getModuleName($device);
+ 		$instance_id = $instance_id_station;
+ 
+    		if(isset($device['type']))
+    		{
+        		switch($device['type'])
+        		{
+            			// Outdoor Module
+            			case "NAModule1": //	 IPS_LogMessage('NETATMO',"Outdoor");
+             				$instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
+                              		break;
+            			//Wind Sensor
+            			case "NAModule2": 	// IPS_LogsMessage('NETATMO',"Wind Sensor");
+        				$instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
+        		                break;
+            			//Rain Gauge
+            			case "NAModule3": //	 IPS_LogMessage('NETATMO',"Rain Gauge");
+              				$instance_id = $this->CreateCategoryByIdent($instance_id, $module , $module );
+                		       break;
+            			//Indoor Module
+            			case "NAModule4": //	 IPS_LogMessage('NETATMO',"Indoor");
+				        $instance_id = $this->CreateCategoryByIdent($instance_id, $module, $module );
+                              		break;
+            			case "NAMain" : //	 IPS_LogMessage('NETATMO',"Main device");
+            				$instance_id = $this->CreateCategoryByIdent($instance_id,  $module, $module );
+                        		break;
+        		}
+    		}
+    		if(isset($device['place']['timezone']))
+        		$tz = $device['place']['timezone'];
+    		else $tz = 'GMT';
+    			if(isset($device['dashboard_data']))
+    			{
+     			//   $this->echoLog("Last data: \n");
+        		foreach($device['dashboard_data'] as $key => $val)
+        		{
+        			switch (gettype($val)) 
+        			{
+    					case "double":
+        					$ips_type = 2;
+						break;
+					case "integer":
+        					$ips_type = 1;
+        					break;
+        				case "string":
+        					$ips_type = 3;
+        					break;
+        				case "boolean":
+						$ips_type = 0;
+						break;	
+				}
+  				$this->CreateVariableByIdent($instance_id, $key,$key,$val , $ips_type)  ;
+        		}
+    		}
+	}	
 	
 	
 private function saveWSBasicInfo($device)
