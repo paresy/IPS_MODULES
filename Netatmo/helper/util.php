@@ -1,147 +1,175 @@
-<?php
+<?
 
+	private function handleError($message, $exit = FALSE)
+	{
+		$this->echoLog( $message);
+    		if($exit)
+    		{
+        		exit(-1);
+    		}
+	}
+	
+	private function printTimeInTz($time, $timezone, $format)
+	{
+    		try
+    		{
+			$tz = new DateTimeZone($timezone);
+    		}
+    		catch(Exception $ex)
+    		{
+        		$tz = new DateTimeZone("GMT");
+    		}
+    		$date = new DateTime();
+    		$date->setTimezone($tz);
+    		$date->setTimestamp($time);
+    		$this->echoLog( $date->format($format));
+	}
+	
+	private  function printBorder($message)
+	{
+    		$size = strlen($message);
+    		for($i = 0; $i < $size; $i++)
+    		{
+        		$this->echoLog("-");
+    		}	
+    		$this->echoLog("\n");
+	}
+	
+	private function printMessageWithBorder($message)
+	{
+    		$message = "- " . $message . " -";
+    		$this->printBorder($message);
+    		$this->echoLog($message . "\n");
+    		$this->printBorder($message);
+	}
 
-	// UTILS.php
+	private function echoLog($message) 
+	{
+		global $echoString;	
+		$echoString = $echoString . $message;
+	}
 
-private function handleError($message, $exit = FALSE)
-{
-    $this->echoLog( $message);
-    if($exit)
-        exit(-1);
-}
-private function printTimeInTz($time, $timezone, $format)
-{
-    try{
-        $tz = new DateTimeZone($timezone);
-    }
-    catch(Exception $ex)
-    {
-        $tz = new DateTimeZone("GMT");
-    }
-    $date = new DateTime();
-    $date->setTimezone($tz);
-    $date->setTimestamp($time);
-    $this->echoLog( $date->format($format));
-}
-private  function printBorder($message)
-{
-    $size = strlen($message);
-    for($i = 0; $i < $size; $i++)
-        $this->echoLog("-");
-    $this->echoLog("\n");
-}
-private function printMessageWithBorder($message)
-{
-    $message = "- " . $message . " -";
-    $this->printBorder($message);
-    $this->echoLog($message . "\n");
-    $this->printBorder($message);
-}
+	private function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
+	{
+		if(!empty($measurements))
+    		{
+        		if(!empty($title))
+        		{
+            			$this->printMessageWithBorder($title);
+        		}
+        		if($monthly)
+        		{
+	         		$dateFormat = 'F: ';
+		     	}
+		    	else 
+		 	{	
+		       		$dateFormat = 'j F: ';
+		       	}
+		       	//array of requested info type, needed to map result values to what they mean
+		       	$keys = explode(",", $type);
+		       	foreach($measurements as $timestamp => $values)
+        		{
+        	  		$this->printTimeinTz($timestamp, $tz, $dateFormat);
+        	   		$this->echoLog("\n");
+        	   		foreach($values as $key => $val)
+        	   		{
+        		       		$this->echoLog( $keys[$key] . ": ");
+        		     		if($keys[$key] === "time_utc" || preg_match("/^date_.*/", $keys[$key]))
+        		   		{
+                	 			$this->echoLog ($this->printTimeInTz($val, $tz, "j F H:i"));
+                			}
+                			else
+                			{
+                	 			$this->echoLog( $val);
+                	  			$this->printUnit($keys[$key]);
+                			}	
+                			if(count($values)-1 === $key || $monthly)
+                			{
+                	  			$this->echoLog( "\n");
+                			}
+                			else 
+                			{	
+                				$this->echoLog( ", ");
+                			}
+            			}
+        		}
+    		}
+	}
 
-private function echoLog($message) 
-{
-global $echoString;	
-$echoString = $echoString . $message;
-
-}
-
-
-private function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
-{
-    if(!empty($measurements))
-    {
-        if(!empty($title))
-            $this->printMessageWithBorder($title);
-        if($monthly)
-            $dateFormat = 'F: ';
-        else $dateFormat = 'j F: ';
-        //array of requested info type, needed to map result values to what they mean
-        $keys = explode(",", $type);
-        foreach($measurements as $timestamp => $values)
-        {
-            $this->printTimeinTz($timestamp, $tz, $dateFormat);
-             $this->echoLog("\n");
-            foreach($values as $key => $val)
-            {
-                $this->echoLog( $keys[$key] . ": ");
-                if($keys[$key] === "time_utc" || preg_match("/^date_.*/", $keys[$key]))
-                    $this->echoLog ($this->printTimeInTz($val, $tz, "j F H:i"));
-                else{
-                    $this->echoLog( $val);
-                    $this->printUnit($keys[$key]);
-                }
-                if(count($values)-1 === $key || $monthly)
-                    $this->echoLog( "\n");
-                else $this->echoLog( ", ");
-            }
-        }
-    }
-}
-/**
- * function printing a weather station or modules basic information such as id, name, dashboard data, modules (if main device), type(if module)
- *
- */
-private function printWSBasicInfo($device)
-{
-    if(isset($device['station_name']))
-        $this->echoLog("- ".$device['station_name']. " -\n");
-    else if(isset($device['module_name']))
-        $this->echoLog("- ".$device['module_name']. " -\n");
-    $this->echoLog("id: " . $device['_id']. "\n");
-    if(isset($device['type']))
-    {
-        $this->echoLog("type: ");
-        switch($device['type'])
-        {
-            // Outdoor Module
-            case "NAModule1": $this->echoLog("Outdoor\n");
-                              break;
-            //Wind Sensor
-            case "NAModule2": $this->echoLog("Wind Sensor\n");
-                              break;
-            //Rain Gauge
-            case "NAModule3": $this->echoLog("Rain Gauge\n");
-                              break;
-            //Indoor Module
-            case "NAModule4": $this->echoLog("Indoor\n");
-                              break;
-            case "NAMain" : $this->echoLog("Main device \n");
-                            break;
-        }
-    }
-    if(isset($device['place']['timezone']))
-        $tz = $device['place']['timezone'];
-    else $tz = 'GMT';
-    if(isset($device['dashboard_data']))
-    {
-        $this->echoLog("Last data: \n");
-        foreach($device['dashboard_data'] as $key => $val)
-        {
-            if($key === 'time_utc' || preg_match("/^date_.*/", $key))
-            {
-                $this->echoLog( $key .": ");
-                $this->printTimeInTz($val, $tz, 'j F H:i');
-                $this->echoLog("\n");
-            }
-            else if(is_array($val))
-            {
-                //do nothing : don't print historic
-            }
-            else {
-                $this->echoLog($key .": " . $val);
-                $this->printUnit($key);
-                $this->echoLog( "\n");
-            }
-        }
-        if(isset($device['modules']))
-        {
-            $this->echoLog(" \n\nModules: \n");
-            foreach($device['modules'] as $module)
-                $this->printWSBasicInfo($module);
-        }
-    }
-    $this->echoLog("       ----------------------   \n");
-}
+	/**
+ 	* function printing a weather station or modules basic information such as id, name, dashboard data, modules (if main device), type(if module)
+ 	*
+ 	*/
+	private function printWSBasicInfo($device)
+	{
+		if(isset($device['station_name']))
+		{
+			$this->echoLog("- ".$device['station_name']. " -\n");
+		}
+    		else if(isset($device['module_name']))
+        	{
+        		$this->echoLog("- ".$device['module_name']. " -\n");
+    			$this->echoLog("id: " . $device['_id']. "\n");
+        	}
+    		if(isset($device['type']))
+    		{
+        		$this->echoLog("type: ");
+        		switch($device['type'])
+        		{
+            			// Outdoor Module
+            			case "NAModule1": $this->echoLog("Outdoor\n");
+                              		break;
+            			//Wind Sensor
+            			case "NAModule2": $this->echoLog("Wind Sensor\n");
+                        		break;
+            			//Rain Gauge
+            			case "NAModule3": $this->echoLog("Rain Gauge\n");
+                              		break;
+            			//Indoor Module
+            			case "NAModule4": $this->echoLog("Indoor\n");
+                              		break;
+            			case "NAMain" : $this->echoLog("Main device \n");
+                            		break;
+        		}
+    		}
+    		if(isset($device['place']['timezone']))
+        		$tz = $device['place']['timezone'];
+    		else 
+    		{
+    			$tz = 'GMT';
+    		}
+    		if(isset($device['dashboard_data']))
+    		{
+        		$this->echoLog("Last data: \n");
+        		foreach($device['dashboard_data'] as $key => $val)
+        		{
+            			if($key === 'time_utc' || preg_match("/^date_.*/", $key))
+            			{
+                			$this->echoLog( $key .": ");
+                			$this->printTimeInTz($val, $tz, 'j F H:i');
+                			$this->echoLog("\n");
+            			}
+            			else if(is_array($val))
+            			{
+                			//do nothing : don't print historic
+            			}
+            			else 
+            			{
+                			$this->echoLog($key .": " . $val);
+                			$this->printUnit($key);
+                			$this->echoLog( "\n");
+            			}
+        		}
+    		}
+        	if(isset($device['modules']))
+        	{
+            		$this->echoLog(" \n\nModules: \n");
+            		foreach($device['modules'] as $module)
+                		$this->printWSBasicInfo($module);
+        	}
+    	$this->echoLog("       ----------------------   \n");
+	}
+	
 private function printUnit($key)
 {
     $typeUnit = array('temp' => '°C', 'hum' => '%', 'noise' => 'db', 'strength' => 'km/h', 'angle' => '°', 'rain' => 'mm', 'pressure' => 'mbar', 'co2' => 'ppm');
