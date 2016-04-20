@@ -72,7 +72,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		$tokens = $client->getAccessToken();
     			$this->SetStatus(102);// login OK
 		}
-		catch(NAClientException $ex)
+		catch(Exception $ex)
 		{
 			$this->handleError("An error happened while trying to retrieve your tokens: " .$ex->getMessage()."\n", TRUE);
 	     		// IPS_LogMessage(__CLASS__, "ALL OK !!!!");
