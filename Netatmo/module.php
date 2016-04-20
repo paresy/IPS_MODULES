@@ -41,7 +41,6 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
     		//  IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
      		//  IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
    		$this->PrepareConnection();
-   		$this->SetStatus(102);// login OK
         }
  
 	private function PrepareConnection() 
@@ -71,6 +70,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		try
 		{
     			$tokens = $client->getAccessToken();
+    			$this->SetStatus(102);// login OK
 		}
 		catch(NAClientException $ex)
 		{
