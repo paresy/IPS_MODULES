@@ -1,11 +1,11 @@
 {
-	"id": "{DF21E3FC-D9B4-42DE-8382-7450B0DC03FD}",
-	"name": "Oscam",
+	"id": "{07139E74-735F-42D0-84DE-3136B8F39D64}",
+	"name": "XMPP_Notify",
 	"type": 3,
 	"vendor": "dapor",
-	"aliases": [ "oscam"],
+	"aliases": [ "xmppn"],
 	"parentRequirements": [],
 	"childRequirements": [],
 	"implemented": [],
-	"prefix": "OSCAM"
+	"prefix": "xmppn"
 }
