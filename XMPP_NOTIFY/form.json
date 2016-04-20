@@ -22,12 +22,12 @@
             	  {
                     "type": "Button",
                     "label": "Register new ID",
-                    "onClick": "XMPP_registerID($id);"
+                    "onClick": "XMPPN_registerID($id);"
                 },
                 {
                     "type": "Button",
                     "label": "Test connection with Defaultuser",
-                    "onClick": "XMPP_sendTest($id);"
+                    "onClick": "XMPPN_sendTest($id);"
                 }
             ]
 }
