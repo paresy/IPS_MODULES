@@ -51,7 +51,9 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
     		global $access_token;
     		global $logging;
     		global $archive;
-    	
+    		try
+		{
+    		
     		$logging = $this->ReadPropertyBoolean("logging");	
     		$archive = $this->ReadPropertyInteger("archive");	
 		$config = array();
@@ -67,9 +69,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		$client->setVariable("password", $pwd);
 
 		//Authentication with Netatmo server (OAuth2)
-		try
-		{
-    			$tokens = $client->getAccessToken();
+		$tokens = $client->getAccessToken();
     			$this->SetStatus(102);// login OK
 		}
 		catch(NAClientException $ex)
