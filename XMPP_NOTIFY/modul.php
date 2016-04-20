@@ -16,27 +16,48 @@ class Oscam extends IPSModule {
         public function Create() {
             // Diese Zeile nicht löschen.
         	parent::Create();
-	$this->RegisterPropertyString("username", "");
-	$this->RegisterPropertyString("password", "");
-	$this->RegisterPropertyString("serverurl", "");
+	$this->RegisterPropertyString("register", "");
+	$this->RegisterPropertyString("default_addr", "");
+	$this->RegisterPropertyString("url", "");
+	$this->RegisterPropertyInteger("port", 0);
 	//$this->RegisterTimer("ReadOscam", 300, 'OSC_getData($_IPS[\'TARGET\']);');
         }
  
         // Überschreibt die intere IPS_ApplyChanges($id) Funktion
         public function ApplyChanges() {
-            // Diese Zeile nicht löschen
-            parent::ApplyChanges();
-      IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
-       IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
- //  	$this->checkConnection();
-   	$this->SetStatus(102);// login OK
+            	// Diese Zeile nicht löschen
+        	parent::ApplyChanges();
+      		//IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
+      		//IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
+ 		//$this->checkConnection();
+   		$this->SetStatus(102);// settings saved
         }
         
         
        
-public function getData(){
-$url = $this->ReadPropertyString("serverurl");
-$user = $this->ReadPropertyString("username");
+	public function registerID()
+	{
+		$url = $this->ReadPropertyString("url");	
+		if ($url === "")
+		{
+			$register = $this->ReadPropertyString("register");
+			$default_addr = $this->ReadPropertyString("default_addr");
+
+ 			$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+    			$id = uniqid("IPS_");	
+    
+			$msg = "REGISTER";
+			$len = strlen($msg);
+    			vars("XMPP_NOTIFY",$this->InstanceID,'REGISTER_ID',$id,1,"", false,0);
+    			socket_sendto($sock, $msg, $len, 0, dapor.net, 5190);
+	 		socket_close($sock);
+		}
+		else
+		{
+			echo "Register is only awailable at DAPOR Hosting with empty server-url";
+		}
+	}
+	/*
 $pw = $this->ReadPropertyString("password");
 $context  = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
 $url = "$url/oscamapi.html?part=userstats";
@@ -98,7 +119,7 @@ $position=99;
     {
     $position=1;
      }
-//$system = (vars("$name",14040 /*[Archive Handler]*/,35483,"Name","$name",3,"", false));
+
 vars("$name",$this->InstanceID,'Status',"$status",3,"", false, $position);
 vars("$name",$this->InstanceID,'Ip',"$ip",3,"", false, $position);
 vars("$name",$this->InstanceID,'OK',$cwok,1,"dapor.zaehler", true, $position);
@@ -145,9 +166,9 @@ $userconnected=intval($child->userconnected);
 $useronline=intval($child->useronline);
 $position=0;
  
-//$system = (vars("$name",14040 /*[Archive Handler]*/,35483,"Name","$name",3,"", false));
 
-//vars("$name",14040 /*[Archive Handler]*/,35483,'Ip',"$ip",3,"", false, $position);
+
+
 vars("$name",$this->InstanceID,'OK',$cwok,1,"dapor.zaehler", true, $position);
 vars("$name",$this->InstanceID,'Not-OK',$cwnok,1,"dapor.zaehler", true, $position);
 vars("$name",$this->InstanceID,'Cache',$cwcache,1,"dapor.zaehler", true, $position);
@@ -169,7 +190,7 @@ vars("$name",$this->InstanceID,'Useronline',$useronline,1,"dapor.zaehler", true,
 
 } // ende foreach
 
-
+*/
 
 
 function vars($system, $ParentID, $Variname, $wert, $VariTyp, $VariProfile ,$logging, $position)
