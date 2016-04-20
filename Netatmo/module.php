@@ -29,6 +29,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		$this->RegisterPropertyString("client_id", "");
 		$this->RegisterPropertyString("client_secret", "");
 		$this->RegisterPropertyBoolean("logging", false);
+		$this->RegisterPropertyBoolean("archive", false);
 		$this->RegisterTimer("ReadNetatmo", 300, 'NAW_SaveData($_IPS[\'TARGET\']);');
         }
  
@@ -46,12 +47,14 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 	private function PrepareConnection() 
 	{
  		global $client;
-    		global $tokens ;     	
-    		global $refresh_token ;
-    		global $access_token ;
-    		global $logging ;
+    		global $tokens;     	
+    		global $refresh_token;
+    		global $access_token;
+    		global $logging;
+    		global $archive;
     	
     		$logging = $this->ReadPropertyBoolean("logging");	
+    		$archive = $this->ReadPropertyInteger("archive");	
 		$config = array();
 		$config['client_id'] = $this->ReadPropertyString("client_id");
 		$config['client_secret'] = $this->ReadPropertyString("client_secret");
@@ -427,6 +430,11 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 			} else if (preg_match("/^time_.*/", $ident)) 
 			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
 				
+			}
+			if ($logging) 
+			{
+				AC_SetLoggingStatus($archive, $vid, true);
+				IPS_ApplyChanges($archive);
 			}
 		}
 		@SetValue($vid,$value);
