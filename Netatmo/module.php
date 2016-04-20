@@ -226,7 +226,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
                 		$this->saveModules($module);
         		}
 		}
-		
+		IPS_LogMessage('Netatmo_Modul', "GetData finished successfully");
 	}
 
 	private function getModuleName($device)
