@@ -429,9 +429,11 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 				IPS_SetVariableCustomProfile($vid, $profile);
 			} else if (preg_match("/^date_.*/", $ident)) 
 			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
+					$logging = false;
 				
 			} else if (preg_match("/^time_.*/", $ident)) 
 			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
+					$logging = false;
 				
 			}
 			if ($logging) 
