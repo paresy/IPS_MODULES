@@ -1,0 +1,28 @@
+{
+	"elements":
+	[
+		{ "name": "username", "type": "ValidationTextBox", "caption": "Username" },
+		{ "name": "password", "type": "PasswordTextBox", "caption": "Password" },
+		{ "name": "url", "type": "ValidationTextBox", "caption": "ServerURL / IP" },
+		{ "name": "port", "type": "NumberSpinner",  "caption": "Port" },
+		{ "name": "logging", "type": "CheckBox",  "caption": "Logging" },
+		{ "name": "archive", "type": "SelectInstance",  "caption": "Archive Handler" }
+
+	
+	],
+	 "status":
+    [
+    	{ "code": 101, "icon": "active", "caption": "status unknown" },
+        { "code": 102, "icon": "active", "caption": "Login information valid" },
+        { "code": 201, "icon": "error", "caption": "Authentication failed" },
+        { "code": 202, "icon": "error", "caption": "ERROR" }
+    ],
+      "actions":
+            [
+                {
+                    "type": "Button",
+                    "label": "GetData",
+                    "onClick": "OSCAM_SaveData($id);"
+                }
+            ]
+}
