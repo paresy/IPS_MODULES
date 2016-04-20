@@ -1,6 +1,6 @@
 <?
 
-require_once(__DIR__ . "/util.php");  //  Helper Klasse
+require_once(__DIR__ . "/helper/util.php");  //  Helper Klasse
 require_once(__DIR__ . "/netatmo_api/Clients/NAWSApiClient.php");
 require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 
