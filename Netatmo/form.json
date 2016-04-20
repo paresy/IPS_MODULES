@@ -5,7 +5,8 @@
 		{ "name": "password", "type": "PasswordTextBox", "caption": "Password" },
 		{ "name": "client_id", "type": "ValidationTextBox", "caption": "Client ID" },
 		{ "name": "client_secret", "type": "PasswordTextBox", "caption": "Client Secret" },
-		{ "name": "logging", "type": "CheckBox",  "caption": "Logging aktivieren" }
+		{ "name": "logging", "type": "CheckBox",  "caption": "Logging aktivieren" },
+		{ "name": "archive", "type": "SelectInstance",  "caption": "Archive Handler" }
 	
 	],
 	 "status":
