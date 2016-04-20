@@ -76,7 +76,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		{
 			$this->handleError("An error happened while trying to retrieve your tokens: " .$ex->getMessage()."\n", TRUE);
 	     		// IPS_LogMessage(__CLASS__, "ALL OK !!!!");
-			$this->SetStatus(102);// login OK
+			$this->SetStatus(201);// login failed
      		}
 	}
  
