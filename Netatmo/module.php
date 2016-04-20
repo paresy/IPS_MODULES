@@ -202,10 +202,12 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		catch(NAClientException $ex)
 		{
 			 $this->handleError("An error occured while retrieving data: ". $ex->getMessage()."\n", TRUE);
+			 IPS_LogMessage('Netatmo_Modul', "An error occured while retrieving data: ". $ex->getMessage()."\n");
 		}
 		if(empty($data['devices']))
 		{
     			$this->echoLog( 'No devices affiliated to user');
+    			IPS_LogMessage('Netatmo_Modul', $echoString);
 		}
 		else
 		{
@@ -224,7 +226,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
                 		$this->saveModules($module);
         		}
 		}
-		IPS_LogMessage('Netatmo_Modul', $echoString);
+		
 	}
 
 	private function getModuleName($device)
