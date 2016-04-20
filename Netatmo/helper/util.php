@@ -1,6 +1,6 @@
 <?
 
-	private function handleError($message, $exit = FALSE)
+	function handleError($message, $exit = FALSE)
 	{
 		$this->echoLog( $message);
     		if($exit)
@@ -9,7 +9,7 @@
     		}
 	}
 	
-	private function printTimeInTz($time, $timezone, $format)
+	function printTimeInTz($time, $timezone, $format)
 	{
     		try
     		{
@@ -25,7 +25,7 @@
     		$this->echoLog( $date->format($format));
 	}
 	
-	private  function printBorder($message)
+	function printBorder($message)
 	{
     		$size = strlen($message);
     		for($i = 0; $i < $size; $i++)
@@ -35,7 +35,7 @@
     		$this->echoLog("\n");
 	}
 	
-	private function printMessageWithBorder($message)
+	function printMessageWithBorder($message)
 	{
     		$message = "- " . $message . " -";
     		$this->printBorder($message);
@@ -43,13 +43,13 @@
     		$this->printBorder($message);
 	}
 
-	private function echoLog($message) 
+	function echoLog($message) 
 	{
 		global $echoString;	
 		$echoString = $echoString . $message;
 	}
 
-	private function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
+	function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
 	{
 		if(!empty($measurements))
     		{
@@ -100,7 +100,7 @@
  	* function printing a weather station or modules basic information such as id, name, dashboard data, modules (if main device), type(if module)
  	*
  	*/
-	private function printWSBasicInfo($device)
+	function printWSBasicInfo($device)
 	{
 		if(isset($device['station_name']))
 		{
@@ -170,7 +170,7 @@
     	$this->echoLog("       ----------------------   \n");
 	}
 	
-private function printUnit($key)
+function printUnit($key)
 {
     $typeUnit = array('temp' => '°C', 'hum' => '%', 'noise' => 'db', 'strength' => 'km/h', 'angle' => '°', 'rain' => 'mm', 'pressure' => 'mbar', 'co2' => 'ppm');
     foreach($typeUnit as $type => $unit)
@@ -186,7 +186,7 @@ private function printUnit($key)
 /*
 * @brief print a thermostat basic information in CLI
 */
-private function printThermBasicInfo($dev)
+function printThermBasicInfo($dev)
 {
     //Device
     $this->echoLog(" -".$dev['station_name']."- \n");
@@ -224,7 +224,7 @@ private function printThermBasicInfo($dev)
 /**
 * @brief returns the current program of a therm module
 */
-private function getCurrentProgram($module)
+function getCurrentProgram($module)
 {
     foreach($module['therm_program_list'] as $program)
     {
@@ -237,7 +237,7 @@ private function getCurrentProgram($module)
 /**
 * @brief returns the current setpoint of a therm module along with its setpoint temperature and endtime if defined
 */
-private function getCurrentMode($module)
+function getCurrentMode($module)
 {
     $initialMode = $module["setpoint"]["setpoint_mode"];
     $initialTemp = isset($module["setpoint"]["setpoint_temp"]) ? $module["setpoint"]["setpoint_temp"]: NULL;
@@ -246,13 +246,13 @@ private function getCurrentMode($module)
 }
 
 
-private function removeHTMLTags($string)
+function removeHTMLTags($string)
 {
    return preg_replace("/<.*?>/", "", $string);
 }
 
 
- protected function RegisterTimer($ident, $interval, $script) {
+ function RegisterTimer($ident, $interval, $script) {
     $id = @IPS_GetObjectIDByIdent($ident, $this->InstanceID);
 
     if ($id && IPS_GetEvent($id)['EventType'] <> 1) {
