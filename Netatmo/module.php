@@ -32,172 +32,170 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
         public function Create() {
             // Diese Zeile nicht löschen.
         	parent::Create();
-	$this->RegisterPropertyString("username", "");
-	$this->RegisterPropertyString("password", "");
-	$this->RegisterPropertyString("client_id", "");
-	$this->RegisterPropertyString("client_secret", "");
-	$this->RegisterPropertyBoolean("logging", false);
-	$this->RegisterTimer("ReadNetatmo", 300, 'NAW_SaveData($_IPS[\'TARGET\']);');
+		$this->RegisterPropertyString("username", "");
+		$this->RegisterPropertyString("password", "");
+		$this->RegisterPropertyString("client_id", "");
+		$this->RegisterPropertyString("client_secret", "");
+		$this->RegisterPropertyBoolean("logging", false);
+		$this->RegisterTimer("ReadNetatmo", 300, 'NAW_SaveData($_IPS[\'TARGET\']);');
         }
  
         // Überschreibt die intere IPS_ApplyChanges($id) Funktion
         public function ApplyChanges() {
             // Diese Zeile nicht löschen
-            parent::ApplyChanges();
-    //  IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
-     //  IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
-   	$this->PrepareConnection();
-   	$this->SetStatus(102);// login OK
+            	parent::ApplyChanges();
+    		//  IPS_LogMessage(__CLASS__, __FUNCTION__); //                   
+     		//  IPS_LogMessage('Config', print_r(json_decode(IPS_GetConfiguration($this->InstanceID)), 1));
+   		$this->PrepareConnection();
+   		$this->SetStatus(102);// login OK
         }
  
 	private function PrepareConnection() 
 	{
- 	global $client;
-    	global $tokens ;     	
-    	global $refresh_token ;
-    	global $access_token ;
-    	global $logging ;
+ 		global $client;
+    		global $tokens ;     	
+    		global $refresh_token ;
+    		global $access_token ;
+    		global $logging ;
     	
-    	$logging = $this->ReadPropertyBoolean("logging");	
-	$config = array();
-	$config['client_id'] = $this->ReadPropertyString("client_id");
-	$config['client_secret'] = $this->ReadPropertyString("client_secret");
-	//application will have access to station and theromstat
-	$config['scope'] = "read_station";
-	$client = new NAWSApiClient($config);
+    		$logging = $this->ReadPropertyBoolean("logging");	
+		$config = array();
+		$config['client_id'] = $this->ReadPropertyString("client_id");
+		$config['client_secret'] = $this->ReadPropertyString("client_secret");
+		//application will have access to station and theromstat
+		$config['scope'] = "read_station";
+		$client = new NAWSApiClient($config);
     		
-    	$username = $this->ReadPropertyString("username");
-	$pwd = $this->ReadPropertyString("password");
-	$client->setVariable("username", $username);
-	$client->setVariable("password", $pwd);
+    		$username = $this->ReadPropertyString("username");
+		$pwd = $this->ReadPropertyString("password");
+		$client->setVariable("username", $username);
+		$client->setVariable("password", $pwd);
 
-	//Authentication with Netatmo server (OAuth2)
-try
-{
-    $tokens = $client->getAccessToken();
-}
-catch(NAClientException $ex)
-{
-		
-	$this->handleError("An error happened while trying to retrieve your tokens: " .$ex->getMessage()."\n", TRUE);
-	     	// IPS_LogMessage(__CLASS__, "ALL OK !!!!");
-		$this->SetStatus(102);// login OK
+		//Authentication with Netatmo server (OAuth2)
+		try
+		{
+    			$tokens = $client->getAccessToken();
+		}
+		catch(NAClientException $ex)
+		{
+			$this->handleError("An error happened while trying to retrieve your tokens: " .$ex->getMessage()."\n", TRUE);
+	     		// IPS_LogMessage(__CLASS__, "ALL OK !!!!");
+			$this->SetStatus(102);// login OK
      		}
-	
-    
-    }
+	}
  
 	//ShowData
 	public function ShowData() {
-	global $echoString;
-	global $client;
-    	global $tokens ;     	
-    	global $refresh_token ;
-    	global $access_token ;
-	global $deviceList;
+		global $echoString;
+		global $client;
+    		global $tokens ;     	
+    		global $refresh_token ;
+    		global $access_token ;
+		global $deviceList;
     	
-	$this->PrepareConnection();	
-	
-	//Retrieve user's Weather Stations Information
-try
-{
-    //retrieve all stations belonging to the user, and also his favorite ones
-    $data = $client->getData(NULL, TRUE);
-     $this->echoLog( print_r($data));
-    $this->printMessageWithBorder("Weather Stations Basic Information");
-}
-catch(NAClientException $ex)
-{
-    $this->handleError("An error occured while retrieving data: ". $ex->getMessage()."\n", TRUE);
-}
-if(empty($data['devices']))
-{
-    $this->echoLog('No devices affiliated to user');
-}
-else
-{
-    $users = array();
-    $friends = array();
-    $fav = array();
-    $device = $data['devices'][0];
-    $tz = isset($device['place']['timezone']) ? $device['place']['timezone'] : "GMT";
-    //devices are already sorted in the following way: first weather stations owned by user, then "friend" WS, and finally favorites stations. Still let's store them in different arrays according to their type
-    foreach($data['devices'] as $device)
-    {
-        //favorites have both "favorite" and "read_only" flag set to true, whereas friends only have read_only
-        if(isset($device['favorite']) && $device['favorite'])
-            $fav[] = $device;
-        else if(isset($device['read_only']) && $device['read_only'])
-            $friends[] = $device;
-        else $users[] = $device;
-    }
-    //print first User's device Then friends, then favorite
-    $this->printDevices($users, "User's weather stations");
-    $this->printDevices($friends, "User's friends weather stations");
-    $this->printDevices($fav, "User's favorite weather stations");
-    // now get some daily measurements for the last 30 days
-     $type = "temperature,Co2,humidity,noise,pressure";
-    //first for the main device
-    try
-    {
-        $measure = $client->getMeasure($device['_id'], NULL, "1day" , $type, time() - 24*3600*30, time(), 30,  FALSE, FALSE);
-        $this->printMeasure($measure, $type, $tz, $device['_id'] ."'s daily measurements of the last 30 days");
-    }
-    catch(NAClientException $ex)
-    {
-        $this->handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
-    }
-    //Then for its modules
-    foreach($device['modules'] as $module)
-    {
-        //requested data type depends on the module's type
-        switch($module['type'])
-        {
-            case "NAModule3": $type = "sum_rain";
-                              break;
-            case "NAModule2": $type = "WindStrength,WindAngle,GustStrength,GustAngle,date_max_gust";
-                              break;
-            case "NAModule1" : $type = "temperature,humidity";
-                               break;
-            default : $type = "temperature,Co2,humidity,noise,pressure";
-        }
-        try
-        {
-            $measure = $client->getMeasure($device['_id'], $module['_id'], "1day" , $type, time()-24*3600*30 , time(), 30,  FALSE, FALSE);
-            $this->printMeasure($measure, $type, $tz, $module['_id']. "'s daily measurements of the last 30 days ");
-        }
-        catch(NAClientException $ex)
-        {
-            $this->handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
-        }
-    }
-	
-		
-	}
+		$this->PrepareConnection();	
+		//Retrieve user's Weather Stations Information
+		try
+		{
+			 //retrieve all stations belonging to the user, and also his favorite ones
+    			$data = $client->getData(NULL, TRUE);
+     			$this->echoLog( print_r($data));
+    			$this->printMessageWithBorder("Weather Stations Basic Information");
+		}
+		catch(NAClientException $ex)
+		{
+    			$this->handleError("An error occured while retrieving data: ". $ex->getMessage()."\n", TRUE);
+		}
+		if(empty($data['devices']))
+		{
+    			$this->echoLog('No devices affiliated to user');
+		}
+		else
+		{
+    			$users = array();
+    			$friends = array();
+    			$fav = array();
+    			$device = $data['devices'][0];
+    			$tz = isset($device['place']['timezone']) ? $device['place']['timezone'] : "GMT";
+    			//devices are already sorted in the following way: first weather stations owned by user, then "friend" WS, and finally favorites stations. Still let's store them in different arrays according to their type
+    			foreach($data['devices'] as $device)
+    			{
+        			//favorites have both "favorite" and "read_only" flag set to true, whereas friends only have read_only
+        			if(isset($device['favorite']) && $device['favorite'])
+        			{
+            				$fav[] = $device;
+        			}
+        			else if(isset($device['read_only']) && $device['read_only']){
+        				$friends[] = $device;	
+        			}
+        			else 
+        			{
+        				$users[] = $device;
+        			}
+    			}
+    			//print first User's device Then friends, then favorite
+    			$this->printDevices($users, "User's weather stations");
+    			$this->printDevices($friends, "User's friends weather stations");
+    			$this->printDevices($fav, "User's favorite weather stations");
+    			// now get some daily measurements for the last 30 days
+     			$type = "temperature,Co2,humidity,noise,pressure";
+    			//first for the main device
+    			try
+    			{
+        			$measure = $client->getMeasure($device['_id'], NULL, "1day" , $type, time() - 24*3600*30, time(), 30,  FALSE, FALSE);
+        			$this->printMeasure($measure, $type, $tz, $device['_id'] ."'s daily measurements of the last 30 days");
+    			}
+    			catch(NAClientException $ex)
+    			{
+        			$this->handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
+    			}
+    			//Then for its modules
+    			foreach($device['modules'] as $module)
+    			{
+        			//requested data type depends on the module's type
+        			switch($module['type'])
+        			{
+            				case "NAModule3": $type = "sum_rain";
+                              			break;
+            				case "NAModule2": $type = "WindStrength,WindAngle,GustStrength,GustAngle,date_max_gust";
+                              			break;
+            				case "NAModule1" : $type = "temperature,humidity";
+                               			break;
+            				default : $type = "temperature,Co2,humidity,noise,pressure";
+        			}
+        			try
+        			{
+            				$measure = $client->getMeasure($device['_id'], $module['_id'], "1day" , $type, time()-24*3600*30 , time(), 30,  FALSE, FALSE);
+            				$this->printMeasure($measure, $type, $tz, $module['_id']. "'s daily measurements of the last 30 days ");
+        			}
+        			catch(NAClientException $ex)
+        			{
+        				 $this->handleError("An error occured while retrieving main device's daily measurements: " . $ex->getMessage() . "\n");
+        			}
+    			}			
+		}
 		IPS_LogMessage('Netatmo_Modul', $echoString);
 		echo "done...siehe Logs";
 	}
 	
 // SAVE
 
-public function SaveData() {
-	
-	global $client;
-    global $tokens ;     	
-    global $refresh_token ;
-    global $access_token ;
-	global $deviceList;
+	public function SaveData() 
+	{
+		global $client;
+    		global $tokens ;     	
+    		global $refresh_token ;
+    		global $access_token ;
+		global $deviceList;
     	
-	$this->PrepareConnection();	
+		$this->PrepareConnection();	
 	
-	$deviceList = $client->api("devicelist");	
-	// IPS_LogMessage(__CLASS__, "Devicelist: ". print_r($deviceList ,1));	
-	// $this->echoLog(print_r($deviceList));
-		
-		
-	//Retrieve user's Weather Stations Information
-try
-{
+		$deviceList = $client->api("devicelist");	
+		// IPS_LogMessage(__CLASS__, "Devicelist: ". print_r($deviceList ,1));	
+		// $this->echoLog(print_r($deviceList));
+		//Retrieve user's Weather Stations Information
+		try
+		{
     //retrieve all stations belonging to the user, and also his favorite ones
     $data = $client->getData(NULL, TRUE);
   //  $this->printMessageWithBorder("Weather Stations Basic Information");
