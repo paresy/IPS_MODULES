@@ -1,0 +1,11 @@
+{
+	"id": "{DF21E3FC-D9B4-42DE-8382-7450B0DC03FD}",
+	"name": "Oscam",
+	"type": 3,
+	"vendor": "dapor",
+	"aliases": [ "oscam"],
+	"parentRequirements": [],
+	"childRequirements": [],
+	"implemented": [],
+	"prefix": "OSCAM"
+}
