@@ -1,22 +1,15 @@
 <?
-
-//require_once(__DIR__ . "/netatmo.php");  // Netatmo Helper Klasse
 require_once(__DIR__ . "/netatmo_api/Clients/NAWSApiClient.php");
 require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 
 
     // Klassendefinition
-
-    
     class Netatmo extends IPSModule {
    
-    	
-   
-    	
-    private $client ;
-    private $tokens ;     	
-    private $refresh_token ;
-    private $access_token ;
+    private $client;
+    private $tokens;     	
+    private $refresh_token;
+    private $access_token;
     private $deviceList;
     private $echoString;
         
@@ -466,94 +459,116 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
     		}
 	}
 
+	private function handleError($message, $exit = FALSE)
+	{
+    		$this->echoLog( $message);
+    		if($exit)
+    		{
+        		exit(-1);
+    		}
+	}
+	
+	private function printTimeInTz($time, $timezone, $format)
+	{
+	    	try
+	    	{
+	        	$tz = new DateTimeZone($timezone);
+	    	}
+	    	catch(Exception $ex)
+	   	{
+	        	$tz = new DateTimeZone("GMT");
+	    	}
+	   	$date = new DateTime();
+	   	$date->setTimezone($tz);
+	   	$date->setTimestamp($time);
+	   	$this->echoLog( $date->format($format));
+	}
+	
+	private  function printBorder($message)
+	{
+		 $size = strlen($message);
+		 for($i = 0; $i < $size; $i++)
+		 {
+			  $this->echoLog("-");
+		 }
+    		$this->echoLog("\n");
+	}
+	
+	private function printMessageWithBorder($message)
+	{
+		$message = "- " . $message . " -";
+    		$this->printBorder($message);
+    		$this->echoLog($message . "\n");
+    		$this->printBorder($message);
+	}
 
+	private function echoLog($message) 
+	{
+		global $echoString;	
+		$echoString = $echoString . $message;
 
-// UTILS.php
+	}
 
-private function handleError($message, $exit = FALSE)
-{
-    $this->echoLog( $message);
-    if($exit)
-        exit(-1);
-}
-private function printTimeInTz($time, $timezone, $format)
-{
-    try{
-        $tz = new DateTimeZone($timezone);
-    }
-    catch(Exception $ex)
-    {
-        $tz = new DateTimeZone("GMT");
-    }
-    $date = new DateTime();
-    $date->setTimezone($tz);
-    $date->setTimestamp($time);
-    $this->echoLog( $date->format($format));
-}
-private  function printBorder($message)
-{
-    $size = strlen($message);
-    for($i = 0; $i < $size; $i++)
-        $this->echoLog("-");
-    $this->echoLog("\n");
-}
-private function printMessageWithBorder($message)
-{
-    $message = "- " . $message . " -";
-    $this->printBorder($message);
-    $this->echoLog($message . "\n");
-    $this->printBorder($message);
-}
-
-private function echoLog($message) 
-{
-global $echoString;	
-$echoString = $echoString . $message;
-
-}
-
-
-private function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
-{
-    if(!empty($measurements))
-    {
-        if(!empty($title))
-            $this->printMessageWithBorder($title);
-        if($monthly)
-            $dateFormat = 'F: ';
-        else $dateFormat = 'j F: ';
-        //array of requested info type, needed to map result values to what they mean
-        $keys = explode(",", $type);
-        foreach($measurements as $timestamp => $values)
-        {
-            $this->printTimeinTz($timestamp, $tz, $dateFormat);
-             $this->echoLog("\n");
-            foreach($values as $key => $val)
-            {
-                $this->echoLog( $keys[$key] . ": ");
-                if($keys[$key] === "time_utc" || preg_match("/^date_.*/", $keys[$key]))
-                    $this->echoLog ($this->printTimeInTz($val, $tz, "j F H:i"));
-                else{
-                    $this->echoLog( $val);
-                    $this->printUnit($keys[$key]);
-                }
-                if(count($values)-1 === $key || $monthly)
-                    $this->echoLog( "\n");
-                else $this->echoLog( ", ");
-            }
-        }
-    }
-}
-/**
- * function printing a weather station or modules basic information such as id, name, dashboard data, modules (if main device), type(if module)
- *
- */
-private function printWSBasicInfo($device)
-{
-    if(isset($device['station_name']))
-        $this->echoLog("- ".$device['station_name']. " -\n");
-    else if(isset($device['module_name']))
-        $this->echoLog("- ".$device['module_name']. " -\n");
+	private function printMeasure($measurements, $type, $tz, $title = NULL, $monthly = FALSE)
+	{
+		if(!empty($measurements))
+		{
+        		if(!empty($title))
+            		{
+            			$this->printMessageWithBorder($title);
+            		}
+        		if($monthly)
+        		{
+            			$dateFormat = 'F: ';
+        		}
+        		else 
+        		{
+        			$dateFormat = 'j F: ';
+        		}
+        		//array of requested info type, needed to map result values to what they mean
+        		$keys = explode(",", $type);
+        		foreach($measurements as $timestamp => $values)
+        		{
+            			$this->printTimeinTz($timestamp, $tz, $dateFormat);
+             			$this->echoLog("\n");
+            			foreach($values as $key => $val)
+            			{
+                			$this->echoLog( $keys[$key] . ": ");
+                			if($keys[$key] === "time_utc" || preg_match("/^date_.*/", $keys[$key]))
+                    			{
+                    				$this->echoLog ($this->printTimeInTz($val, $tz, "j F H:i"));
+                    			}
+                			else
+                			{
+                    				$this->echoLog( $val);
+                    				$this->printUnit($keys[$key]);
+                			}
+                			if(count($values)-1 === $key || $monthly)
+                    			{
+                    				$this->echoLog( "\n");
+                    			}
+                			else 
+                			{
+                				$this->echoLog( ", ");
+                			}
+            			}
+        		}
+    		}
+	}
+	
+	/**
+ 	* function printing a weather station or modules basic information such as id, name, dashboard data, modules (if main device), type(if module)
+ 	*
+ 	*/
+	private function printWSBasicInfo($device)
+	{
+    		if(isset($device['station_name']))
+        	{
+        		$this->echoLog("- ".$device['station_name']. " -\n");
+        	}
+    		else if(isset($device['module_name']))
+        	{
+        		$this->echoLog("- ".$device['module_name']. " -\n");
     $this->echoLog("id: " . $device['_id']. "\n");
     if(isset($device['type']))
     {
@@ -676,7 +691,7 @@ private function getCurrentProgram($module)
 /**
 * @brief returns the current setpoint of a therm module along with its setpoint temperature and endtime if defined
 */
-private function getCurrentMode($module)
+	private function getCurrentMode($module)
 {
     $initialMode = $module["setpoint"]["setpoint_mode"];
     $initialTemp = isset($module["setpoint"]["setpoint_temp"]) ? $module["setpoint"]["setpoint_temp"]: NULL;
