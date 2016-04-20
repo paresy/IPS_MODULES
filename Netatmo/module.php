@@ -292,7 +292,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
         					$ips_type = 2;
 						break;
 					case "integer":
-        					$ips_type = 1;
+        					$ips_type = 2;
         					break;
         				case "string":
         					$ips_type = 3;
