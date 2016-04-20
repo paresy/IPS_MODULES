@@ -422,7 +422,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		{
 			if ((preg_match("/^RAIN.*/", $ident) || (preg_match("/^sum_rain.*/", $ident)) 
 			{	
-				$type = 2
+				$type = 2;
 			}
 			$vid = IPS_CreateVariable($type);
 			IPS_SetParent($vid, $id);
