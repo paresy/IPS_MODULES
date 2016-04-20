@@ -103,7 +103,7 @@ try
 {
     //retrieve all stations belonging to the user, and also his favorite ones
     $data = $client->getData(NULL, TRUE);
-    $this->echoLog( print_r($data));
+    $this->IPS_LogMessage($_IPS['SELF'], print_r($data));
     $this->printMessageWithBorder("Weather Stations Basic Information");
 }
 catch(NAClientException $ex)
@@ -112,7 +112,7 @@ catch(NAClientException $ex)
 }
 if(empty($data['devices']))
 {
-    $this->echoLog('No devices affiliated to user');
+    $this->IPS_LogMessage($_IPS['SELF'],'No devices affiliated to user');
 }
 else
 {
