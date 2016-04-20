@@ -10,7 +10,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
     
     class Netatmo extends IPSModule {
    
-    require_once(__DIR__ . "/helper/util.php");  //  Helper Functions	
+    include(__DIR__ . "/helper/util.php");  //  Helper Functions	
    
     	
     private $client ;
