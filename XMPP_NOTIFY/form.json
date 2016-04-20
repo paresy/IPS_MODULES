@@ -1,7 +1,6 @@
 {
 	"elements":
 	[
-		{ "name": "register", "type": "ValidationTextBox", "caption": "Register-ID" },
 		{ "name": "default_addr", "type": "ValidationTextBox", "caption": "Default XMPP Address like username@chat.xmpp.org" },
 		{ "type": "Label", "label": "Advanced:" }
 		{ "type": "Label", "label": "Folgende Felder nur bei eigenem XMPP-Server füllen" }
