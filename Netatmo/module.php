@@ -569,7 +569,8 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
     		else if(isset($device['module_name']))
         	{
         		$this->echoLog("- ".$device['module_name']. " -\n");
-    $this->echoLog("id: " . $device['_id']. "\n");
+    			$this->echoLog("id: " . $device['_id']. "\n");
+        	}
     if(isset($device['type']))
     {
         $this->echoLog("type: ");
