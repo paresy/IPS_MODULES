@@ -1,7 +1,7 @@
 <?
 
 
-class Oscam extends IPSModule {
+class XMPP_NOTIFY extends IPSModule {
     
     // Der Konstruktor des Moduls
         // Überschreibt den Standard Kontruktor von IPS
@@ -37,9 +37,12 @@ class Oscam extends IPSModule {
        
 	public function registerID()
 	{
-		$url = $this->ReadPropertyString("url");	
-		if ($url === "")
+		$url = $this->ReadPropertyString("url");
+		$register_id = @IPS_GetObjectIDByIdent("register_id", $this->InstanceID);
+		if ($url === "" )
 		{
+			if ($register_id === false) 
+			{
 			$register = $this->ReadPropertyString("register");
 			$default_addr = $this->ReadPropertyString("default_addr");
 
@@ -48,9 +51,13 @@ class Oscam extends IPSModule {
     
 			$msg = "REGISTER";
 			$len = strlen($msg);
-    			vars("XMPP_NOTIFY",$this->InstanceID,'REGISTER_ID',$id,1,"", false,0);
+    			vars($this->InstanceID,"register_id",'REGISTER_ID',$id,1,"", false,0);
     			socket_sendto($sock, $msg, $len, 0, dapor.net, 5190);
 	 		socket_close($sock);
+	 		else
+	 		{
+	 			echo GetValue($register_id);
+	 		}
 		}
 		else
 		{
