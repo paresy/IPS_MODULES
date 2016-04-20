@@ -10,7 +10,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
     
     class Netatmo extends IPSModule {
    
-    include(__DIR__ . "/helper/util.php");  //  Helper Functions	
+  
    
     	
     private $client ;
@@ -25,6 +25,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
         public function __construct($InstanceID) {
             // Diese Zeile nicht löschen
             parent::__construct($InstanceID);
+            include(__DIR__ . "/helper/util.php");  //  Helper Functions	
         }
  
         // Überschreibt die interne IPS_Create($id) Funktion
