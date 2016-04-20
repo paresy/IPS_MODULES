@@ -422,12 +422,12 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		if($vid === false)
 		{
 			 if (preg_match("/^date_.*/", $ident)) 
-			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
+			{	
 					$logging = false;
 					$type = 1;
 				
 			} else if (preg_match("/^time_.*/", $ident)) 
-			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
+			{	
 					$logging = false;
 					$type = 1;
 				
@@ -443,7 +443,15 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 			if($profile != "")
 			{
 				IPS_SetVariableCustomProfile($vid, $profile);
-			} 
+			} else  if (preg_match("/^date_.*/", $ident)) 
+			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
+					$logging = false;
+				
+			} else if (preg_match("/^time_.*/", $ident)) 
+			{		IPS_SetVariableCustomProfile($vid, "~UnixTimestamp");
+					$logging = false;
+				
+			}
 			if ($logging) 
 			{
 				AC_SetLoggingStatus($archive, $vid, true);
