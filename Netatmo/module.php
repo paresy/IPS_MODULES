@@ -5,7 +5,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 
     // Klassendefinition
     class Netatmo extends IPSModule {
-   
+    
     private $client;
     private $tokens;     	
     private $refresh_token;
@@ -75,7 +75,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		catch(Exception $ex)
 		{
 			$this->SetStatus(201);// login failed
-			$this->handleError("An error happened while trying to retrieve your tokens: " .$ex."\n", TRUE);
+			$this->handleError("An error happened while trying to retrieve your tokens: " .$ex."\n", TRUE); 
 	     		// IPS_LogMessage(__CLASS__, "ALL OK !!!!");
 		
      		}
