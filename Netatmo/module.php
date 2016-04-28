@@ -498,9 +498,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 
 	private function handleError($message, $exit = FALSE)
 	{
-		global $echoString;
-    		$this->echoLog( $message);
-    			IPS_LogMessage('Netatmo_ERROR', $echoString);
+		IPS_LogMessage('Netatmo_ERROR', $message);
     		if($exit)
     		{
         		exit(-1);
