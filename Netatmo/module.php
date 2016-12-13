@@ -4,7 +4,7 @@ require_once (__ROOT__.'/Netatmo2/src/Netatmo/autoload.php');
 
 
     // Klassendefinition
-    class Netatmo2 extends IPSModule {
+    class Netatmo extends IPSModule {
     
     private $client;
     private $tokens;     	
