@@ -21,12 +21,12 @@
                 {
                     "type": "Button",
                     "label": "ShowData",
-                    "onClick": "NAW_ShowData($id);"
+                    "onClick": "NAW2_ShowData($id);"
                 },
                 {
                     "type": "Button",
                     "label": "GetData",
-                    "onClick": "NAW_SaveData($id);"
+                    "onClick": "NAW2_SaveData($id);"
                 }
             ]
 }

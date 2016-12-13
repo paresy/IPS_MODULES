@@ -1,11 +1,11 @@
  {
-	"id": "{24B57877-C24C-4690-8421-B41DCC22BE1B}",
-	"name": "Netatmo",
+	"id": "{24B57877-C24C-4691-8421-B41DCC22BE1B}",
+	"name": "netatmo2",
 	"type": 3,
-	"vendor": "",
-	"aliases": [ "Netatmo"],
+	"vendor": "dapor",
+	"aliases": [ "Netatmo2" ],
 	"parentRequirements": [],
 	"childRequirements": [],
 	"implemented": [],
-	"prefix": "NAW"
+	"prefix": "NAW2"
 }

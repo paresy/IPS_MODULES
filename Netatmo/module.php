@@ -1,10 +1,10 @@
 <?
-require_once(__DIR__ . "/netatmo_api/Clients/NAWSApiClient.php");
-require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
+define('__ROOT__', dirname(dirname(__FILE__)));
+require_once (__ROOT__.'/Netatmo2/src/Netatmo/autoload.php');
 
 
     // Klassendefinition
-    class Netatmo extends IPSModule {
+    class Netatmo2 extends IPSModule {
     
     private $client;
     private $tokens;     	
@@ -30,7 +30,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		$this->RegisterPropertyString("client_secret", "");
 		$this->RegisterPropertyBoolean("logging", false);
 		$this->RegisterPropertyInteger("archive", 0);
-		$this->RegisterTimer("ReadNetatmo", 300, 'NAW_SaveData($_IPS[\'TARGET\']);');
+		$this->RegisterTimer("ReadNetatmo", 300, 'NAW2_SaveData($_IPS[\'TARGET\']);');
         }
  
         // Überschreibt die intere IPS_ApplyChanges($id) Funktion
@@ -61,7 +61,7 @@ require_once(__DIR__ . "/netatmo_api/Constants/AppliCommonPublic.php");
 		$config['client_secret'] = $this->ReadPropertyString("client_secret");
 		//application will have access to station and theromstat
 		$config['scope'] = "read_station";
-		$client = new NAWSApiClient($config);
+	    $client = new Netatmo\Clients\NAWSApiClient($config);
     		
     		$username = $this->ReadPropertyString("username");
 		$pwd = $this->ReadPropertyString("password");
