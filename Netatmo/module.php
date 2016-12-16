@@ -1,6 +1,6 @@
 <?
 define('__ROOT__', dirname(dirname(__FILE__)));
-require_once (__ROOT__.'/Netatmo2/src/Netatmo/autoload.php');
+require_once (__ROOT__.'/Netatmo/src/Netatmo/autoload.php');
 
 
     // Klassendefinition
