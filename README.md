@@ -6,6 +6,7 @@ Netatmo (BETA)
 - 
 |DATUM| Version  | FIX | IMPROVEMENT| COMMENT
 | :-------------| -------------: | :------------- |:------------- |:------------- |
+| 16.12.2016 | v1.6 |  Netatmo API Änderungen|  |BETA - kann noch hin und wieder knirschen| 
 | 20.04.2016 | v1.5 |   Loginfehler werden jetzt richtig angezeigt | Rain-Variablen werden als Float angelegt ||
 | 20.04.2016 | v1.4 |  | Logging kann jetzt aktiviert werden | Neuanlage erforderlich |
 | 20.04.2016 | v1.3 |  | Date wird mit Unixtimestamp gesetzt | Datum wird jetzt direkt angezeigt |
