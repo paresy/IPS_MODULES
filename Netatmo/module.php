@@ -30,7 +30,7 @@ require_once (__ROOT__.'/Netatmo/src/Netatmo/autoload.php');
 		$this->RegisterPropertyString("client_secret", "");
 		$this->RegisterPropertyBoolean("logging", false);
 		$this->RegisterPropertyInteger("archive", 0);
-		$this->RegisterTimer("ReadNetatmo", 300, 'NAW2_SaveData($_IPS[\'TARGET\']);');
+		$this->RegisterTimer("ReadNetatmo", 300, 'NAW_SaveData($_IPS[\'TARGET\']);');
         }
  
         // Überschreibt die intere IPS_ApplyChanges($id) Funktion
